@@ -1,28 +1,69 @@
-<div class="login-container">
-  <h2>Mario gei login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="correo">Correo Electrónico:</label>
-      <input type="email" id="correo" formControlName="correo" placeholder="alejandro@gmail.com">
-      <div *ngIf="loginForm.get('correo')?.invalid && (loginForm.get('correo')?.dirty || loginForm.get('correo')?.touched)" class="error-message">
-        <div *ngIf="loginForm.get('correo')?.errors?.['required']">El correo es requerido.</div>
-        <div *ngIf="loginForm.get('correo')?.errors?.['correo']">El formato del correo no es válido.</div>
+<div class="login-wrapper">
+  <!-- Sección izquierda con imagen -->
+  <div class="login-image-section">
+    <div class="overlay">
+      <div class="docente-info">
+        <p class="docente-label">Docente del mes:</p>
+        <h2 class="docente-name">MISS. ANA KALIFA</h2>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
-      <label for="password">Contraseña:</label>
-      <input type="password" id="password" formControlName="password" placeholder="****">
-      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="error-message">
-        <div *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es requerida.</div>
-        <div *ngIf="loginForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 4 digitos xd</div>
-      </div>
+  <!-- Sección derecha con formulario -->
+  <div class="login-form-section">
+    <div class="form-container">
+      <h1 class="welcome-title">Bienvenido,</h1>
+      <h2 class="subtitle">inicia sesión</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Campo Correo -->
+        <div class="form-group">
+          <label for="correo">Correo</label>
+          <input 
+            type="email" 
+            id="correo" 
+            formControlName="correo" 
+            placeholder="Ingresa tu email">
+          
+          <div *ngIf="loginForm.get('correo')?.invalid && (loginForm.get('correo')?.dirty || loginForm.get('correo')?.touched)" 
+               class="error-message">
+            <div *ngIf="loginForm.get('correo')?.errors?.['required']">El correo es requerido.</div>
+            <div *ngIf="loginForm.get('correo')?.errors?.['email']">El formato del correo no es válido.</div>
+          </div>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="form-group">
+           <label for="password">Contraseña</label>
+            <input type="password" id="password" formControlName="password" placeholder="****">
+             <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="error-message">
+              <div *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es requerida.</div>
+            <div *ngIf="loginForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 4 digitos xd</div>
+            </div>
+          
+          
+        </div>
+
+        <!-- Link olvidaste contraseña -->
+        <div class="forgot-password">
+          <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Botón Ingresar -->
+        <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || isSubmitting">
+          {{ isSubmitting ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Link registro -->
+        <div class="register-link">
+          ¿No tienes una cuenta? <a href="#">Regístrate</a>
+        </div>
+      </form>
     </div>
-
-    <button type="submit" [disabled]="loginForm.invalid">Iniciar Sesión</button>
-
-    <div *ngIf="errorMessage" class="alert alert-danger">
-      {{ errorMessage }}
-    </div>
-  </form>
+  </div>
 </div>
