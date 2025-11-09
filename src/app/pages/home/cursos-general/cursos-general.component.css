@@ -1,0 +1,79 @@
+.text-highlight {
+  color: #ff4d00;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.cursos-container h3 {
+  color: black;
+  font-size: 1.8rem;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.cursos-container {
+  padding: 150px 20px;
+}
+
+/* Sidebar */
+aside {
+  border-right: 1px solid #ddd;
+}
+
+.card {
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+.card h5 {
+  color: #333;
+}
+
+.btn-outline-danger {
+  border-color: #ff4d00;
+  color: #ff4d00;
+}
+
+.btn-outline-danger:hover {
+  background-color: #ff4d00;
+  color: white;
+}
+
+/* Tarjetas de cursos */
+.curso-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.curso-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.curso-card img {
+  height: 180px;
+  object-fit: cover;
+}
+
+.curso-card .card-footer {
+  background-color: #013162;
+  color: #fff;
+}
+
+.form-check-label:hover {
+  cursor: pointer;
+}
+
+.form-check-input:hover {
+  cursor: pointer;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+  aside {
+    border: none;
+  }
+}

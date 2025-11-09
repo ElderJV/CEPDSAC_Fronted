@@ -1,0 +1,55 @@
+<section class="cursos container-fluid">
+  <h1 class="fw-bold text-uppercase">Nuestros</h1>
+  <h2 class="fw-bold text-uppercase text-custom-orange">
+    <strong>CURSOS</strong>
+  </h2>
+
+  <ul class="nav nav-pills mb-4" id="cursos-tab" role="tablist">
+    @for (categoria of cursos.categorias; track categoria.id; let i = $index) {
+    <li class="nav-item" role="presentation">
+      <button
+        class="nav-link"
+        [class.active]="i === 0"
+        [id]="categoria.id + '-tab'"
+        data-bs-toggle="pill"
+        [attr.data-bs-target]="'#' + categoria.id"
+        type="button"
+        role="tab"
+        [attr.aria-controls]="categoria.id"
+        [attr.aria-selected]="i === 0"
+      >
+        {{ categoria.name }}
+      </button>
+    </li>
+    }
+  </ul>
+  <div class="tab-content" id="cursos-tabContent">
+    @for (categoria of cursos.categorias; track categoria.id; let i = $index) {
+    <div
+      class="tab-pane fade"
+      [class.show]="i === 0"
+      [class.active]="i === 0"
+      [id]="categoria.id"
+      role="tabpanel"
+      [attr.aria-labelledby]="categoria.id + '-tab'"
+    >
+      <div class="row g-4">
+        @for (curso of getCursosPorCategoria(categoria.name); track curso.title)
+        {
+        <div class="col-custom">
+          <div
+            class="card-curso"
+            [style.backgroundImage]="'url(' + curso.imgSrc + ')'"
+          >
+            <div class="card-curso-content">
+              <h5 class="card-title">{{ curso.title }}</h5>
+              <a routerLink="curso" class="card-link">Ver curso</a>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</section>

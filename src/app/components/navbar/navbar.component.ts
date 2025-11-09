@@ -63,13 +63,4 @@ export class NavbarComponent {
   goBack(): void {
     this.currentView.set('main');
   }
-
-  // Escucha el evento de teclado "Escape" en todo el documento
-  // Si el offcanvas está abierto y el usuario presiona Escape, lo cierra
-  @HostListener('document:keydown.escape', ['$event'])
-  onKeydownHandler() {
-    if (this.isOffcanvasOpen()) {
-      this.closeOffcanvas();
-    }
-  }
 }
