@@ -67,10 +67,5 @@ export const CURSOS_DATA: CursosModel = {
       imgSrc: 'https://placehold.co/600x400/7E22CE/FFFFFF?text=Lider',
       categoria: 'Gestión',
     },
-    {
-      title: 'Recursos Humanos',
-      imgSrc: 'https://placehold.co/600x400/6B21A8/FFFFFF?text=RRHH',
-      categoria: 'Gestión',
-    },
   ],
 };
