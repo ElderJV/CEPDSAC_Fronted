@@ -1,15 +1,20 @@
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="/logo.png" width="70px" height="70px" alt="Admin CEPSAC" />
-    <h3 class="fw-bold">Admin <span>CEPSAC</span></h3>
+  <div class="sidebar-header">
+    <a routerLink="/admin" class="sidebar-logo">
+      <img src="/logo.png" alt="Admin CEPSAC" />
+      <h3 class="fw-bold">Admin <span>CEPSAC</span></h3>
+    </a>
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">
+      <i class="bi bi-list"></i>
+    </button>
   </div>
 
   <div class="sidebar-profile">
-    <div class="profile-header">
-      <h3>Bienvenido</h3>
-    </div>
-    <div class="card-profile">
-      <img src="/icono.png" width="50px" height="50px" alt="Imagen del" />
+    <h4 class="profile-greeting">Bienvenido</h4>
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <span class="status-indicator"></span>
+      </div>
       <span class="profile-name">Administrador</span>
       <span class="profile-status">Última actividad: 07/08/25 8:00pm</span>
     </div>
@@ -23,31 +28,32 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
         >
-          <i class="bi bi-house-door-fill"></i> Dashboard
+          <i class="bi bi-house-door-fill"></i>
+          <span>Dashboard</span>
         </a>
       </li>
       <li>
         <a routerLink="/admin/cursos" routerLinkActive="active">
           <i class="bi bi-journal-bookmark-fill"></i>
-          Cursos
+          <span>Cursos</span>
         </a>
       </li>
       <li>
         <a routerLink="/admin/diplomados" routerLinkActive="active">
           <i class="bi bi-award-fill"></i>
-          Diplomados
+          <span>Diplomados</span>
         </a>
       </li>
       <li>
         <a routerLink="/admin/estudiantes" routerLinkActive="active">
           <i class="bi bi-people-fill"></i>
-          Estudiantes
+          <span>Estudiantes</span>
         </a>
       </li>
       <li>
         <a routerLink="/admin/profesores" routerLinkActive="active">
           <i class="bi bi-person-video3"></i>
-          Profesores
+          <span>Profesores</span>
         </a>
       </li>
     </ul>
@@ -56,7 +62,7 @@
   <div class="sidebar-footer">
     <a routerLink="/admin/configuracion" routerLinkActive="active">
       <i class="bi bi-gear-fill"></i>
-      Configuración
+      <span>Configuración</span>
     </a>
   </div>
 </aside>
