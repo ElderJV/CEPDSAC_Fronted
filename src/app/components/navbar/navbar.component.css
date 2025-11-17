@@ -2,7 +2,7 @@
 .navbar {
   position: fixed;
   width: 100%;
-  background-color: transparent;
+  background-color: white;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -12,7 +12,7 @@
   font-weight: 500;
   color: #212529;
 }
-
+/*
 .navbar:not(.bg-white) .navbar-logo,
 .navbar:not(.bg-white) .nav-link {
   color: white !important;
@@ -22,7 +22,7 @@
 .navbar:not(.bg-white) .navbar-toggler-icon::before,
 .navbar:not(.bg-white) .navbar-toggler-icon::after {
   background-color: white !important;
-}
+}*/
 
 /* --- Search bar --- */
 .search-container {
@@ -64,7 +64,7 @@
 .navbar-nav .nav-link {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #495057 !important;
+  color: #000000 !important;
   transition: color 0.3s ease;
 }
 
