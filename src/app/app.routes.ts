@@ -19,6 +19,9 @@ import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { AdminCursosComponent } from './pages/admin/admin-cursos/admin-cursos.component';
 import { AdminDiplomadosComponent } from './pages/admin/admin-diplomados/admin-diplomados.component';
+import { AdminTestimoniosComponent } from './pages/admin/admin-testimonios/admin-testimonios.component';
+import {AdminSponsorsComponent} from './pages/admin/admin-sponsors/admin-sponsors.component';
+
 
 export const routes: Routes = [
   {
@@ -69,6 +72,16 @@ export const routes: Routes = [
         component: AdminDiplomadosComponent,
         pathMatch: 'full',
       },
+      {
+        path: 'testimonios',
+        component: AdminTestimoniosComponent,
+        pathMatch: 'full',
+      },
+      {
+        path: 'sponsors',
+        component: AdminSponsorsComponent,
+        pathMatch: 'full',
+      }
     ],
   },
   { path: 'login', component: LoginComponent },

@@ -1,0 +1,94 @@
+.testimonios-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  color: #5B21B6;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.btn-add {
+  background-color: #9333EA;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-add:hover {
+  background-color: #7E22CE;
+}
+
+.testimonios-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.testimonios-table thead {
+  background-color: #F3F4F6;
+}
+
+.testimonios-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+.testimonios-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #E5E7EB;
+  color: #374151;
+  font-size: 14px;
+}
+
+.testimonios-table tbody tr:hover {
+  background-color: #F9FAFB;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #E5E7EB;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  margin: 0 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.btn-icon:hover {
+  opacity: 1;
+}
+
+.btn-edit {
+  color: #F59E0B;
+}
+
+.btn-delete {
+  color: #EF4444;
+}
