@@ -43,7 +43,6 @@ export class LoginComponent {
         this.isSubmitting = false;
         if (response?.token) {
           this.authService.setToken(response.token);
-          // read returnUrl query param and navigate back if present
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
           try {
             if (returnUrl) {

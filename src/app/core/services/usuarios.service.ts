@@ -18,6 +18,7 @@ export class UsuariosService {
 
   //Listamos usuarios por su rol
     listarPorRol(rol: 'ALUMNO' | 'DOCENTE'): Observable<Usuario[]> {
+      console.info('UsuariosService.listarPorRol -> rol:', rol);
     return this.http.get<Usuario[]>(`${this.apiUrl}/listar/${rol}`);
     }
 }

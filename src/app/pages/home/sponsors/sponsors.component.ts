@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SponsorService } from '../../../core/services/sponsor.service';
 import { Sponsor } from '../../../core/models/sponsor.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sponsors',
@@ -12,13 +13,20 @@ import { Sponsor } from '../../../core/models/sponsor.model';
 })
 export class SponsorsComponent implements OnInit {
   private sponsorService = inject(SponsorService);
+  private route = inject(ActivatedRoute);
 
   sponsors: Sponsor[] = [];
   isLoading = true;
   errorMessage: string | null = null;
 
   ngOnInit(): void {
-    this.cargarSponsors();
+    const resolved = this.route.snapshot.data?.['sponsors'] as Sponsor[] | undefined;
+    if (resolved && Array.isArray(resolved)) {
+      this.sponsors = resolved;
+      this.isLoading = false;
+    } else {
+      this.cargarSponsors();
+    }
   }
 
   cargarSponsors(): void {

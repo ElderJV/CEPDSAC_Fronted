@@ -70,6 +70,12 @@
   border-radius: 50%;
   background-color: #E5E7EB;
 }
+.logo-img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 
 .btn-icon {
   background: none;

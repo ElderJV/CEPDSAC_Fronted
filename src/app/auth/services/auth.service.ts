@@ -25,7 +25,6 @@ export class AuthService {
     });
   }
 
-  // Register a new user — maps to backend /api/usuarios
   register(payload: any) {
     return this.http.post(`${environment.apiUrl}/usuarios`, payload);
   }
