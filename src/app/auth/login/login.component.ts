@@ -48,10 +48,10 @@ export class LoginComponent {
             if (returnUrl) {
               this.router.navigateByUrl(returnUrl);
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/']);
             }
           } catch (e) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/']);
           }
         } else {
           this.errorMessage = 'No se recibio el jwt';
