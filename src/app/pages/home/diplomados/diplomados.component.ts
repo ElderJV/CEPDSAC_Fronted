@@ -10,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-diplomados',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink],
   templateUrl: './diplomados.component.html',
   styleUrl: './diplomados.component.css',
 })

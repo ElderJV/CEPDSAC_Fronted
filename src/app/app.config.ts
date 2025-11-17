@@ -6,20 +6,20 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(),
-    // registrar interceptor de errores globalmente
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
-      multi: true
-    }
+    //provideClientHydration(),
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor,
+        errorInterceptor
+      ])
+    ),
   ],
 };

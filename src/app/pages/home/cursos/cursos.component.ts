@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink} from '@angular/router';
 import { CursoDiplomadoService } from '../../../core/services/curso-diplomado.service';
 import { CursoDiplomado } from '../../../core/models/curso-diplomado.model';
 
 @Component({
   selector: 'app-cursos',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cursos.component.html',
   styleUrl: './cursos.component.css',
 })

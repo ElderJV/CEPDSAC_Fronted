@@ -2,28 +2,14 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th>Diplomado</th>
-        <th>Categoría</th>
-        <th>Modalidad</th>
-        <th>Estudiantes</th>
-        <th>Duración</th>
-        <th>Precio</th>
-        <th>Rating</th>
+        <th *ngFor="let col of columns">{{ col.label }}</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Diseño Web</td>
-        <td>Tecnología</td>
-        <td>Remoto</td>
-        <td>43</td>
-        <td>3 meses</td>
-        <td>S/350</td>
-        <td>4.8/5</td>
-        <td>
-          <app-action-buttons-admin />
-        </td>
+      <tr *ngFor="let item of data">
+        <td *ngFor="let col of columns">{{ item[col.key] }}</td>
+        <td><app-action-buttons-admin/></td>
       </tr>
     </tbody>
   </table>

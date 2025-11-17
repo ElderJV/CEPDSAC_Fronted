@@ -5,6 +5,9 @@
     placeholderText="Buscar cursos..."
     nuevoBotonName="Nuevo Curso"
     />
-    <app-data-table-admin />
+    <app-data-table-admin
+    [columns]="[{ key: 'idCursoDiplomado', label: 'ID' },{key: 'titulo', label: 'Título'} , { key: 'nombreCategoria', label: 'Categoría' }, { key: 'otorgaCertificado', label: 'Certificado' }]"
+    [data]="cursos"
+    />
   </div>
 </section>

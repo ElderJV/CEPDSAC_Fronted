@@ -1,49 +1,33 @@
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { ErrorHandlerService } from '../services/error-handler.service';
 
-//interceptor global maneja errores http, redirige en 401 y loguea errores
-@Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
-  constructor(
-    private router: Router,
-    private errorHandler: ErrorHandlerService
-  ) {}
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  const errorHandler = inject(ErrorHandlerService);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
-        //logging automatico en desarrollo
-        if (!this.isProduction()) {
-          console.error('HTTP Error:', {
-            url: request.url,
-            status: error.status,
-            message: error.message,
-            error: error.error
-          });
-        }
-        //manejar errores de autenticacion globalmente
-        if (this.errorHandler.isAuthenticationError(error)) {
-          this.handleAuthenticationError();
-        }
-        //propagar el error para que el componente lo maneje
-        return throwError(() => error);
-      })
-    );
-  }
+  return next(req).pipe(
+    catchError((error) => {
 
-  private handleAuthenticationError(): void {
-    //limpiar token y redirigir al login
-    localStorage.removeItem('jwt_token');
-    this.router.navigate(['/login'], {
-      queryParams: { sessionExpired: 'true' }
-    });
-  }
+      // Log automático en desarrollo (si quieres hacer el check de prod, aquí)
+      console.error('HTTP Error:', {
+        url: req.url,
+        status: error.status,
+        message: error.message,
+        error: error.error,
+      });
 
-  private isProduction(): boolean {
-    return false; //environment.production xd
-  }
-}
+      // Manejar errores de autenticación globalmente
+      if (errorHandler.isAuthenticationError(error)) {
+        localStorage.removeItem('jwt_token');
+        router.navigate(['/login'], {
+          queryParams: { sessionExpired: 'true' },
+        });
+      }
+
+      return throwError(() => error);
+    })
+  );
+};

@@ -5,6 +5,9 @@
     placeholderText="Buscar estudiantes..."
     nuevoBotonName="Nuevo Estudiante"
     />
-    <app-data-table-admin/>
+    <app-data-table-admin
+    [columns]="[{ key: 'idUsuario', label: 'ID' },{key: 'nombre', label: 'Nombre'} , { key: 'apellido', label: 'Apellido' }, { key: 'correo', label: 'Correo' }, { key: 'activo', label: 'Estado' }]"
+    [data]="estudiantes"
+    />
   </div>
 </section>

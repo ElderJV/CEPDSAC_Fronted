@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
-import { CursoDiplomado, CursoDetalle } from '../models/curso-diplomado.model';
+import { CursoDiplomado, CursoDetalle, CursoDiplomadoViewAdmin } from '../models/curso-diplomado.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +27,8 @@ export class CursoDiplomadoService {
     return this.http.get<CursoDetalle>(`${this.apiUrl}/detalle/${id}`);
   }
 
-  listar(): Observable<CursoDiplomado[]> {
-    return this.http.get<CursoDiplomado[]>(`${this.apiUrl}/listar`);
+  listar(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar`);
   }
 
   obtenerPorId(id: number): Observable<CursoDiplomado> {
