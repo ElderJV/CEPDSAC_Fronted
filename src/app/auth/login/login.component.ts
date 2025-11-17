@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorHandlerService } from '../../core/services/error-handler.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private errorHandler = inject(ErrorHandlerService);
 
   loginForm: FormGroup = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -44,17 +47,15 @@ export class LoginComponent {
           this.errorMessage = 'No se recibio el jwt';
         }
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         this.isSubmitting = false;
         console.error('Error en login:', err);
-        this.errorMessage = this.getErrorMessage(err);
+        // usar el servicio centralizado de errores en el service
+        this.errorMessage = this.errorHandler.getErrorMessage(
+          err,
+          'Error al iniciar sesión. Intenta nuevamente.'
+        );
       }
     });
-  }
-
-  private getErrorMessage(error: any): string {
-    if (error.status === 401) return 'Credenciales erroneas.';
-    if (error.status === 0) return 'No se pudo conectar con el servidor.';
-    return 'Intenta nuevamente.';
   }
 }
