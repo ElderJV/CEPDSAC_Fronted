@@ -5,7 +5,6 @@ import { DataTableAdminComponent } from "../../../components/data-table-admin/da
 
 @Component({
   selector: 'app-admin-diplomados',
-  imports: [ActionButtonsAdminComponent, SearchBarAdminComponent, DataTableAdminComponent],
   templateUrl: './admin-diplomados.component.html',
   styleUrls: ['../../admin/admin-styles.css','./admin-diplomados.component.css']
 })

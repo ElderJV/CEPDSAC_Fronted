@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 // Layouts
 import { MainComponent } from './layout/main/main.component';
 import { AdminComponent } from './layout/admin/admin.component';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 // Pages de la Home
 import { HeroComponent } from './pages/home/hero/hero.component';
@@ -10,6 +11,7 @@ import { CursoComponent } from './pages/home/curso/curso.component';
 import { DiplomadoComponent } from './pages/home/diplomado/diplomado.component';
 import { CursosGeneralComponent } from './pages/home/cursos-general/cursos-general.component';
 import { DiplomadosGeneralComponent } from './pages/home/diplomados-general/diplomados-general.component';
+import { MatriculaGeneralComponent } from './pages/home/matricula-general/matricula-general.component';
 
 // Login y Register
 import { LoginComponent } from './auth/login/login.component';
@@ -50,11 +52,21 @@ export const routes: Routes = [
         component: DiplomadosGeneralComponent,
         pathMatch: 'full',
       },
+      {
+        path: 'matricula/:cursoId/:programacionId',
+        component: MatriculaGeneralComponent,
+      },
+      {
+        path: 'matricula/:cursoId/:programacionId',
+        component: MatriculaGeneralComponent,
+        pathMatch: 'full',
+      },
     ],
   },
   {
     path: 'admin',
     component: AdminComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',

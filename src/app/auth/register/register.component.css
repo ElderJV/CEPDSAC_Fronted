@@ -73,3 +73,54 @@
 .form-footer a:hover {
   color: #00798c;
 }
+
+.register-page {
+  min-height: calc(100vh - 200px);
+}
+
+.register-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.register-card .card-body {
+  padding: 2rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.country-code {
+  max-width: 115px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .form-control {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-select {
+  background-position: right 1rem center;
+}
+
+.card-title {
+  font-weight: 700;
+}
+
+.btn-primary {
+  background-color: #ff6b00;
+  border-color: #ff6b00;
+}
+
+.btn-primary:hover {
+  background-color: #ff7f22;
+  border-color: #ff7f22;
+}
+
+@media (max-width: 576px) {
+  .register-card .card-body { padding: 1rem; }
+}

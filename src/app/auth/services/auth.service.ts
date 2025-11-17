@@ -24,6 +24,11 @@ export class AuthService {
     });
   }
 
+  // Register a new user — maps to backend /api/usuarios
+  register(payload: any) {
+    return this.http.post(`${environment.apiUrl}/usuarios`, payload);
+  }
+
   logout(): void {
     localStorage.removeItem('jwt_token');
   }
@@ -33,6 +38,29 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && this.isTokenValid(token);
+  }
+
+  getTokenPayload(token?: string): any | null {
+    const t = token ?? this.getToken();
+    if (!t) return null;
+    try {
+      const parts = t.split('.');
+      if (parts.length !== 3) return null;
+      const payload = parts[1];
+      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      return JSON.parse(decodeURIComponent(escape(decoded)));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  isTokenValid(token?: string): boolean {
+    const payload = this.getTokenPayload(token);
+    if (!payload) return false;
+    if (!payload.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return payload.exp > now;
   }
 }

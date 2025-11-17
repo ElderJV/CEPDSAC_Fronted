@@ -1,34 +1,99 @@
-<div class="content">
-  <form class="form-container">
-    <div class="form-header">
-      <h3 class="title">Regístrate</h3>
-      <span class="info"
-        >Por favor, completa todos los campos para registrarte</span
-      >
-    </div>
+<app-navbar></app-navbar>
 
-    <div class="input-container">
-      <div>
-        <label for="">Nombre</label>
-        <input type="text" placeholder="Ingresa tu nombre" />
-      </div>
-      <div>
-        <label for="">Apellido</label>
-        <input type="text" placeholder="Ingresa tu apellido" />
-      </div>
-      <div>
-        <label for="">Correo</label>
-        <input type="email" placeholder="Ingresa tu correo" />
-      </div>
-      <div>
-        <label for="">Contraseña</label>
-        <input type="password" placeholder="Ingresa tu contraseña" />
+<main class="register-page py-5 mt-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-7">
+        <div class="card register-card shadow-sm">
+          <div class="card-body">
+            @if (generalError()) {
+              <div class="alert alert-danger">{{ generalError() }}</div>
+            }
+            <h3 class="card-title text-center mb-2">Crea tu cuenta</h3>
+            <p class="text-center text-muted mb-4">Completa los campos para registrarte y acceder a nuestros cursos.</p>
+
+            <form [formGroup]="registerForm" (ngSubmit)="submit()" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                <input class="form-control" [ngClass]="{'is-invalid': registerForm.get('nombre')?.hasError('server')}" id="nombre" type="text" placeholder="Ingresa tu nombre" formControlName="nombre" />
+                @if (fieldErrors()['nombre']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['nombre'] }}</div>
+                }
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Apellido</label>
+                <input class="form-control" [ngClass]="{'is-invalid': registerForm.get('apellido')?.hasError('server')}" id="apellido" type="text" placeholder="Ingresa tu apellido" formControlName="apellido" />
+                @if (fieldErrors()['apellido']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['apellido'] }}</div>
+                }
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Correo</label>
+                <input class="form-control" [ngClass]="{'is-invalid': registerForm.get('correo')?.hasError('server')}" id="correo" type="email" placeholder="nombre@ejemplo.com" formControlName="correo" />
+                @if (fieldErrors()['correo']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['correo'] }}</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Contraseña</label>
+                <input class="form-control" [ngClass]="{'is-invalid': registerForm.get('password')?.hasError('server')}" id="password" type="password" placeholder="Mínimo 6 caracteres" formControlName="password" />
+                @if (fieldErrors()['password']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['password'] }}</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Número celular</label>
+                <div class="input-group">
+                  <select class="form-select country-code" formControlName="id_codigo_pais" aria-label="Código país">
+                    <option value="" disabled>Cod</option>
+                    <option *ngFor="let p of paises" [value]="p.idPais">+{{ p.codigo }} </option>
+                  </select>
+                  <input class="form-control" id="numero_celular" type="text" placeholder="9 123 45678" formControlName="numero_celular" />
+                @if (fieldErrors()['numero_celular']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['numero_celular'] }}</div>
+                }
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Tipo de identificación</label>
+                <select class="form-select" [ngClass]="{'is-invalid': registerForm.get('id_tipo_identificacion')?.hasError('server')}" id="id_tipo_identificacion" formControlName="id_tipo_identificacion">
+                  <option value="" disabled>Selecciona un tipo</option>
+                  <option *ngFor="let t of tiposIdentificacion" [value]="t.idTipoIdentificacion" [attr.title]="t.nombre">{{ t.iniciales ? t.iniciales : t.nombre }}</option>
+                </select>
+                @if (fieldErrors()['id_tipo_identificacion']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['id_tipo_identificacion'] }}</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Número de identificación</label>
+                <input class="form-control" [ngClass]="{'is-invalid': registerForm.get('numero_identificacion')?.hasError('server')}" id="numero_identificacion" type="text" placeholder="Documento" formControlName="numero_identificacion" />
+                @if (fieldErrors()['numero_identificacion']) {
+                  <div class="invalid-feedback d-block">{{ fieldErrors()['numero_identificacion'] }}</div>
+                }
+              </div>
+
+              <div class="col-12 d-grid">
+                <button class="btn btn-primary btn-lg" type="submit">{{ isSubmitting() ? 'Registrando...' : 'Crear cuenta' }}</button>
+              </div>
+
+              <div class="col-12 mt-2">
+                <small class="text-muted">Debug — Form valid: {{ registerForm.valid }} — Submitting: {{ isSubmitting() }}</small>
+              </div>
+            </form>
+
+            <div class="text-center mt-3">
+              <small class="text-muted">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></small>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+</main>
 
-    <span class="form-footer">
-      ¿Ya tienes una cuenta?,
-      <a routerLink="/login">Inicia Sesión</a>
-    </span>
-  </form>
-</div>
+<app-footer></app-footer>

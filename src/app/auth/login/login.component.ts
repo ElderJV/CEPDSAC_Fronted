@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandlerService } from '../../core/services/error-handler.service';
@@ -17,6 +17,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private errorHandler = inject(ErrorHandlerService);
 
   loginForm: FormGroup = this.fb.group({
@@ -42,7 +43,17 @@ export class LoginComponent {
         this.isSubmitting = false;
         if (response?.token) {
           localStorage.setItem('jwt_token', response.token);
-          this.router.navigate(['/dashboard']);
+          // read returnUrl query param and navigate back if present
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          try {
+            if (returnUrl) {
+              this.router.navigateByUrl(returnUrl);
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
+          } catch (e) {
+            this.router.navigate(['/dashboard']);
+          }
         } else {
           this.errorMessage = 'No se recibio el jwt';
         }

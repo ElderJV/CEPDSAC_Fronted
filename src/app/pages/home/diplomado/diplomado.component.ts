@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CursoDiplomadoService } from '../../../core/services/curso-diplomado.service';
 import { CursoDetalle } from '../../../core/models/curso-diplomado.model';
@@ -18,35 +18,58 @@ export class DiplomadoComponent implements OnInit {
   private cursoDiplomadoService = inject(CursoDiplomadoService);
   private errorHandler = inject(ErrorHandlerService);
   private toast = inject(ToastService);
+  private router = inject(Router);
 
-  diplomado: CursoDetalle | null = null;
-  isLoading = true;
+  diplomado = signal<CursoDetalle | null>(null);
+  isLoading = signal(true);
+  cursoId: number | null = null;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      this.cursoId = +id;
       this.cargarDiplomado(+id);
     } else {
       this.toast.error('ID de diplomado no válido');
-      this.isLoading = false;
+      this.isLoading.set(false);
     }
   }
 
   cargarDiplomado(id: number): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.cursoDiplomadoService.obtenerDetalle(id).subscribe({
       next: (data) => {
         console.log('diplomado detalle:', data);
-        this.diplomado = data;
-        this.isLoading = false;
+        this.diplomado.set(data);
+        this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
         console.error('error cargando diplomado:', err);
         const mensaje = this.errorHandler.getErrorMessage(err);
         this.toast.error(mensaje);
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
+  }
+
+  matricularPrimer(): void {
+    const d = this.diplomado();
+    if (!d || !this.cursoId) {
+      this.toast.error('No se pudo iniciar matrícula: diplomado no cargado.');
+      return;
+    }
+    const programaciones = d.programaciones || [];
+    if (programaciones.length === 0) {
+      this.toast.error('No hay programaciones disponibles para matricular.');
+      return;
+    }
+    const primerProg = programaciones[0];
+    const progId = primerProg.idProgramacionCurso;
+    if (!progId) {
+      this.toast.error('ID de programación no disponible.');
+      return;
+    }
+    this.router.navigate(['/matricula', this.cursoId, progId]);
   }
 
   getModalidadLabel(modalidad: string): string {
@@ -68,14 +91,16 @@ export class DiplomadoComponent implements OnInit {
   }
 
   getMaterialesArray(): string[] {
-    return this.diplomado?.materialesIncluidos
-      ? this.diplomado.materialesIncluidos.split('|').filter(m => m.trim())
+    const d = this.diplomado();
+    return d?.materialesIncluidos
+      ? d.materialesIncluidos.split('|').filter(m => m.trim())
       : [];
   }
 
   getRequisitosArray(): string[] {
-    return this.diplomado?.requisitos
-      ? this.diplomado.requisitos.split('|').filter(r => r.trim())
+    const d = this.diplomado();
+    return d?.requisitos
+      ? d.requisitos.split('|').filter(r => r.trim())
       : [];
   }
 }

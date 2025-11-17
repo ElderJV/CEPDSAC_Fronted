@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CursoDiplomadoService } from '../../../core/services/curso-diplomado.service';
 import { CursoDiplomado } from '../../../core/models/curso-diplomado.model';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
@@ -10,9 +10,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-diplomados',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink],
   templateUrl: './diplomados.component.html',
-  styleUrl: './diplomados.component.css',
+  styleUrls: ['./diplomados.component.css'],
 })
 export class DiplomadosComponent implements OnInit {
   private cursoDiplomadoService = inject(CursoDiplomadoService);

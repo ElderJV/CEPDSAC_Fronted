@@ -1,0 +1,88 @@
+<section class="matricula-page py-5 mt-5">
+	<div class="container">
+		<div class="row mb-3 align-items-end">
+			<div class="col">
+				<h6 class="text-dark mb-1">Pagar</h6>
+				<h1 class="page-title mb-2">Curso</h1>
+				<hr class="title-hr" />
+			</div>
+		</div>
+
+		<div class="row">
+			<!-- Left: course card and confirmation -->
+			<div class="col-12 col-lg-8">
+				<div class="course-card d-flex align-items-center p-3 mb-3">
+					  <img [src]="cursoDetalle?.urlCurso || '/assets/images/default-course.png'" alt="curso" class="course-thumb me-3" />
+					<div class="flex-grow-1">
+						<h4 class="course-title mb-1">{{ cursoDetalle?.titulo || 'Desarrollo de Aplicaciones Móviles' }}</h4>
+						<div class="text-muted small">Por {{ programacionSeleccionada?.nombreDocente ? (programacionSeleccionada?.nombreDocente + ' ' + (programacionSeleccionada?.apellidoDocente || '')) : 'Pepito' }}</div>
+
+						<div class="mt-2 small info-vertical text-muted">
+							<div class="info-item d-flex align-items-center mb-2">
+								<!-- modalidad icon -->
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2 text-muted">
+									<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+									<path d="M7 3v4" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+								<div><strong>Modalidad:</strong><div class="small">{{ programacionSeleccionada?.modalidad || 'VIRTUAL' }}</div></div>
+							</div>
+
+							<div class="info-item d-flex align-items-center mb-2">
+								<!-- hours/clock icon -->
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2 text-muted">
+									<circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="1.2"/>
+									<path d="M12 7v6l4 2" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+								<div><strong>Horas:</strong><div class="small">{{ programacionSeleccionada?.horasSemanales ? (programacionSeleccionada?.horasSemanales + ' hrs/sem') : (programacionSeleccionada?.duracionCurso ? (programacionSeleccionada?.duracionCurso + ' hrs') : 'N/A') }}</div></div>
+							</div>
+
+							<div *ngIf="programacionSeleccionada" class="info-item d-flex align-items-center">
+								<!-- calendar icon -->
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2 text-muted">
+									<rect x="3" y="5" width="18" height="16" rx="2" stroke="#6b7280" stroke-width="1.2"/>
+									<path d="M16 3v4M8 3v4" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round"/>
+								</svg>
+								<div><strong>Fecha:</strong><div class="small">{{ programacionSeleccionada.fechaInicio | date:'EEEE, d MMM — h:mm a' }}</div></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-end ms-3">
+						<div class="price">S/. {{ programacionSeleccionada?.monto ?? '0.00' }}</div>
+						<button class="btn btn-sm btn-dark mt-2">Eliminar</button>
+					</div>
+				</div>
+            <div class="card p-3 text-center">
+							@if (programacionId) {
+								<button class="btn btn-pay btn-lg w-100" (click)="submit()" [disabled]="loading() || matriculaCreada()">{{ loading() ? 'Procesando...' : (matriculaCreada() ? 'Matriculado' : 'Matricularse') }}</button>
+							} @else {
+								<div class="text-danger">No se recibió una programación válida.</div>
+							}
+            </div>
+			</div>
+
+			<div class="col-12 col-lg-4">
+				<div class="payment-card p-4 text-center shadow-sm">
+					<h6 class="text-black mb-3">Escanea el QR</h6>
+
+										@if (programacionSeleccionada) {
+											<div class="qr-placeholder mb-3">
+												<img src="https://www.efbasket.com/wp-content/uploads/2024/12/QR-efbasket.jpeg" alt="qr" class="qr-img" />
+											</div>
+										} @else {
+											<div class="qr-placeholder">QR</div>
+										}
+
+					  <div class="pay-amount mb-3">S/. <span class="fw-bold">{{ programacionSeleccionada?.monto ?? '0.00' }}</span></div>
+
+					<button class="btn btn-pay btn-lg w-100" (click)="notificarPago()" [disabled]="!matriculaCreada() || loading()">{{ loading() ? 'Procesando...' : 'PAGADO' }}</button>
+
+					<p class="small text-danger mt-3 mb-0">Recuerda enviar la captura de tu pago al siguiente número</p>
+										<p class="small text-muted"><strong>
+											  <a [href]="contactPhoneHref" target="_blank" rel="noopener noreferrer" class="text-muted" [attr.aria-label]="'Contactar por WhatsApp al ' + contactPhoneDisplay">{{ contactPhoneDisplay }}</a>
+										</strong></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
