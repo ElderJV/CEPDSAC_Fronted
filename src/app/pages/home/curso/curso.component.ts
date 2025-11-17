@@ -1,9 +1,82 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { CursoDiplomadoService } from '../../../core/services/curso-diplomado.service';
+import { CursoDetalle } from '../../../core/models/curso-diplomado.model';
+import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-curso',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './curso.component.html',
   styleUrl: './curso.component.css',
 })
-export class CursoComponent {}
+export class CursoComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private cursoDiplomadoService = inject(CursoDiplomadoService);
+  private errorHandler = inject(ErrorHandlerService);
+  private toast = inject(ToastService);
+
+  curso: CursoDetalle | null = null;
+  isLoading = true;
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.cargarCurso(+id);
+    } else {
+      this.toast.error('ID de curso no válido');
+      this.isLoading = false;
+    }
+  }
+
+  cargarCurso(id: number): void {
+    this.isLoading = true;
+
+    this.cursoDiplomadoService.obtenerDetalle(id).subscribe({
+      next: (data) => {
+        console.log('curso detalle:', data);
+        this.curso = data;
+        this.isLoading = false;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('error cargando curso:', err);
+        const mensaje = this.errorHandler.getErrorMessage(err);
+        this.toast.error(mensaje);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getModalidadLabel(modalidad: string): string {
+    const labels: Record<string, string> = {
+      'PRESENCIAL': 'Presencial',
+      'VIRTUAL': 'Virtual',
+      'VIRTUAL_24_7': 'Virtual 24/7'
+    };
+    return labels[modalidad] || modalidad;
+  }
+
+  getNombreCompleto(prog: any): string {
+    if (prog.nombreDocente && prog.apellidoDocente) {
+      return `${prog.nombreDocente} ${prog.apellidoDocente}`;
+    } else if (prog.nombreDocente) {
+      return prog.nombreDocente;
+    }
+    return 'Por asignar';
+  }
+
+  getMaterialesArray(): string[] {
+    return this.curso?.materialesIncluidos
+      ? this.curso.materialesIncluidos.split('|').filter(m => m.trim())
+      : [];
+  }
+
+  getRequisitosArray(): string[] {
+    return this.curso?.requisitos
+      ? this.curso.requisitos.split('|').filter(r => r.trim())
+      : [];
+  }
+}

@@ -1,0 +1,139 @@
+.diplomados-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* --- Título --- */
+.page-title {
+  color: #334e68; /* Azul oscuro */
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* --- Barra de Herramientas (Toolbar) --- */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Input de Búsqueda */
+.search-bar input {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 300px;
+  background-image: url("data:image/svg+xml,..."); /* Icono de lupa */
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  padding-left: 40px; /* Espacio para el icono, aunque en el ejemplo no tiene */
+}
+
+/* Contenedor de Acciones (Filtro y Nuevo Diplomado) */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Botón de Filtro */
+.btn-filter {
+  background-color: white;
+  color: #334e68;
+  border: 1px solid #334e68;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-filter:hover {
+  background-color: #f0f0f0;
+}
+
+/* Botón Nuevo Diplomado (Naranja) */
+.btn-new {
+  background-color: #ff5722; /* Naranja */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.btn-new .icon {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.btn-new:hover {
+  background-color: #e64a19;
+}
+
+/* --- Tabla de Datos --- */
+.table-responsive {
+  /* Hace que la tabla se desplace horizontalmente en pantallas pequeñas */
+  overflow-x: auto; 
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+/* Encabezado de la Tabla */
+.data-table thead th {
+  background-color: #f7f9fc; /* Fondo claro para el encabezado */
+  color: #334e68;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Celdas del Cuerpo de la Tabla */
+.data-table tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+/* Filas Alternas (opcional para mejor legibilidad) */
+.data-table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Iconos de Acciones (Editar, Eliminar, Ver) */
+.action-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-icons span {
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: color 0.2s;
+}
+
+/* Colores de los iconos (opcional) */
+.icon-edit:hover { color: #007bff; }
+.icon-delete:hover { color: #dc3545; }
+.icon-view:hover { color: #ff5722; }
+
+/* Ajuste de ancho de columna para las acciones (para que no se estire mucho) */
+.data-table thead th:last-child,
+.data-table tbody td:last-child {
+  width: 100px; 
+  text-align: center;
+}

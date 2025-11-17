@@ -72,6 +72,11 @@
   color: #ff4d00 !important;
 }
 
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.router-link-active {
+  color: #ff4d00 !important;
+}
+
 /* --- Dropdowns desktop --- */
 .dropdown-toggle::after {
   margin-left: 0.5rem;

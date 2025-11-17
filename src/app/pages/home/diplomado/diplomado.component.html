@@ -1,97 +1,144 @@
 <section class="curso-container container">
-  <div class="text-start mb-4">
-    <h2 class="fw-bold text-uppercase">Desarrollo de</h2>
-    <h1 class="fw-bolder text-uppercase text-highlight">
-      Aplicaciones Móviles
-    </h1>
-  </div>
+  @if (isLoading) {
+    <div class="text-center mt-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  }
 
-  <div class="row g-3 mb-4">
-    <div class="col-md-6 col-lg-3">
-      <div class="info-box p-3 h-100 text-center">
-        <div class="icon mb-2">
-          <i class="bi bi-laptop fs-2"></i>
+  @if (!isLoading && diplomado) {
+    <div class="text-start mb-4">
+      <h2 class="fw-bold text-uppercase">{{ diplomado.tipo ? 'Diplomado en' : 'Curso de' }}</h2>
+      <h1 class="fw-bolder text-uppercase text-highlight">
+        {{ diplomado.titulo }}
+      </h1>
+    </div>
+
+    @if (diplomado.programaciones && diplomado.programaciones.length > 0) {
+      <div class="row g-3 mb-4">
+        @for (programacion of diplomado.programaciones; track programacion.idProgramacionCurso; let i = $index) {
+          @if (i === 0) {
+            <div class="col-md-6 col-lg-3">
+              <div class="info-box p-3 h-100 text-center">
+                <div class="icon mb-2">
+                  <i class="bi bi-laptop fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Modalidad:</h5>
+                <p>{{ getModalidadLabel(programacion.modalidad) }}</p>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+              <div class="info-box p-3 h-100 text-center">
+                <div class="icon mb-2">
+                  <i class="bi bi-clock fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-1">Duración:</h5>
+                <p>{{ programacion.duracionCurso }} Horas</p>
+              </div>
+            </div>
+          }
+        }
+
+        <div class="col-lg-6">
+          <div class="grid-box p-3 h-100">
+            <h5 class="fw-bold mb-3 text-center">Programaciones Disponibles</h5>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <th>Docente</th>
+                    <th>Horario</th>
+                    <th>Inicio</th>
+                    <th>Modalidad</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (prog of diplomado.programaciones; track prog.idProgramacionCurso) {
+                    <tr>
+                      <td>{{ getNombreCompleto(prog) }}</td>
+                      <td>{{ prog.horario || 'Por definir' }}</td>
+                      <td>{{ prog.fechaInicio | date: 'dd/MM/yyyy' }}</td>
+                      <td>{{ getModalidadLabel(prog.modalidad) }}</td>
+                      <td>S/. {{ prog.monto | number: '1.2-2' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <h5 class="fw-bold mb-1">Modalidad:</h5>
-        <p>Remota</p>
       </div>
-    </div>
+    }
 
-    <div class="col-md-6 col-lg-3">
-      <div class="info-box p-3 h-100 text-center">
-        <div class="icon mb-2">
-          <i class="bi bi-clock fs-2"></i>
+    @if (diplomado.objetivo) {
+      <div class="card p-4 mb-4 about-box">
+        <h5 class="fw-bold text-uppercase mb-3">Acerca de este {{ diplomado.tipo ? 'diplomado' : 'curso' }}:</h5>
+        <p>{{ diplomado.objetivo }}</p>
+      </div>
+    }
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 h-100 materials-box">
+          <h5 class="fw-bold text-uppercase mb-3">
+            {{ getMaterialesArray().length > 0 ? 'Materiales incluidos:' : 'Información:' }}
+          </h5>
+          <ul class="mb-0">
+            @if (getMaterialesArray().length > 0) {
+              @for (material of getMaterialesArray(); track $index) {
+                <li>{{ material }}</li>
+              }
+            } @else {
+              @if (diplomado.nombreCategoria) {
+                <li>Categoría: {{ diplomado.nombreCategoria }}</li>
+              }
+              @if (diplomado.otorgaCertificado) {
+                <li>✓ Otorga certificado de finalización</li>
+              }
+              @if (diplomado.programaciones && diplomado.programaciones.length > 0) {
+                <li>{{ diplomado.programaciones.length }} programación(es) disponible(s)</li>
+              }
+            }
+          </ul>
         </div>
-        <h5 class="fw-bold mb-1">Duración:</h5>
-        <p>40 Horas</p>
       </div>
-    </div>
 
-    <div class="col-lg-6">
-      <div class="grid-box p-3 h-100">
-        <div class="row row-cols-2 text-center">
-          <!-- Cuadrícula vacía por ahora -->
-          <div class="col border p-2">Profesor</div>
-          <div class="col border p-2">Fecha</div>
-          <div class="col border p-2">Pepito</div>
-          <div class="col border p-2">Lunes 8:00 - 11:30 am</div>
-          <div class="col border p-2">Panchito</div>
-          <div class="col border p-2">Día</div>
-          <div class="col border p-2">Mario</div>
-          <div class="col border p-2">Día</div>
-          <div class="col border p-2">Ester</div>
-          <div class="col border p-2">Día</div>
+      <div class="col-md-6">
+        <div class="card p-3 h-100 requisitos-box">
+          <h5 class="fw-bold text-uppercase mb-3">
+            {{ getRequisitosArray().length > 0 ? 'Requisitos:' : 'Programaciones:' }}
+          </h5>
+          <ul class="mb-0">
+            @if (getRequisitosArray().length > 0) {
+              @for (requisito of getRequisitosArray(); track $index) {
+                <li>{{ requisito }}</li>
+              }
+            } @else {
+              @for (prog of diplomado.programaciones; track prog.idProgramacionCurso) {
+                <li>
+                  <strong>{{ getNombreCompleto(prog) }}</strong>
+                  @if (prog.horario) {
+                    <span> - {{ prog.horario }}</span>
+                  }
+                  - {{ getModalidadLabel(prog.modalidad) }}
+                  - Desde {{ prog.fechaInicio | date: 'dd/MM/yyyy' }}
+                  - S/. {{ prog.monto | number: '1.2-2' }}
+                </li>
+              }
+            }
+          </ul>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="card p-4 mb-4 about-box">
-    <h5 class="fw-bold text-uppercase mb-3">Acerca de este curso:</h5>
-    <p>
-      Este curso se enfoca en desarrollar las habilidades necesarias para
-      diseñar y crear aplicaciones móviles efectivas y visualmente atractivas en
-      la plataforma Android. El alumno comprenderá el lenguaje de programación
-      Kotlin, especial para sistemas operativos Android, y diseñará interfaces
-      de usuario atractivas con XML y Jetpack Compose. Al finalizar el curso,
-      los participantes serán capaces de desarrollar aplicaciones Android de
-      alta calidad y adaptarse a las demandas cambiantes del desarrollo móvil en
-      esta plataforma.
-    </p>
-  </div>
-
-  <div class="row g-3 mb-4">
-    <div class="col-md-6">
-      <div class="card p-3 h-100 materials-box">
-        <h5 class="fw-bold text-uppercase mb-3">Materiales incluidos:</h5>
-        <ul class="mb-0">
-          <li>4 horas de vídeo bajo demanda</li>
-          <li>4 artículos</li>
-          <li>3 recursos descargables</li>
-          <li>Acceso completo de por vida</li>
-          <li>Acceso en móvil y TV</li>
-          <li>Certificado de finalización</li>
-        </ul>
-      </div>
+    <div class="text-center">
+      <button class="btn btn-carrito mx-2 fw-bold rounded-pill">
+        Añadir al carrito
+      </button>
+      <button class="btn btn-comprar mx-2 fw-bold rounded-pill">Comprar</button>
     </div>
-
-    <div class="col-md-6">
-      <div class="card p-3 h-100 requisitos-box">
-        <h5 class="fw-bold text-uppercase mb-3">Requisitos:</h5>
-        <ul class="mb-0">
-          <li>Conocimientos previos en programación orientada a objetos</li>
-          <li>
-            Manejo básico de herramientas de desarrollo (Android Studio y SDK)
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center">
-    <button class="btn btn-carrito mx-2 fw-bold rounded-pill">
-      Añadir al carrito
-    </button>
-    <button class="btn btn-comprar mx-2 fw-bold rounded-pill">Comprar</button>
-  </div>
+  }
 </section>

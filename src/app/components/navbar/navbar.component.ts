@@ -1,25 +1,61 @@
+
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostListener, signal, OnInit } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { CursoDiplomadoService } from '../../core/services/curso-diplomado.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
-  // Scroll dinámico para el background del navbar
+export class NavbarComponent implements OnInit {
   hasScrolled = signal(false);
-
-  // Estado reactivo con señales de Angular
-  // isOffcanvasOpen indica si el menú offcanvas está abierto (true/false)
   isOffcanvasOpen = signal(false);
-
-  // currentView guarda en qué vista estamos dentro del menú:
-  // 'main' = menú principal, 'cursos' = vista de cursos, 'diplomados' = vista de diplomados
   currentView = signal<'main' | 'cursos' | 'diplomados'>('main');
+
+  categoriasCursos: Array<{ id: string; nombre: string }> = [];
+  categoriasDiplomados: Array<{ id: string; nombre: string }> = [];
+
+  isHome = false;
+
+  constructor(private router: Router, private cursoDiplomadoService: CursoDiplomadoService) {}
+
+  ngOnInit(): void {
+    this.isHome = this.router.url === '/';
+    this.cargarCategoriasCursos();
+    this.cargarCategoriasDiplomados();
+  }
+
+  cargarCategoriasCursos(): void {
+    this.cursoDiplomadoService.listarCursos().subscribe({
+      next: (cursos) => {
+        const categoriasUnicas = new Map<string, string>();
+        cursos.forEach(curso => {
+          if (curso.categoria) {
+            categoriasUnicas.set(curso.categoria.idCategoria.toString(), curso.categoria.nombre);
+          }
+        });
+        this.categoriasCursos = Array.from(categoriasUnicas.entries()).map(([id, nombre]) => ({ id, nombre }));
+      }
+    });
+  }
+
+  cargarCategoriasDiplomados(): void {
+    this.cursoDiplomadoService.listarDiplomados().subscribe({
+      next: (diplomados) => {
+        const categoriasUnicas = new Map<string, string>();
+        diplomados.forEach(diplomado => {
+          if (diplomado.categoria) {
+            categoriasUnicas.set(diplomado.categoria.idCategoria.toString(), diplomado.categoria.nombre);
+          }
+        });
+        this.categoriasDiplomados = Array.from(categoriasUnicas.entries()).map(([id, nombre]) => ({ id, nombre }));
+      }
+    });
+  }
 
   // Se activa cada vez que se hace scroll
   @HostListener('window:scroll', [])
