@@ -36,6 +36,10 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/forgot-password`, { correo });
   }
 
+  resetPassword(token: string, nuevaPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, nuevaPassword });
+  }
+
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('jwt_token');

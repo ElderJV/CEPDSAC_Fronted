@@ -16,6 +16,7 @@ import { MatriculaGeneralComponent } from './pages/home/matricula-general/matric
 // Login y Register
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { RecuperarPassComponent } from './auth/recuperar-pass/recuperar-pass.component';
 
 // Pages del Admin
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -111,7 +112,8 @@ export const routes: Routes = [
     ],
   },
   { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
-    { path: 'registro', component: RegisterComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'registro', component: RegisterComponent },
+  { path: 'reset-password', component: RecuperarPassComponent },
   { path: '**', component: MainComponent },
 ];

@@ -1,0 +1,113 @@
+<div class="reset-wrapper">
+  <div class="reset-image-section">
+    <div class="overlay">
+      <div class="info">
+        <p class="label">Recuperación de Contraseña</p>
+        <h2 class="title">Restablece tu acceso</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-form-section">
+    <div class="form-container">
+      <h1 class="welcome-title">Nueva Contraseña</h1>
+      <h2 class="subtitle">Ingresa tu nueva contraseña</h2>
+
+      <form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="nuevaPassword">Nueva Contraseña</label>
+          <div class="password-input-wrapper">
+            <input
+              type="password"
+              id="nuevaPassword"
+              formControlName="nuevaPassword"
+              placeholder="Mínimo 8 caracteres"
+              (focus)="showPasswordStrength = true"
+              (blur)="showPasswordStrength = false">
+
+            @if (showPasswordStrength) {
+              <div class="password-strength-indicator">
+                <div class="strength-title">Requisitos de contraseña:</div>
+                <div class="strength-requirement" [class.met]="hasMinLength">
+                  <span class="check-icon">{{ hasMinLength ? '✓' : '○' }}</span>
+                  Mínimo 8 caracteres
+                </div>
+                <div class="strength-requirement" [class.met]="hasLowerCase">
+                  <span class="check-icon">{{ hasLowerCase ? '✓' : '○' }}</span>
+                  Una letra minúscula
+                </div>
+                <div class="strength-requirement" [class.met]="hasUpperCase">
+                  <span class="check-icon">{{ hasUpperCase ? '✓' : '○' }}</span>
+                  Una letra mayúscula
+                </div>
+                <div class="strength-requirement" [class.met]="hasNumber">
+                  <span class="check-icon">{{ hasNumber ? '✓' : '○' }}</span>
+                  Un número
+                </div>
+                <div class="strength-requirement" [class.met]="hasSpecialChar">
+                  <span class="check-icon">{{ hasSpecialChar ? '✓' : '○' }}</span>
+                  Un carácter especial (&#64;$!%*?&)
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (hasError('nuevaPassword', 'required')) {
+            <div class="error-message">
+              La contraseña es requerida.
+            </div>
+          }
+          @if (hasError('nuevaPassword', 'minlength')) {
+            <div class="error-message">
+              La contraseña debe tener al menos 8 caracteres.
+            </div>
+          }
+          @if (hasError('nuevaPassword', 'maxlength')) {
+            <div class="error-message">
+              La contraseña no puede exceder 128 caracteres.
+            </div>
+          }
+          @if (hasError('nuevaPassword', 'passwordStrength')) {
+            <div class="error-message">
+              La contraseña debe contener al menos: 1 minúscula, 1 mayúscula, 1 número y 1 carácter especial (&#64;$!%*?&).
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmarPassword">Confirmar Contraseña</label>
+          <input
+            type="password"
+            id="confirmarPassword"
+            formControlName="confirmarPassword"
+            placeholder="Repite tu contraseña">
+
+          @if (hasError('confirmarPassword', 'required')) {
+            <div class="error-message">
+              Debes confirmar tu contraseña.
+            </div>
+          }
+          @if (passwordsMismatch) {
+            <div class="error-message">
+              Las contraseñas no coinciden.
+            </div>
+          }
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="resetForm.invalid || isSubmitting">
+          {{ isSubmitting ? 'Restableciendo...' : 'Restablecer Contraseña' }}
+        </button>
+
+        @if (errorMessage) {
+          <div class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <div class="back-link">
+          <a href="/login">← Volver al inicio de sesión</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
