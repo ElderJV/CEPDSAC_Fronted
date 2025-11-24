@@ -1,0 +1,25 @@
+<div class="card">
+  <h2>Métricas del Sitio</h2>
+  <div class="form-row">
+    <div class="form-group">
+      <label>Número de Estudiantes</label>
+      <input type="number" [(ngModel)]="configGeneral.numeroEstudiantes">
+    </div>
+    <div class="form-group">
+      <label>Certificaciones</label>
+      <input type="number" [(ngModel)]="configGeneral.numeroCertificaciones">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>Instructores</label>
+      <input type="number" [(ngModel)]="configGeneral.numeroInstructores">
+    </div>
+    <div class="form-group">
+      <label>Cursos</label>
+      <input type="number" [(ngModel)]="configGeneral.numeroCursos">
+    </div>
+  </div>
+  <button class="btn-primary" (click)="guardarConfigGeneral()">Guardar Cambios</button>
+  <div style="clear: both;"></div>
+</div>

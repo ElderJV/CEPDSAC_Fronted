@@ -109,9 +109,9 @@ input[type="text"] {
 
 input:focus {
   outline: none;
-  border-color: #ffb3a7;
+  border-color: #FF4D00;
   background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(255, 179, 167, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.1);
 }
 
 .password-wrapper {
@@ -154,14 +154,14 @@ input:focus {
 }
 
 .forgot-password a {
-  color: #ee6631;
+  color: #FF4D00;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s;
 }
 
 .forgot-password a:hover {
-  color: #ff6b5a;
+  color: #e04400;
   text-decoration: underline;
 }
 
@@ -172,17 +172,17 @@ input:focus {
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #ff9688, #f04c23d0);
+  background: linear-gradient(135deg, #FF4D00, #e04400);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 150, 136, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 77, 0, 0.3);
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff9688, #ff7a6b);
-  box-shadow: 0 6px 16px rgba(255, 150, 136, 0.4);
+  background: linear-gradient(135deg, #e04400, #c93d00);
+  box-shadow: 0 6px 16px rgba(255, 77, 0, 0.4);
   transform: translateY(-2px);
 }
 
@@ -215,14 +215,203 @@ input:focus {
 }
 
 .register-link a {
-  color: #e63e28;
+  color: #FF4D00;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.docente-info {
+  margin-top: auto;
+  color: white;
+}
+
+.docente-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.docente-name {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Sección derecha con formulario */
+.login-form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffffb9;
+  padding: 2rem;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+/* Formulario */
+form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #5f5e5eab;
+  margin-bottom: 0.5rem;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  border: 3px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+input:focus {
+  outline: none;
+  border-color: #FF4D00;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.1);
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 3rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password a {
+  color: #FF4D00;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.forgot-password a:hover {
+  color: #e04400;
+  text-decoration: underline;
+}
+
+/* Botón */
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #FF4D00, #e04400);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 77, 0, 0.3);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e04400, #c93d00);
+  box-shadow: 0 6px 16px rgba(255, 77, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Alerta */
+.alert {
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.alert-danger {
+  background-color: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+/* Link de registro */
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.register-link a {
+  color: #FF4D00;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
 }
 
 .register-link a:hover {
-  color: #ff6b5a;
+  color: #e04400;
   text-decoration: underline;
 }
 
@@ -247,4 +436,74 @@ input:focus {
   .subtitle {
     font-size: 1.25rem;
   }
+}
+
+/* SweetAlert2 Custom Styles - Global */
+:host ::ng-deep .custom-swal-popup {
+  border-radius: 12px;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+:host ::ng-deep .custom-swal-title {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+:host ::ng-deep .custom-swal-input {
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  font-size: 1rem !important;
+}
+
+:host ::ng-deep .custom-swal-input:focus {
+  border-color: #FF4D00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.1) !important;
+  outline: none !important;
+}
+
+:host ::ng-deep .custom-swal-confirm {
+  background-color: #FF4D00 !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 2rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(255, 77, 0, 0.3) !important;
+  border: none !important;
+}
+
+:host ::ng-deep .custom-swal-confirm:hover {
+  background-color: #e04400 !important;
+  box-shadow: 0 6px 16px rgba(255, 77, 0, 0.4) !important;
+}
+
+:host ::ng-deep .custom-swal-cancel {
+  background-color: #6c757d !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 2rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+:host ::ng-deep .custom-swal-cancel:hover {
+  background-color: #5a6268 !important;
+}
+
+:host ::ng-deep .swal2-icon.swal2-success {
+  border-color: #FF4D00 !important;
+  color: #FF4D00 !important;
+}
+
+:host ::ng-deep .swal2-icon.swal2-success [class^='swal2-success-line'] {
+  background-color: #FF4D00 !important;
+}
+
+:host ::ng-deep .swal2-icon.swal2-success .swal2-success-ring {
+  border-color: rgba(255, 77, 0, 0.3) !important;
+}
+
+:host ::ng-deep .swal2-html-container {
+  color: #666;
+  font-size: 1rem;
 }

@@ -11,6 +11,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CursoDiplomadoService } from '../../../core/services/curso-diplomado.service';
 import { CursoDetalle, ProgramacionCursoSimple } from '../../../core/models/curso-diplomado.model';
 import { AuthService } from '../../../auth/services/auth.service';
+import { MetodoPagoService } from '../../../core/services/metodo-pago.service';
+import { MetodoPago } from '../../../core/models/configuracion.model';
 
 @Component({
   selector: 'app-matricula-general',
@@ -28,6 +30,7 @@ export class MatriculaGeneralComponent implements OnInit {
   private errorHandler = inject(ErrorHandlerService);
   private cursoService = inject(CursoDiplomadoService);
   private authService = inject(AuthService);
+  private metodoPagoService = inject(MetodoPagoService);
 
   cursoId: number | null = null;
   programacionId: number | null = null;
@@ -36,6 +39,10 @@ export class MatriculaGeneralComponent implements OnInit {
   loading = signal(false);
   matriculaCreada = signal(false);
   matriculaId = signal<number | null>(null);
+
+  metodosPago: MetodoPago[] = [];
+  metodoPagoSeleccionado: MetodoPago | null = null;
+  loadingMetodos = signal(false);
 
   contactPhoneDisplay = '956782481';
   get contactPhoneHref(): string {
@@ -66,6 +73,30 @@ export class MatriculaGeneralComponent implements OnInit {
         }
       });
     }
+
+    this.cargarMetodosPago();
+  }
+
+  cargarMetodosPago(): void {
+    this.loadingMetodos.set(true);
+    this.metodoPagoService.obtenerActivos().subscribe({
+      next: (metodos) => {
+        this.metodosPago = metodos;
+        if (metodos.length > 0) {
+          this.metodoPagoSeleccionado = metodos[0];
+        }
+        this.loadingMetodos.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.loadingMetodos.set(false);
+        const msg = this.errorHandler.getErrorMessage(err);
+        this.toast.error('Error cargando métodos de pago: ' + msg);
+      }
+    });
+  }
+
+  seleccionarMetodoPago(metodo: MetodoPago): void {
+    this.metodoPagoSeleccionado = metodo;
   }
 
   submit() {
@@ -131,6 +162,10 @@ export class MatriculaGeneralComponent implements OnInit {
   }
 
     notificarPago() {
+      if (!this.metodoPagoSeleccionado) {
+        this.toast.error('Por favor selecciona un método de pago.');
+        return;
+      }
       const id = this.matriculaId();
       if (id == null) {
           this.toast.error('No hay matrícula válida para notificar.');

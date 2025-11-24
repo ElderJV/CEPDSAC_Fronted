@@ -1,0 +1,125 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Métodos de Pago</h2>
+    <button class="btn-primary" (click)="mostrarFormularioNuevoMetodo()">
+      <lucide-icon [img]="PlusIcon" [size]="18"></lucide-icon>
+      Añadir Método de Pago
+    </button>
+  </div>
+
+  @if (mostrarFormularioMetodo) {
+    <div class="metodo-form">
+      <h3>{{ metodoEnEdicion ? 'Editar' : 'Nuevo' }} Método de Pago</h3>
+      
+      <div class="form-group">
+        <label>Tipo de Método *</label>
+        <input type="text" [(ngModel)]="nuevoMetodo.tipoMetodo" placeholder="Ej: YAPE, PLIN, TRANSFERENCIA">
+      </div>
+
+      <div class="form-group">
+        <label>Descripción *</label>
+        <textarea [(ngModel)]="nuevoMetodo.descripcion" rows="2" 
+          placeholder="Descripción del método de pago"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Requisitos *</label>
+        <textarea [(ngModel)]="nuevoMetodo.requisitos" rows="2" 
+          placeholder="Requisitos para usar este método"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Imagen QR</label>
+        <div class="file-upload-container">
+          <input type="file" 
+            id="qr-upload" 
+            accept="image/*" 
+            (change)="onFileSelected($event)"
+            style="display: none;">
+          <button type="button" class="btn-secondary" onclick="document.getElementById('qr-upload').click()">
+            <lucide-icon [img]="UploadIcon" [size]="16"></lucide-icon>
+            Seleccionar Imagen
+          </button>
+          @if (imagenQRPreview) {
+            <div class="qr-preview">
+              <img [src]="imagenQRPreview" alt="Preview QR">
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="nuevoMetodo.activo">
+          Activo
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-primary" (click)="guardarMetodo()">
+          {{ metodoEnEdicion ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button class="btn-secondary" (click)="cancelarEdicion()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  }
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>QR</th>
+          <th>Tipo</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (metodo of metodosPago; track metodo.idMetodoPago) {
+          <tr>
+            <td class="qr-cell">
+              @if (metodo.imagenQR) {
+                <img [src]="metodo.imagenQR" alt="QR" class="qr-thumbnail">
+              } @else {
+                <div class="no-qr">Sin QR</div>
+              }
+            </td>
+            <td>{{ metodo.tipoMetodo }}</td>
+            <td>{{ metodo.descripcion || '-' }}</td>
+            <td>
+              <span class="badge" [class.badge-success]="metodo.activo" [class.badge-danger]="!metodo.activo">
+                {{ metodo.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <div class="actions">
+                <button class="icon-btn edit-icon" (click)="editarMetodo(metodo)" title="Editar">
+                  <lucide-icon [img]="PencilIcon" [size]="16"></lucide-icon>
+                </button>
+                <button class="icon-btn" 
+                  [class.toggle-on]="metodo.activo"
+                  [class.toggle-off]="!metodo.activo"
+                  (click)="cambiarEstadoMetodo(metodo)" 
+                  [title]="metodo.activo ? 'Desactivar' : 'Activar'">
+                  <lucide-icon [img]="PowerIcon" [size]="16"></lucide-icon>
+                </button>
+                <button class="icon-btn delete-icon" (click)="eliminarMetodo(metodo)" title="Eliminar">
+                  <lucide-icon [img]="TrashIcon" [size]="16"></lucide-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="empty-state">
+              No hay métodos de pago registrados
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

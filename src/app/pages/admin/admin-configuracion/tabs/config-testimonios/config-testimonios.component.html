@@ -1,0 +1,70 @@
+<div class="card">
+  <h2>Testimonios</h2>
+  <div style="clear: both;"></div>
+  
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Cargando testimonios...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-state">
+    <lucide-icon [img]="AlertIcon" [size]="24"></lucide-icon>
+    <p>{{ errorMessage }}</p>
+    <button class="btn-primary" (click)="cargarTestimonios()">Reintentar</button>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && testimonios.length === 0" class="empty-state">
+    <p>No hay testimonios registrados</p>
+  </div>
+  
+  <div *ngIf="!isLoading && !errorMessage && testimonios.length > 0" class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Correo</th>
+          <th>Comentario</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let testimonio of testimonios; trackBy: trackById">
+          <td>{{ testimonio.idUsuario.nombre }} {{ testimonio.idUsuario.apellido }}</td>
+          <td>{{ testimonio.idUsuario.correo }}</td>
+          <td class="comment-cell">
+            <div class="comment-text">{{ testimonio.comentario }}</div>
+          </td>
+          <td>
+            <span [class]="'badge ' + getEstadoBadgeClass(testimonio.estadoAprobado)">
+              {{ getEstadoTexto(testimonio.estadoAprobado) }}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <button 
+                *ngIf="testimonio.estadoAprobado !== true"
+                class="icon-btn approve-btn" 
+                (click)="aprobarTestimonio(testimonio)"
+                title="Aprobar">
+                <lucide-icon [img]="CheckIcon" [size]="18"></lucide-icon>
+              </button>
+              <button 
+                *ngIf="testimonio.estadoAprobado !== false"
+                class="icon-btn reject-btn" 
+                (click)="rechazarTestimonio(testimonio)"
+                title="Rechazar">
+                <lucide-icon [img]="XIcon" [size]="18"></lucide-icon>
+              </button>
+              <button 
+                class="icon-btn delete-btn" 
+                (click)="eliminarTestimonio(testimonio)"
+                title="Eliminar">
+                <lucide-icon [img]="TrashIcon" [size]="18"></lucide-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

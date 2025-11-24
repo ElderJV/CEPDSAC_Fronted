@@ -1,143 +1,58 @@
-
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Configuración</h1>
-            <p>Edita Información de la página principal aquí</p>
-        </div>
-
-        <!-- Métricas del Sitio -->
-        <div class="card">
-            <h2>Métricas del Sitio</h2>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Número de Estudiantes</label>
-                    <input type="text" value="1200">
-                </div>
-                <div class="form-group">
-                    <label>Certificaciones</label>
-                    <input type="text" value="1200">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Instructores</label>
-                    <input type="text" value="1200">
-                </div>
-                <div class="form-group">
-                    <label>Cursos</label>
-                    <input type="text" value="1200">
-                </div>
-            </div>
-            <button class="btn-primary">Guardar Cambios</button>
-            <div style="clear: both;"></div>
-        </div>
-
-        <!-- Sponsors -->
-        <div class="card">
-            <h2>Sponsors</h2>
-            <button class="btn-success">Añadir Sponsor</button>
-            <div style="clear: both;"></div>
-            
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Logo</th>
-                            <th>Nombre</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="logo-cell">
-                                <div class="avatar"></div>
-                            </td>
-                            <td>UNT</td>
-                            <td>
-                                <div class="actions">
-                                    <button class="icon-btn edit-icon">✏️</button>
-                                    <button class="icon-btn delete-icon">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="logo-cell">
-                                <div class="avatar"></div>
-                            </td>
-                            <td>UNT</td>
-                            <td>
-                                <div class="actions">
-                                    <button class="icon-btn edit-icon">✏️</button>
-                                    <button class="icon-btn delete-icon">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="logo-cell">
-                                <div class="avatar"></div>
-                            </td>
-                            <td>UNT</td>
-                            <td>
-                                <div class="actions">
-                                    <button class="icon-btn edit-icon">✏️</button>
-                                    <button class="icon-btn delete-icon">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Testimonios -->
-        <div class="card">
-            <h2>Testimonios</h2>
-            <button class="btn-success">Añadir Testimonio</button>
-            <div style="clear: both;"></div>
-            
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Estudiante</th>
-                            <th>Mensaje</th>
-                            <th>Curso / Diplomado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="logo-cell">
-                                <div class="avatar"></div>
-                            </td>
-                            <td>Jhon Doe</td>
-                            <td>Este curso me sirvió mucho en mi carrera...</td>
-                            <td>Desarrollo de Apps Móviles</td>
-                            <td>
-                                <div class="actions">
-                                    <button class="icon-btn edit-icon">✏️</button>
-                                    <button class="icon-btn delete-icon">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="logo-cell">
-                                <div class="avatar"></div>
-                            </td>
-                            <td>Jhon Doe</td>
-                            <td>Este curso me sirvió mucho en mi...</td>
-                            <td>Desarrollo de Apps Móviles</td>
-                            <td>
-                                <div class="actions">
-                                    <button class="icon-btn edit-icon">✏️</button>
-                                    <button class="icon-btn delete-icon">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<section>
+  <h1 class="titulo_admin">Configuración</h1>
+  
+  <div class="contenido-admin">
+    <div class="tabs-container">
+      <div class="tabs">
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'general'"
+          (click)="selectTab('general')">
+          General
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'metodos-pago'"
+          (click)="selectTab('metodos-pago')">
+          Métodos de Pago
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'sponsors'"
+          (click)="selectTab('sponsors')">
+          Sponsors
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'testimonios'"
+          (click)="selectTab('testimonios')">
+          Testimonios
+        </button>
+        <button 
+          class="tab" 
+          [class.active]="activeTab === 'contacto'"
+          (click)="selectTab('contacto')">
+          Contacto
+        </button>
+      </div>
     </div>
+
+    <div class="tab-content">
+      @if (activeTab === 'general') {
+        <app-config-general />
+      }
+      @if (activeTab === 'metodos-pago') {
+        <app-config-metodos-pago />
+      }
+      @if (activeTab === 'sponsors') {
+        <app-config-sponsors />
+      }
+      @if (activeTab === 'testimonios') {
+        <app-config-testimonios />
+      }
+      @if (activeTab === 'contacto') {
+        <app-config-contacto />
+      }
+    </div>
+  </div>
+</section>

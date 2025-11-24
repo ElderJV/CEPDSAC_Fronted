@@ -134,3 +134,53 @@
 	.course-thumb { width: 120px; height: 80px; }
 }
 
+.payment-methods {
+	margin-bottom: 1rem;
+}
+
+.btn-payment-method {
+	min-width: 90px;
+	padding: 8px 16px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	border: 2px solid #0062ff;
+	color: #0062ff;
+	background: white;
+}
+
+.btn-payment-method:hover {
+	background: rgba(0, 98, 255, 0.1);
+	transform: translateY(-2px);
+}
+
+.btn-payment-method.active {
+	background: #0062ff;
+	color: white;
+	border-color: #0062ff;
+	box-shadow: 0 4px 12px rgba(0, 98, 255, 0.3);
+}
+
+.qr-section {
+	animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 575px) {
+	.btn-payment-method {
+		min-width: 80px;
+		padding: 6px 12px;
+		font-size: 0.85rem;
+	}
+}

@@ -1,0 +1,32 @@
+@import '../../admin-configuracion.component.css';
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    margin-bottom: 0;
+}
+
+.btn-success lucide-icon,
+.btn-secondary lucide-icon {
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-on lucide-icon {
+    color: #4CAF50;
+}
+
+.toggle-off lucide-icon {
+    color: #999;
+}

@@ -63,26 +63,67 @@
 
 			<div class="col-12 col-lg-4">
 				<div class="payment-card p-4 text-center shadow-sm">
-					<h6 class="text-black mb-3">Escanea el QR</h6>
+					<h6 class="text-black mb-3">Método de Pago</h6>
 
-										@if (programacionSeleccionada) {
-											<div class="qr-placeholder mb-3">
-												<img src="https://www.efbasket.com/wp-content/uploads/2024/12/QR-efbasket.jpeg" alt="qr" class="qr-img" />
-											</div>
-										} @else {
-											<div class="qr-placeholder">QR</div>
-										}
+					@if (loadingMetodos()) {
+						<div class="text-center py-3">
+							<div class="spinner-border spinner-border-sm" role="status">
+								<span class="visually-hidden">Cargando...</span>
+							</div>
+							<p class="small text-muted mt-2">Cargando métodos de pago...</p>
+						</div>
+					} @else if (metodosPago.length === 0) {
+						<div class="alert alert-warning" role="alert">
+							No hay métodos de pago disponibles
+						</div>
+					} @else {
+						<div class="payment-methods mb-3">
+							<div class="d-flex gap-2 flex-wrap justify-content-center">
+								@for (metodo of metodosPago; track metodo.idMetodoPago) {
+									<button 
+										type="button"
+										(click)="seleccionarMetodoPago(metodo)"
+										[class.active]="metodoPagoSeleccionado?.idMetodoPago === metodo.idMetodoPago"
+										class="btn btn-outline-primary btn-payment-method">
+										{{ metodo.tipoMetodo }}
+									</button>
+								}
+							</div>
+						</div>
+
+						@if (metodoPagoSeleccionado) {
+							<div class="qr-section mb-3">
+								<p class="small text-muted mb-2">Escanea el QR de {{ metodoPagoSeleccionado.tipoMetodo }}</p>
+								@if (metodoPagoSeleccionado.imagenQR) {
+									<div class="qr-placeholder mb-3">
+										<img 
+											[src]="metodoPagoSeleccionado.imagenQR" 
+											[alt]="'QR ' + metodoPagoSeleccionado.tipoMetodo" 
+											class="qr-img" />
+									</div>
+								} @else {
+									<div class="qr-placeholder">
+										<span class="text-muted">Sin QR</span>
+									</div>
+								}
+							</div>
+						} @else {
+							<div class="qr-placeholder mb-3">
+								<span class="text-muted">Selecciona un método</span>
+							</div>
+						}
+					}
 
 					  <div class="pay-amount mb-3">S/. <span class="fw-bold">{{ programacionSeleccionada?.monto ?? '0.00' }}</span></div>
 
-					<button class="btn btn-pay btn-lg w-100" (click)="notificarPago()" [disabled]="!matriculaCreada() || loading()">{{ loading() ? 'Procesando...' : 'PAGADO' }}</button>
+					<button class="btn btn-pay btn-lg w-100" (click)="notificarPago()" [disabled]="!matriculaCreada() || loading() || !metodoPagoSeleccionado">{{ loading() ? 'Procesando...' : 'PAGADO' }}</button>
 
 					<p class="small text-danger mt-3 mb-0">Recuerda enviar la captura de tu pago al siguiente número</p>
-										<p class="small text-muted"><strong>
+											<p class="small text-muted"><strong>
 											  <a [href]="contactPhoneHref" target="_blank" rel="noopener noreferrer" class="text-muted" [attr.aria-label]="'Contactar por WhatsApp al ' + contactPhoneDisplay">{{ contactPhoneDisplay }}</a>
-										</strong></p>
+											</strong></p>
 				</div>
 			</div>
 		</div>
-	</div>
+		</div>
 </section>

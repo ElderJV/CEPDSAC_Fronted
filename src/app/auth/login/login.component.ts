@@ -101,6 +101,15 @@ export class LoginComponent {
       showCancelButton: true,
       confirmButtonText: 'Enviar',
       cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#FF4D00',
+      cancelButtonColor: '#010102ff',
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        input: 'custom-swal-input',
+        confirmButton: 'custom-swal-confirm',
+        cancelButton: 'custom-swal-cancel'
+      },
       preConfirm: async (value) => {
         if (!value) {
           Swal.showValidationMessage('El correo es requerido');
@@ -121,8 +130,16 @@ export class LoginComponent {
     if (result && result.value) {
       Swal.fire({
         icon: 'success',
+        iconColor: '#FF4D00',
         title: 'Enviado',
-        text: 'Si el correo existe en nuestro sistema, recibirás un email con instrucciones.'
+        text: 'Verificado, recibirás un email con instrucciones, Por favor verificalo.',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: '#FF4D00',
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          confirmButton: 'custom-swal-confirm'
+        }
       });
     }
   }

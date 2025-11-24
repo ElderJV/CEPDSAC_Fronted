@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { MetricsService, MetricsResponse } from '../../../core/services/metrics.service';
+import { ConfiguracionGeneralService } from '../../../core/services/configuracion-general.service';
 
 @Component({
   selector: 'app-estadisticas',
@@ -10,14 +10,32 @@ import { MetricsService, MetricsResponse } from '../../../core/services/metrics.
   styleUrls: ['./estadisticas.component.css'],
 })
 export class EstadisticasComponent implements OnInit {
-  metrics: MetricsResponse = { estudiantes: 0, certificaciones: 0, instructores: 0, cursos: 0 };
+  private configService = inject(ConfiguracionGeneralService);
 
-  constructor(private metricsService: MetricsService) {}
+  metrics = {
+    estudiantes: 0,
+    certificaciones: 0,
+    instructores: 0,
+    cursos: 0
+  };
 
   ngOnInit(): void {
-    this.metricsService.getMetrics().subscribe({
-      next: (m) => (this.metrics = m),
-      error: (err) => console.error('Error cargando métricas', err),
+    this.cargarEstadisticas();
+  }
+
+  cargarEstadisticas(): void {
+    this.configService.obtener().subscribe({
+      next: (config) => {
+        this.metrics = {
+          estudiantes: config.numeroEstudiantes || 0,
+          certificaciones: config.numeroCertificaciones || 0,
+          instructores: config.numeroInstructores || 0,
+          cursos: config.numeroCursos || 0
+        };
+      },
+      error: (err) => {
+        console.error('Error cargando estadísticas:', err);
+      }
     });
   }
 }

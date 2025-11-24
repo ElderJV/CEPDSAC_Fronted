@@ -25,8 +25,7 @@ import { AdminDiplomadosComponent } from './pages/admin/admin-diplomados/admin-d
 import { AdminEstudiantesComponent } from './pages/admin/admin-estudiantes/admin-estudiantes.component';
 import { AdminProfesoresComponent } from './pages/admin/admin-profesores/admin-profesores.component';
 import { AdminTestimoniosComponent } from './pages/admin/admin-testimonios/admin-testimonios.component';
-import { AdminSponsorsComponent } from './pages/admin/admin-sponsors/admin-sponsors.component';
-import { SponsorsResolver } from './core/resolvers/sponsors.resolver';
+import { AdminConfiguracionComponent } from './pages/admin/admin-configuracion/admin-configuracion.component';
 
 export const routes: Routes = [
   {
@@ -103,12 +102,10 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'sponsors',
-        component: AdminSponsorsComponent,
+        path: 'configuracion',
+        component: AdminConfiguracionComponent,
         pathMatch: 'full',
-        resolve: { sponsors: SponsorsResolver },
       },
-      
     ],
   },
   { path: 'login', component: LoginComponent },

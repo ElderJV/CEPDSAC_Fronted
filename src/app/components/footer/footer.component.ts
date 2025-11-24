@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { ConfiguracionContactoService } from '../../core/services/configuracion-contacto.service';
 
 interface Link {
   url?: string;
@@ -27,7 +28,9 @@ interface SocialLink {
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
+  private contactoService = inject(ConfiguracionContactoService);
+
   public anioActual: number = new Date().getFullYear();
 
   public isModalVisible = false;
@@ -45,38 +48,88 @@ export class FooterComponent {
     },
   ];
 
-  public contactInfo: ContactInfo[] = [
-    {
-      url: 'https://wa.me/51956782481',
-      iconClass: 'fab fa-whatsapp',
-      text: '+51 956 782 481',
-      ariaLabel: 'Contactar por WhatsApp',
-    },
-    {
-      url: 'mailto:info@cedpsac.com',
-      iconClass: 'fas fa-envelope',
-      text: 'info@cedpsac.com',
-      ariaLabel: 'Enviar correo electrónico',
-    },
-  ];
+  public contactInfo: ContactInfo[] = [];
 
-  public socialLinks: SocialLink[] = [
-    {
-      url: '#',
-      iconClass: 'fab fa-facebook-f',
-      ariaLabel: 'Visita nuestra página de Facebook',
-    },
-    {
-      url: '#',
-      iconClass: 'fab fa-instagram',
-      ariaLabel: 'Síguenos en Instagram',
-    },
-    {
-      url: '#',
-      iconClass: 'fab fa-linkedin-in',
-      ariaLabel: 'Conecta con nosotros en LinkedIn',
-    },
-  ];
+  public socialLinks: SocialLink[] = [];
+
+  ngOnInit(): void {
+    this.cargarConfiguracionContacto();
+  }
+
+  cargarConfiguracionContacto(): void {
+    this.contactoService.obtener().subscribe({
+      next: (config) => {
+        // Configurar información de contacto
+        this.contactInfo = [];
+        
+        if (config.whatsapp) {
+          this.contactInfo.push({
+            url: `https://wa.me/${config.whatsapp.replace(/[^0-9]/g, '')}`,
+            iconClass: 'fab fa-whatsapp',
+            text: config.whatsapp,
+            ariaLabel: 'Contactar por WhatsApp',
+          });
+        }
+
+        if (config.correoContacto) {
+          this.contactInfo.push({
+            url: `mailto:${config.correoContacto}`,
+            iconClass: 'fas fa-envelope',
+            text: config.correoContacto,
+            ariaLabel: 'Enviar correo electrónico',
+          });
+        }
+
+        if (config.telefono) {
+          this.contactInfo.push({
+            url: `tel:${config.telefono.replace(/[^0-9+]/g, '')}`,
+            iconClass: 'fas fa-phone',
+            text: config.telefono,
+            ariaLabel: 'Llamar por teléfono',
+          });
+        }
+
+        // Configurar redes sociales
+        this.socialLinks = [];
+
+        if (config.facebook) {
+          this.socialLinks.push({
+            url: config.facebook,
+            iconClass: 'fab fa-facebook-f',
+            ariaLabel: 'Visita nuestra página de Facebook',
+          });
+        }
+
+        if (config.instagram) {
+          this.socialLinks.push({
+            url: config.instagram,
+            iconClass: 'fab fa-instagram',
+            ariaLabel: 'Síguenos en Instagram',
+          });
+        }
+
+        if (config.linkedin) {
+          this.socialLinks.push({
+            url: config.linkedin,
+            iconClass: 'fab fa-linkedin-in',
+            ariaLabel: 'Conecta con nosotros en LinkedIn',
+          });
+        }
+
+        if (config.twitter) {
+          this.socialLinks.push({
+            url: config.twitter,
+            iconClass: 'fab fa-twitter',
+            ariaLabel: 'Síguenos en Twitter',
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando configuración de contacto:', err);
+        // Mantener valores por defecto vacíos en caso de error
+      }
+    });
+  }
 
   // --- Modal con textos formateados en HTML ---
   openModal(type: 'privacy' | 'terms'): void {

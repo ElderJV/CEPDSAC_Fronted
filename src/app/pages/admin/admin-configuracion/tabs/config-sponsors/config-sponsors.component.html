@@ -1,0 +1,134 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Sponsors</h2>
+    <button class="btn-primary" (click)="openCreateModal()">
+      <lucide-icon [img]="PlusIcon" [size]="18"></lucide-icon>
+      Añadir Sponsor
+    </button>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <p>Cargando sponsors...</p>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Logo</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sponsor of sponsors; track sponsor.idSponsor) {
+            <tr>
+              <td class="logo-cell">
+                <img [src]="getImageUrl(sponsor.rutaImagen)" [alt]="sponsor.nombre" class="logo-img">
+              </td>
+              <td>{{ sponsor.nombre }}</td>
+              <td>
+                <div class="actions">
+                  <button class="icon-btn edit-icon" (click)="openEditModal(sponsor)" title="Editar">
+                    <lucide-icon [img]="PencilIcon" [size]="16"></lucide-icon>
+                  </button>
+                  <button class="icon-btn delete-icon" (click)="deleteSponsor(sponsor)" title="Eliminar">
+                    <lucide-icon [img]="TrashIcon" [size]="16"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="3" class="empty-state">
+                No hay sponsors registrados
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? 'Editar Sponsor' : 'Nuevo Sponsor' }}</h3>
+        <button class="close-btn" (click)="closeModal()">
+          <lucide-icon [img]="XIcon" [size]="24"></lucide-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (submitError) {
+          <div class="alert alert-error">
+            {{ submitError }}
+          </div>
+        }
+
+        <form (ngSubmit)="submitForm()">
+          <div class="form-group">
+            <label for="nombre">Nombre del Sponsor *</label>
+            <input
+              type="text"
+              id="nombre"
+              [(ngModel)]="sponsorNombre"
+              name="nombre"
+              placeholder="Ej: SENATI"
+              required
+              [disabled]="isSubmitting"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="imagen">Logo {{ isEditMode ? '(opcional)' : '*' }}</label>
+            <input
+              type="file"
+              id="imagen"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              [disabled]="isSubmitting"
+            >
+            <small>Formatos: JPG, PNG, GIF. Máximo 5MB</small>
+          </div>
+
+          @if (imagePreview) {
+            <div class="image-preview">
+              <img [src]="imagePreview" alt="Preview">
+            </div>
+          }
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="closeModal()"
+              [disabled]="isSubmitting"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="isSubmitting"
+            >
+              {{ isSubmitting ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Crear') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

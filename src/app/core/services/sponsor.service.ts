@@ -40,6 +40,6 @@ export class SponsorService {
   }
 
   getImageUrl(rutaImagen: string): string {
-    return `${environment.apiUrl.replace('/api', '')}${rutaImagen}`;
+    return rutaImagen;
   }
 }
