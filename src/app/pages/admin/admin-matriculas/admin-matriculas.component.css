@@ -1,0 +1,80 @@
+@import '../admin-styles.css';
+
+.admin-container {
+  padding: 2rem;
+}
+
+.alert-custom {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: rgba(1, 49, 98, 0.05);
+  border-left: 4px solid var(--cedpsac-blue);
+}
+
+.alert-icon {
+  color: var(--cedpsac-blue);
+  font-size: 1.5rem;
+}
+
+.alert-content {
+  color: var(--cedpsac-blue);
+  font-weight: 500;
+}
+
+.pagination {
+  gap: 0.5rem;
+}
+
+.page-item.disabled .page-link {
+  background-color: transparent;
+  border: none;
+  color: var(--cedpsac-gray);
+}
+
+.page-link {
+  color: var(--cedpsac-blue);
+  border: 1px solid var(--cedpsac-gray-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  transition: var(--transition-normal);
+}
+
+.page-link:hover {
+  background-color: var(--cedpsac-blue);
+  color: var(--cedpsac-white);
+  border-color: var(--cedpsac-blue);
+}
+
+.input-group-text {
+  background-color: var(--cedpsac-white);
+  border-color: #ced4da;
+}
+
+.form-control.border-start-0 {
+  border-left: none;
+}
+
+.form-control.border-start-0:focus {
+  border-left: none;
+}
+
+.progress {
+  background-color: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+.progress-bar.bg-success {
+  background-color: var(--cedpsac-blue) !important;
+}
+
+.progress-bar.bg-warning {
+  background-color: var(--cedpsac-orange) !important;
+}

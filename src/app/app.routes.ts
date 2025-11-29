@@ -13,20 +13,6 @@ import { CursosGeneralComponent } from './pages/home/cursos-general/cursos-gener
 import { DiplomadosGeneralComponent } from './pages/home/diplomados-general/diplomados-general.component';
 import { MatriculaGeneralComponent } from './pages/home/matricula-general/matricula-general.component';
 
-// Login y Register
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { RecuperarPassComponent } from './auth/recuperar-pass/recuperar-pass.component';
-
-// Pages del Admin
-import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
-import { AdminCursosComponent } from './pages/admin/admin-cursos/admin-cursos.component';
-import { AdminDiplomadosComponent } from './pages/admin/admin-diplomados/admin-diplomados.component';
-import { AdminEstudiantesComponent } from './pages/admin/admin-estudiantes/admin-estudiantes.component';
-import { AdminProfesoresComponent } from './pages/admin/admin-profesores/admin-profesores.component';
-import { AdminTestimoniosComponent } from './pages/admin/admin-testimonios/admin-testimonios.component';
-import { AdminConfiguracionComponent } from './pages/admin/admin-configuracion/admin-configuracion.component';
-
 export const routes: Routes = [
   {
     path: '',
@@ -70,47 +56,24 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: DashboardComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'cursos',
-        component: AdminCursosComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'diplomados',
-        component: AdminDiplomadosComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'estudiantes',
-        component: AdminEstudiantesComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'profesores',
-        component: AdminProfesoresComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'testimonios',
-        component: AdminTestimoniosComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'configuracion',
-        component: AdminConfiguracionComponent,
-        pathMatch: 'full',
-      },
-    ],
+    loadChildren: () => import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES)
   },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'registro', component: RegisterComponent },
-  { path: 'reset-password', component: RecuperarPassComponent },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) 
+  },
+  { 
+    path: 'register', 
+    loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) 
+  },
+  { 
+    path: 'registro', 
+    loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) 
+  },
+  { 
+    path: 'reset-password', 
+    loadComponent: () => import('./auth/recuperar-pass/recuperar-pass.component').then(m => m.RecuperarPassComponent) 
+  },
   { path: '**', component: MainComponent },
 ];
+

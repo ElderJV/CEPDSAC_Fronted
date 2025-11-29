@@ -15,64 +15,6 @@
       </h1>
     </div>
 
-    @if ((diplomado()?.programaciones || []).length > 0) {
-      <div class="row g-3 mb-4">
-        @for (programacion of (diplomado()?.programaciones || []); track programacion.idProgramacionCurso; let i = $index) {
-          @if (i === 0) {
-            <div class="col-md-6 col-lg-3">
-              <div class="info-box p-3 h-100 text-center">
-                <div class="icon mb-2">
-                  <i class="bi bi-laptop fs-2"></i>
-                </div>
-                <h5 class="fw-bold mb-1">Modalidad:</h5>
-                <p>{{ getModalidadLabel(programacion.modalidad) }}</p>
-              </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-              <div class="info-box p-3 h-100 text-center">
-                <div class="icon mb-2">
-                  <i class="bi bi-clock fs-2"></i>
-                </div>
-                <h5 class="fw-bold mb-1">Duración:</h5>
-                <p>{{ programacion.duracionCurso }} Horas</p>
-              </div>
-            </div>
-          }
-        }
-
-            <div class="col-lg-6">
-          <div class="grid-box p-3 h-100">
-            <h5 class="fw-bold mb-3 text-center">Programaciones Disponibles</h5>
-            <div class="table-responsive">
-              <table class="table table-sm table-striped">
-                <thead>
-                  <tr>
-                    <th>Docente</th>
-                    <th>Horario</th>
-                    <th>Inicio</th>
-                    <th>Modalidad</th>
-                    <th>Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (prog of (diplomado()?.programaciones || []); track prog.idProgramacionCurso) {
-                    <tr>
-                      <td>{{ getNombreCompleto(prog) }}</td>
-                      <td>{{ prog.horario || 'Por definir' }}</td>
-                      <td>{{ prog.fechaInicio | date: 'dd/MM/yyyy' }}</td>
-                      <td>{{ getModalidadLabel(prog.modalidad) }}</td>
-                      <td>S/. {{ prog.monto | number: '1.2-2' }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-
     @if (diplomado()?.objetivo) {
       <div class="card p-4 mb-4 about-box">
         <h5 class="fw-bold text-uppercase mb-3">Acerca de este {{ diplomado()?.tipo ? 'diplomado' : 'curso' }}:</h5>
@@ -80,11 +22,98 @@
       </div>
     }
 
+    @if ((diplomado()?.programaciones || []).length > 0) {
+      <div class="programaciones-section mb-4">
+        <h3 class="section-title mb-4">
+          <i class="bi bi-calendar-check me-2"></i>
+          Selecciona tu Programación
+        </h3>
+        
+        <div class="row g-4">
+          @for (prog of (diplomado()?.programaciones || []); track prog.idProgramacionCurso) {
+            <div class="col-12 col-md-6 col-lg-4">
+              <div 
+                class="program-card" 
+                [class.selected]="programacionSeleccionada === prog.idProgramacionCurso"
+                (click)="seleccionarProgramacion(prog.idProgramacionCurso)">
+                
+                <div class="program-card-header">
+                  <div class="program-badge">{{ getModalidadLabel(prog.modalidad) }}</div>
+                  <div class="program-price">S/. {{ prog.monto | number: '1.2-2' }}</div>
+                </div>
+
+                <div class="program-card-body">
+                  <div class="program-info-item">
+                    <i class="bi bi-person-circle"></i>
+                    <div>
+                      <small class="text-muted">Docente</small>
+                      <div class="fw-semibold">{{ getNombreCompleto(prog) }}</div>
+                    </div>
+                  </div>
+
+                  <div class="program-info-item">
+                    <i class="bi bi-calendar-range"></i>
+                    <div>
+                      <small class="text-muted">Fecha de Inicio</small>
+                      <div class="fw-semibold">{{ prog.fechaInicio | date: 'dd/MM/yyyy' }}</div>
+                    </div>
+                  </div>
+
+                  @if (prog.horario) {
+                    <div class="program-info-item">
+                      <i class="bi bi-clock"></i>
+                      <div>
+                        <small class="text-muted">Horario</small>
+                        <div class="fw-semibold">{{ prog.horario }}</div>
+                      </div>
+                    </div>
+                  }
+
+                  @if (prog.duracionCurso) {
+                    <div class="program-info-item">
+                      <i class="bi bi-hourglass-split"></i>
+                      <div>
+                        <small class="text-muted">Duración</small>
+                        <div class="fw-semibold">{{ prog.duracionCurso }} horas</div>
+                      </div>
+                    </div>
+                  }
+
+                  @if (prog.duracionMeses) {
+                    <div class="program-info-item">
+                      <i class="bi bi-credit-card"></i>
+                      <div>
+                        <small class="text-muted">Cuotas</small>
+                        <div class="fw-semibold">{{ prog.duracionMeses }} meses</div>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="program-card-footer">
+                  <div class="selection-indicator">
+                    @if (programacionSeleccionada === prog.idProgramacionCurso) {
+                      <i class="bi bi-check-circle-fill"></i>
+                      <span>Seleccionada</span>
+                    } @else {
+                      <i class="bi bi-circle"></i>
+                      <span>Seleccionar</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
     <div class="row g-3 mb-4">
       <div class="col-md-6">
         <div class="card p-3 h-100 materials-box">
           <h5 class="fw-bold text-uppercase mb-3">
-            {{ getMaterialesArray().length > 0 ? 'Materiales incluidos:' : 'Información:' }}
+            <i class="bi bi-box-seam me-2"></i>
+            {{ getMaterialesArray().length > 0 ? 'Materiales incluidos' : 'Información' }}
           </h5>
           <ul class="mb-0">
             @if (getMaterialesArray().length > 0) {
@@ -109,7 +138,8 @@
       <div class="col-md-6">
         <div class="card p-3 h-100 requisitos-box">
           <h5 class="fw-bold text-uppercase mb-3">
-            {{ getRequisitosArray().length > 0 ? 'Requisitos:' : 'Programaciones:' }}
+            <i class="bi bi-list-check me-2"></i>
+            {{ getRequisitosArray().length > 0 ? 'Requisitos' : 'Detalles' }}
           </h5>
           <ul class="mb-0">
             @if (getRequisitosArray().length > 0) {
@@ -117,28 +147,28 @@
                 <li>{{ requisito }}</li>
               }
             } @else {
-              @for (prog of (diplomado()?.programaciones || []); track prog.idProgramacionCurso) {
-                <li>
-                  <strong>{{ getNombreCompleto(prog) }}</strong>
-                  @if (prog.horario) {
-                    <span> - {{ prog.horario }}</span>
-                  }
-                  - {{ getModalidadLabel(prog.modalidad) }}
-                  - Desde {{ prog.fechaInicio | date: 'dd/MM/yyyy' }}
-                  - S/. {{ prog.monto | number: '1.2-2' }}
-                </li>
+              @if (diplomado()?.otorgaCertificado) {
+                <li>Certificado al finalizar</li>
               }
+              @if ((diplomado()?.programaciones || []).length > 0) {
+                <li>Múltiples horarios disponibles</li>
+              }
+              <li>Modalidades flexibles</li>
             }
           </ul>
         </div>
       </div>
     </div>
 
-    <div class="text-center">
+    <div class="text-center action-buttons">
       <button class="btn btn-carrito mx-2 fw-bold rounded-pill">
+        <i class="bi bi-cart-plus me-2"></i>
         Añadir al carrito
       </button>
-      <button class="btn btn-comprar mx-2 fw-bold rounded-pill" (click)="matricularPrimer()">Matricularse</button>
+      <button class="btn btn-comprar mx-2 fw-bold rounded-pill" (click)="matricularPrimer()">
+        <i class="bi bi-check-circle me-2"></i>
+        Matricularse
+      </button>
     </div>
   }
 </section>

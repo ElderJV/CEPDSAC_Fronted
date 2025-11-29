@@ -9,7 +9,13 @@
     <tbody>
       <tr *ngFor="let item of data">
         <td *ngFor="let col of columns">{{ item[col.key] }}</td>
-        <td><app-action-buttons-admin/></td>
+        <td>
+          <app-action-buttons-admin
+            (edit)="edit.emit(item)"
+            (delete)="delete.emit(item)"
+            (view)="view.emit(item)"
+          />
+        </td>
       </tr>
     </tbody>
   </table>

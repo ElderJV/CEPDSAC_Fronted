@@ -58,6 +58,19 @@ aside {
   object-fit: cover;
 }
 
+/* palabra grande no sale de la tarjeta */
+.curso-card .card-title {
+  font-weight: 700;
+  line-height: 1.3;
+  font-size: clamp(0.6rem, 1.8vw, 1.2rem);
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+  white-space: normal;
+  max-height: 4.5em;
+  overflow: visible;
+}
+
 .curso-card .card-footer {
   background-color: #013162;
   color: #fff;

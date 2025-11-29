@@ -1,9 +1,15 @@
 /* --- 1. Contenedor Principal (Host) --- */
 :host {
   flex-shrink: 0;
-  min-width: 280px; /* Ancho fijo del sidebar */
+  width: 280px; /* Ancho fijo del sidebar */
   background-color: #ffffff;
   border-right: 0.5px solid #FF4D00;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  overflow-y: auto; /* Permite scroll si el sidebar es muy alto */
 }
 
 .sidebar {
@@ -158,10 +164,89 @@
   color: #013162;
 }
 
-/* Active (cuando el enlace está activo - ¡magia de routerLinkActive!) */
+/* --- Submenu con Animación --- */
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0 10px;
+  background-color: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+  position: relative;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out, padding 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 500px; /* Altura suficiente para el contenido */
+  opacity: 1;
+  padding: 5px 0 10px 0;
+}
+
+.submenu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 10px;
+  left: 28px;
+  width: 2px;
+  background-color: #e9ecef;
+  z-index: 1;
+}
+
+.submenu li {
+  position: relative;
+}
+
+.submenu li a {
+  padding: 10px 15px 10px 50px;
+  font-size: 0.9rem;
+  color: #6c757d;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+}
+
+.submenu li a:hover {
+  background-color: #ffffff;
+  color: #ff4d00;
+  transform: translateX(5px); 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.submenu li a.active {
+  background-color: #fff0e6; 
+  color: #ff4d00;
+  font-weight: 600;
+}
+
+.submenu li a.active::before {
+  content: '';
+  position: absolute;
+  left: 26px; 
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #ff4d00;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.rotate-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Active State con Gradiente --- */
 .sidebar-nav a.active,
 .sidebar-footer a.active {
-  background-color: #ff4d00; /* Color principal */
-  color: #ffffff; /* Texto blanco */
-  box-shadow: 0 4px 10px -2px rgba(255, 77, 0, 0.5);
+  background: linear-gradient(135deg, #ff4d00 0%, #ff7e47 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px -3px rgba(255, 77, 0, 0.4);
+  border: none;
 }

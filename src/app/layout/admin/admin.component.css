@@ -1,10 +1,10 @@
 .admin-wrapper {
-  display: flex;
   min-height: 100vh;
-  background-color: #f8f9fa; /* Color de fondo para el área de contenido */
+  background-color: #f8f9fa;
 }
 
 .admin-content {
-  flex-grow: 1; /* Hace que el contenido principal ocupe el espacio restante */
-  overflow-y: auto; /* Permite scroll solo en esta área */
+  margin-left: 280px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
 }

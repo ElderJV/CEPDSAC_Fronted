@@ -1,5 +1,5 @@
 <aside class="sidebar">
-  
+
   <div class="sidebar-header">
     <a routerLink="/admin" class="sidebar-logo">
       <img src="/logo.png" alt="Admin CEPSAC" />
@@ -24,11 +24,7 @@
   <nav class="sidebar-nav">
     <ul>
       <li>
-        <a
-          routerLink="/admin/"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
+        <a routerLink="/admin/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-house-door-fill"></i>
           <span>Dashboard</span>
         </a>
@@ -58,15 +54,49 @@
         </a>
       </li>
       <li>
-        <a routerLink="/admin/testimonios" routerLinkActive="active">
-          <i class="bi bi-blockquote-right"></i>
-          <span>Testimonios</span>
+        <a (click)="toggleProgramacionSubmenu()" [class.active]="showProgramacionSubmenu"
+          style="cursor: pointer; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <i class="bi bi-calendar3"></i>
+            <span>Programación de Cursos</span>
+          </div>
+          <i class="bi bi-chevron-down" [class.rotate-icon]="showProgramacionSubmenu"></i>
         </a>
+        <ul class="submenu" [class.open]="showProgramacionSubmenu">
+          <li>
+            <a routerLink="/admin/programacion-cursos" routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }">
+              <span>Listado</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/admin/programacion-cursos/cancelar-masivo" routerLinkActive="active">
+              <span>Cierre de Programación</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li>
-        <a routerLink="/admin/sponsors" routerLinkActive="active">
-          <i class="bi bi-bookmark-star-fill"></i>
-          <span>Sponsors</span>
+        <a (click)="toggleMatriculasSubmenu()" [class.active]="showMatriculasSubmenu"
+          style="cursor: pointer; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <i class="bi bi-credit-card-2-front"></i>
+            <span>Matrículas</span>
+          </div>
+          <i class="bi bi-chevron-down" [class.rotate-icon]="showMatriculasSubmenu"></i>
+        </a>
+        <ul class="submenu" [class.open]="showMatriculasSubmenu">
+          <li>
+            <a routerLink="/admin/matriculas" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <span>Listado</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a routerLink="/admin/descuentos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="bi bi-percent"></i>
+          <span>Descuentos</span>
         </a>
       </li>
     </ul>

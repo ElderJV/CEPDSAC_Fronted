@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Pencil, Trash2, Plus, X } from 'lucide-angular';
 import { SponsorService } from '../../../../../core/services/sponsor.service';
+import { ToastService } from '../../../../../core/services/toast.service';
 import { Sponsor } from '../../../../../core/models/sponsor.model';
 
 @Component({
@@ -14,6 +15,7 @@ import { Sponsor } from '../../../../../core/models/sponsor.model';
 })
 export class ConfigSponsorsComponent implements OnInit {
   private sponsorService = inject(SponsorService);
+  private toast = inject(ToastService);
 
   readonly PencilIcon = Pencil;
   readonly TrashIcon = Trash2;
@@ -154,17 +156,24 @@ export class ConfigSponsorsComponent implements OnInit {
     }
   }
 
-  deleteSponsor(sponsor: Sponsor): void {
-    if (!confirm(`¿Estás seguro de eliminar el sponsor "${sponsor.nombre}"?`)) {
+  async deleteSponsor(sponsor: Sponsor): Promise<void> {
+    const confirmed = await this.toast.confirm(
+      '¿Eliminar Sponsor?',
+      `¿Estás seguro de eliminar el sponsor "${sponsor.nombre}"?`
+    );
+    
+    if (!confirmed) {
       return;
     }
+
     this.sponsorService.eliminar(sponsor.idSponsor).subscribe({
       next: () => {
+        this.toast.success('Sponsor eliminado correctamente');
         this.loadSponsors();
       },
       error: (err) => {
         console.error('Error eliminando sponsor:', err);
-        alert('Error al eliminar el sponsor');
+        this.toast.error('Error al eliminar el sponsor');
       }
     });
   }

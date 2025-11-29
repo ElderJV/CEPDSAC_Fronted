@@ -22,6 +22,7 @@ export class CursoComponent implements OnInit {
 
   curso = signal<CursoDetalle | null>(null);
   isLoading = signal(true);
+  programacionSeleccionada: number | null = null;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -40,6 +41,9 @@ export class CursoComponent implements OnInit {
       next: (data) => {
         console.log('curso detalle:', data);
         this.curso.set(data);
+        if (data.programaciones && data.programaciones.length > 0) {
+          this.programacionSeleccionada = data.programaciones[0].idProgramacionCurso;
+        }
         this.isLoading.set(false);
       },
       error: (err: HttpErrorResponse) => {
@@ -49,6 +53,10 @@ export class CursoComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  seleccionarProgramacion(idProgramacion: number): void {
+    this.programacionSeleccionada = idProgramacion;
   }
 
   getModalidadLabel(modalidad: string): string {
@@ -93,14 +101,16 @@ export class CursoComponent implements OnInit {
 
   comprar() {
     const c = this.curso();
-    const first = c?.programaciones && c.programaciones.length > 0
-      ? c.programaciones[0].idProgramacionCurso
-      : null;
     const cursoId = c?.idCursoDiplomado ?? null;
-    if (!first || !cursoId) {
-      this.toast.error('No hay programaciones disponibles para comprar.');
+    
+    if (!cursoId) {
+      this.toast.error('ID de curso no disponible.');
       return;
     }
-    this.irAMatricula(cursoId, first);
+    if (!this.programacionSeleccionada) {
+      this.toast.error('Por favor selecciona una programación antes de matricularte.');
+      return;
+    }
+    this.router.navigate(['/matricula', cursoId, this.programacionSeleccionada]);
   }
 }

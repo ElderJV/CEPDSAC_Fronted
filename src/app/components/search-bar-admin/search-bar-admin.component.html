@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between">
   <div class="cuadro-busqueda">
     <i class="bi bi-search"></i>
-    <input [placeholder]='placeholderText'/>
+    <input [placeholder]='placeholderText' (input)="onSearchInput($event)"/>
   </div>
 
   <div class="d-flex gap-3">
@@ -9,7 +9,7 @@
         <i class="bi bi-funnel"></i>
         Filtro
     </button>
-    <button class="btn nuevo">
+    <button class="btn nuevo" (click)="create.emit()">
         <i class="bi bi-plus-lg"></i>
         {{ nuevoBotonName }}
     </button>

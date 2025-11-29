@@ -1,0 +1,170 @@
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="CreditCard" class="me-2"></lucide-icon>
+      Gestión de Matrículas
+    </h2>
+    <button class="btn btn-primary d-flex align-items-center gap-2" routerLink="/admin/matriculas/personalizada">
+      <lucide-icon [img]="Plus" size="18"></lucide-icon>
+      Nueva Matrícula
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="mb-4">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0">
+                <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+              </span>
+              <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por DNI del alumno..."
+                [value]="dniFilter()" (input)="onDniInput($event)" (change)="onSearch($event)">
+
+              <select class="form-select" [value]="estadoFilter()" (change)="onEstadoChange($event)"
+                style="max-width: 150px;">
+                <option value="">Todos</option>
+                <option value="PENDIENTE">Pendiente</option>
+                <option value="EN_PROCESO">En Proceso</option>
+                <option value="PAGADO">Pagado</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
+
+              <button class="btn btn-outline-primary" type="button" (click)="cargarMatriculas()">
+                Actualizar
+              </button>
+            </div>
+            <small class="text-muted ms-1">Presiona Enter para buscar</small>
+          </div>
+        </div>
+      </div>
+
+      @if (isLoading()) {
+      <div class="text-center mt-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+      }
+
+      @if (!isLoading() && matriculas().length === 0) {
+      <div class="alert-custom">
+        <div class="alert-icon">
+          <lucide-icon [img]="Info"></lucide-icon>
+        </div>
+        <div class="alert-content">
+          No se encontraron matrículas.
+        </div>
+      </div>
+      }
+
+      @if (!isLoading() && matriculas().length > 0) {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Alumno</th>
+              <th>Curso</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Monto</th>
+              <th>Cuotas</th>
+              <th>Vencimiento</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of matriculas(); track m.idMatricula) {
+            <tr [class.table-warning]="m.tieneVencidas">
+              <td>#{{ m.idMatricula }}</td>
+              <td>
+                <div class="fw-bold">{{ m.nombreCompletoAlumno }}</div>
+                <small class="text-muted">{{ m.dniAlumno }}</small>
+                <div class="small text-muted">{{ m.correoAlumno }}</div>
+              </td>
+              <td>
+                <div class="text-truncate" style="max-width: 200px;" title="{{ m.tituloCurso }}">
+                  {{ m.tituloCurso }}
+                </div>
+              </td>
+              <td>{{ m.fechaMatricula | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <span class="badge rounded-pill" [ngClass]="getEstadoBadgeClass(m.estado)">
+                  {{ m.estado }}
+                </span>
+              </td>
+              <td class="fw-bold">S/. {{ m.monto | number: '1.2-2' }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="progress flex-grow-1" style="height: 6px; width: 60px;">
+                    <div class="progress-bar" role="progressbar"
+                      [style.width.%]="(m.cuotasPagadas / m.totalCuotas) * 100"
+                      [class.bg-success]="m.cuotasPagadas === m.totalCuotas"
+                      [class.bg-warning]="m.cuotasPagadas < m.totalCuotas">
+                    </div>
+                  </div>
+                  <small class="ms-2">{{ m.cuotasPagadas }}/{{ m.totalCuotas }}</small>
+                </div>
+              </td>
+              <td>
+                @if (m.proximoVencimiento) {
+                <span [class.text-danger]="m.tieneVencidas" class="d-flex align-items-center gap-1">
+                  {{ m.proximoVencimiento | date: 'dd/MM/yyyy' }}
+                  @if (m.tieneVencidas) {
+                  <lucide-icon [img]="AlertCircle" size="16" class="text-danger" title="Cuota vencida"></lucide-icon>
+                  }
+                </span>
+                } @else {
+                <span class="text-muted">-</span>
+                }
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" [routerLink]="['/admin/matriculas', m.idMatricula]"
+                    title="Ver Detalle">
+                    <lucide-icon [img]="Eye" size="16"></lucide-icon>
+                  </button>
+                  @if (m.estado === 'PENDIENTE') {
+                  <button class="btn btn-sm btn-outline-success" (click)="confirmarPago(m.idMatricula)"
+                    title="Confirmar Pago">
+                    <lucide-icon [img]="Check" size="16"></lucide-icon>
+                  </button>
+                  }
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages() > 1) {
+      <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-between align-items-center">
+        <small class="text-muted">
+          Mostrando {{ matriculas().length }} de {{ totalElements() }} registros
+        </small>
+        <ul class="pagination mb-0">
+          <li class="page-item" [class.disabled]="currentPage() === 0">
+            <button class="page-link" (click)="cambiarPagina(currentPage() - 1)">
+              <lucide-icon [img]="ChevronLeft" size="16"></lucide-icon>
+            </button>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link">
+              {{ currentPage() + 1 }} / {{ totalPages() }}
+            </span>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
+            <button class="page-link" (click)="cambiarPagina(currentPage() + 1)">
+              <lucide-icon [img]="ChevronRight" size="16"></lucide-icon>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      }
+      }
+    </div>
+  </div>
+</div>

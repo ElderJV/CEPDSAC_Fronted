@@ -1,0 +1,203 @@
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="UserPlusIcon" class="me-2"></lucide-icon>
+      Nueva Matrícula Personalizada
+    </h2>
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2" routerLink="/admin/matriculas">
+      <lucide-icon [img]="ArrowLeftIcon" size="18"></lucide-icon>
+      Atrás
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="stepper-wrapper m-4">
+        <div class="stepper-item" [class.completed]="currentStep() > 1" [class.active]="currentStep() === 1">
+          <div class="step-counter">1</div>
+          <div class="step-name">Alumno</div>
+        </div>
+        <div class="stepper-item" [class.completed]="currentStep() > 2" [class.active]="currentStep() === 2">
+          <div class="step-counter">2</div>
+          <div class="step-name">Curso</div>
+        </div>
+        <div class="stepper-item" [class.completed]="currentStep() > 3" [class.active]="currentStep() === 3">
+          <div class="step-counter">3</div>
+          <div class="step-name">Confirmar</div>
+        </div>
+      </div>
+
+      @if (currentStep() === 1) {
+      <div class="step-content">
+        <h5 class="mb-4 d-flex align-items-center">
+          <lucide-icon [img]="GraduationCapIcon" class="me-2 text-primary"></lucide-icon>
+          1. Seleccionar Alumno
+        </h5>
+
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-white">
+            <lucide-icon [img]="SearchIcon" size="18"></lucide-icon>
+          </span>
+          <input type="text" class="form-control border-start-0" placeholder="Buscar alumno por nombre o DNI..."
+            [ngModel]="alumnoSearchTerm()" (ngModelChange)="alumnoSearchTerm.set($event)">
+        </div>
+
+        @if (isLoadingAlumnos()) {
+        <div class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+        } @else {
+        <div class="list-group" style="max-height: 400px; overflow-y: auto;">
+          @for (alumno of filteredAlumnos(); track alumno.idUsuario) {
+          <button type="button"
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            (click)="selectAlumno(alumno)">
+            <div>
+              <div class="fw-bold">{{ alumno.nombre }} {{ alumno.apellido }}</div>
+              <small class="text-muted">{{ alumno.numeroIdentificacion }} - {{ alumno.correo }}</small>
+            </div>
+            <lucide-icon [img]="ChevronRightIcon" size="18" class="text-muted"></lucide-icon>
+          </button>
+          }
+          @if (filteredAlumnos().length === 0) {
+          <div class="text-center py-4 text-muted">
+            No se encontraron alumnos
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+
+      @if (currentStep() === 2) {
+      <div class="step-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="mb-0 d-flex align-items-center">
+            <lucide-icon [img]="BookOpenIcon" class="me-2 text-primary"></lucide-icon>
+            2. Seleccionar Programación
+          </h5>
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" (click)="prevStep()">
+            <lucide-icon [img]="ArrowLeftIcon" size="16" class="me-1"></lucide-icon>Volver
+          </button>
+        </div>
+
+        <div class="alert-custom mb-3">
+          <div class="alert-icon">
+            <lucide-icon [img]="UserIcon"></lucide-icon>
+          </div>
+          <div class="alert-content">
+            Alumno seleccionado: <strong>{{ selectedAlumno()?.nombre }} {{ selectedAlumno()?.apellido }}</strong>
+          </div>
+        </div>
+
+        <div class="mb-3 input-group">
+          <span class="input-group-text bg-white">
+            <lucide-icon [img]="SearchIcon" size="18"></lucide-icon>
+          </span>
+          <input type="text" class="form-control border-start-0" placeholder="Buscar curso..."
+            [ngModel]="cursoSearchTerm()" (ngModelChange)="cursoSearchTerm.set($event)">
+        </div>
+
+        @if (isLoadingCursos()) {
+        <div class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+        } @else {
+        <div class="list-group" style="max-height: 400px; overflow-y: auto;">
+          @for (prog of filteredProgramaciones(); track prog.idProgramacionCurso) {
+          <button type="button" class="list-group-item list-group-item-action" (click)="selectProgramacion(prog)">
+            <div class="d-flex w-100 justify-content-between">
+              <h6 class="mb-1">{{ prog.nombreCursoDiplomado }}</h6>
+              <small class="text-muted">ID: {{ prog.idProgramacionCurso }}</small>
+            </div>
+            <p class="mb-1 small">Inicio: {{ prog.fechaInicio | date:'dd/MM/yyyy' }}</p>
+            <small class="text-primary fw-bold">S/. {{ prog.monto | number:'1.2-2' }}</small>
+          </button>
+          }
+          @if (filteredProgramaciones().length === 0) {
+          <div class="text-center py-4 text-muted">
+            No se encontraron programaciones
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+
+      @if (currentStep() === 3) {
+      <div class="step-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="mb-0 d-flex align-items-center">
+            <lucide-icon [img]="ClipboardCheckIcon" class="me-2 text-primary"></lucide-icon>
+            3. Confirmar Matrícula
+          </h5>
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" (click)="prevStep()">
+            <lucide-icon [img]="ArrowLeftIcon" size="16" class="me-1"></lucide-icon>Volver
+          </button>
+        </div>
+
+        <div class="card border-primary mb-4">
+          <div class="card-body">
+            <h6 class="card-title text-primary mb-3 d-flex align-items-center">
+              <lucide-icon [img]="FileTextIcon" size="18" class="me-2"></lucide-icon>
+              Resumen de Matrícula
+            </h6>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="small text-muted d-flex align-items-center mb-1">
+                  <lucide-icon [img]="GraduationCapIcon" size="14" class="me-1"></lucide-icon>
+                  Alumno
+                </label>
+                <div class="fw-bold">{{ selectedAlumno()?.nombre }} {{ selectedAlumno()?.apellido }}</div>
+                <div class="small">{{ selectedAlumno()?.numeroIdentificacion }}</div>
+                <div class="small">{{ selectedAlumno()?.correo }}</div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="small text-muted d-flex align-items-center mb-1">
+                  <lucide-icon [img]="BookOpenIcon" size="14" class="me-1"></lucide-icon>
+                  Curso / Diplomado
+                </label>
+                <div class="fw-bold">{{ selectedProgramacion()?.nombreCursoDiplomado }}</div>
+                <div class="small">Inicio: {{ selectedProgramacion()?.fechaInicio | date:'dd/MM/yyyy' }}</div>
+                <div class="small">Docente: {{ selectedProgramacion()?.nombreDocente }}</div>
+              </div>
+
+              <div class="col-12">
+                <hr>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold d-flex align-items-center">
+                    <lucide-icon [img]="BanknoteIcon" size="18" class="me-2 text-success"></lucide-icon>
+                    Monto Total:
+                  </span>
+                  <span class="h5 mb-0 text-primary">S/. {{ selectedProgramacion()?.monto | number:'1.2-2' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary btn-lg d-flex align-items-center justify-content-center"
+            [disabled]="isSubmitting()" (click)="confirmarMatricula()">
+            @if (isSubmitting()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Procesando...
+            } @else {
+            <lucide-icon [img]="CheckCircleIcon" class="me-2"></lucide-icon>Confirmar y Crear Matrícula
+            }
+          </button>
+          <button class="btn btn-outline-danger" (click)="resetSelection()" [disabled]="isSubmitting()">
+            Cancelar
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

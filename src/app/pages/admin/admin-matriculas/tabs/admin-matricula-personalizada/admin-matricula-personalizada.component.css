@@ -1,0 +1,98 @@
+@import '../../../admin-styles.css';
+
+.stepper-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
+  padding: 0 20px;
+}
+
+.stepper-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.stepper-item::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: -50%;
+  width: 100%;
+  height: 3px;
+  background: var(--cedpsac-gray-border);
+  z-index: 1;
+  transition: var(--transition-normal);
+}
+
+.stepper-item:first-child::before {
+  content: none;
+}
+
+.step-counter {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: var(--cedpsac-white);
+  border: 2px solid var(--cedpsac-gray-border);
+  color: var(--cedpsac-gray);
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 5;
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-name {
+  font-size: 0.85rem;
+  color: var(--cedpsac-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition-normal);
+}
+
+.stepper-item.active .step-counter {
+  border-color: var(--cedpsac-orange);
+  background: linear-gradient(135deg, var(--cedpsac-orange) 0%, var(--cedpsac-orange-dark) 100%);
+  color: var(--cedpsac-white);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 5px rgba(255, 77, 0, 0.15);
+}
+
+.stepper-item.active .step-name {
+  color: var(--cedpsac-orange);
+  font-weight: 700;
+}
+
+.stepper-item.active::before {
+  background: linear-gradient(90deg, var(--cedpsac-orange) 0%, var(--cedpsac-orange-dark) 100%);
+}
+.stepper-item.completed .step-counter {
+  background: linear-gradient(135deg, var(--cedpsac-blue) 0%, var(--cedpsac-blue-light) 100%);
+  border-color: var(--cedpsac-blue);
+  color: var(--cedpsac-white);
+}
+
+.stepper-item.completed::before {
+  background: linear-gradient(90deg, var(--cedpsac-blue) 0%, var(--cedpsac-blue-light) 100%);
+}
+
+.stepper-item.completed .step-name {
+  color: var(--cedpsac-blue);
+}
+
+.stepper-item:not(.active):not(.completed):hover .step-counter {
+  border-color: var(--cedpsac-orange);
+  color: var(--cedpsac-orange);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md); 
+}

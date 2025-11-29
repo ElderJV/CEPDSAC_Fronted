@@ -1,0 +1,16 @@
+@import '../../../admin-styles.css';
+
+.list-group-item {
+  transition: var(--transition-fast);
+  border-left: 4px solid transparent;
+}
+
+.list-group-item-action:hover {
+  background-color: var(--cedpsac-gray-light);
+  border-left: 4px solid var(--cedpsac-orange);
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}

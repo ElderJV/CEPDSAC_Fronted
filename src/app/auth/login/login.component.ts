@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { ToastService } from '../../core/services/toast.service';
 import Swal from 'sweetalert2';
 import { lastValueFrom } from 'rxjs';
 import {
@@ -20,12 +21,13 @@ import { ErrorHandlerService } from '../../core/services/error-handler.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private errorHandler = inject(ErrorHandlerService);
+  private toastService = inject(ToastService);
 
   private authSvc = this.authService; // alias local para usar en el modal
 
@@ -36,6 +38,14 @@ export class LoginComponent {
 
   errorMessage: string | null = null;
   isSubmitting = false;
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['sessionExpired'] === 'true') {
+        this.toastService.error('Tiempo en sesión expiró, loguearse nuevamente');
+      }
+    });
+  }
 
   onSubmit(): void {
     this.errorMessage = null;

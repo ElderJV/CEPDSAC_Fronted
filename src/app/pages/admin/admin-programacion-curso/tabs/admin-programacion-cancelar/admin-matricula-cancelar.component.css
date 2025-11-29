@@ -1,0 +1,60 @@
+@import '../../../admin-styles.css';
+
+.program-card {
+  transition: var(--transition-fast);
+  cursor: pointer;
+  border: 2px solid var(--cedpsac-gray-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.program-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--cedpsac-orange);
+}
+
+.program-card.border-primary {
+  border-color: var(--cedpsac-orange) !important;
+  background: linear-gradient(135deg, rgba(255, 77, 0, 0.05) 0%, rgba(1, 49, 98, 0.05) 100%) !important;
+}
+
+.program-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-item lucide-icon {
+  flex-shrink: 0;
+}
+
+.alert-custom {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: rgba(1, 49, 98, 0.05);
+  border-left: 4px solid var(--cedpsac-blue);
+}
+
+.alert-icon {
+  color: var(--cedpsac-blue);
+  font-size: 1.5rem;
+}
+
+.alert-content {
+  color: var(--cedpsac-blue);
+  font-weight: 500;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

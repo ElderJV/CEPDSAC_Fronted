@@ -20,7 +20,6 @@
 	border: none;
 }
 
-/* Page title */
 .page-title {
 	color: #ff6600;
 	font-weight: 800;
@@ -177,10 +176,130 @@
 	}
 }
 
+.program-card {
+	background: white;
+	border: 2px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.program-card:hover {
+	border-color: #ff6600;
+	box-shadow: 0 4px 12px rgba(255, 102, 0, 0.15);
+	transform: translateY(-2px);
+}
+
+.program-card.selected {
+	border-color: #ff6600;
+	background: linear-gradient(135deg, rgba(255, 102, 0, 0.05) 0%, rgba(255, 102, 0, 0.02) 100%);
+	box-shadow: 0 4px 16px rgba(255, 102, 0, 0.2);
+}
+
+.program-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+	padding-bottom: 12px;
+	border-bottom: 2px solid #f3f4f6;
+}
+
+.program-header h6 {
+	margin: 0;
+	font-weight: 700;
+	color: #1f2937;
+	font-size: 1rem;
+}
+
+.program-price {
+	color: #ff6600;
+	font-weight: 700;
+	font-size: 1.25rem;
+}
+
+.program-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.program-info-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	font-size: 0.9rem;
+	color: #6b7280;
+}
+
+.program-info-item svg {
+	flex-shrink: 0;
+	margin-top: 2px;
+	color: #9ca3af;
+}
+
+.program-info-item span {
+	line-height: 1.4;
+}
+
+.btn-select-program {
+	background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	transition: all 0.3s ease;
+}
+
+.btn-select-program:hover:not(:disabled) {
+	background: linear-gradient(135deg, #ff8533 0%, #ff6600 100%);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+.btn-select-program:disabled {
+	background: #10b981;
+	cursor: default;
+	opacity: 1;
+}
+
+.alert-info {
+	background: linear-gradient(135deg, rgba(0, 98, 255, 0.1) 0%, rgba(0, 98, 255, 0.05) 100%);
+	border: 2px solid rgba(0, 98, 255, 0.2);
+	border-radius: 12px;
+	padding: 20px;
+}
+
+.alert-info h5 {
+	color: #0062ff;
+	font-weight: 700;
+	margin-bottom: 8px;
+}
+
+.alert-info p {
+	color: #1f2937;
+	margin: 0;
+}
+
 @media (max-width: 575px) {
 	.btn-payment-method {
 		min-width: 80px;
 		padding: 6px 12px;
 		font-size: 0.85rem;
+	}
+	
+	.program-card {
+		padding: 16px;
+	}
+	
+	.program-price {
+		font-size: 1.1rem;
 	}
 }

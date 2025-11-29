@@ -4,11 +4,38 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environment/environment';
 
+export interface User {
+  idUsuario?: number;
+  nombre?: string;
+  apellido?: string;
+  correo?: string;
+  rol?: string;
+  [key: string]: unknown;
+}
+
 export interface LoginResponse {
   token: string;
-  //podriamos implementar el user en la respuesta, o el rol o name
-  user?: any;
+  user?: User;
   rol?: string;
+}
+
+export interface RegisterRequest {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  password: string;
+  numeroCelular: string;
+  numeroIdentificacion: string;
+  nombrePais?: string | null;
+  idTipoIdentificacion: number;
+}
+
+export interface TokenPayload {
+  sub: string;
+  exp: number;
+  iat: number;
+  rol?: string;
+  [key: string]: unknown;
 }
 
 @Injectable({
@@ -28,7 +55,7 @@ export class AuthService {
     });
   }
 
-  register(payload: any) {
+  register(payload: RegisterRequest) {
     return this.http.post(`${environment.apiUrl}/usuarios`, payload);
   }
 
@@ -86,7 +113,7 @@ export class AuthService {
     return !!token && this.isTokenValid(token);
   }
 
-  getTokenPayload(token?: string): any | null {
+  getTokenPayload(token?: string): TokenPayload | null {
     const t = token ?? this.getToken();
     if (!t) return null;
     try {

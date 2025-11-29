@@ -1,0 +1,28 @@
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+.submenu li a {
+  padding-left: 48px;
+  font-size: 0.95rem;
+  border-radius: 0;
+}
+
+.submenu li a:hover {
+  background-color: #e9ecef;
+}
+
+.submenu li a.active {
+  background-color: #ff4d00;
+  color: white;
+}
+
+.rotate-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}

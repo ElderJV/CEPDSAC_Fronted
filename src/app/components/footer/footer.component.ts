@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfiguracionContactoService } from '../../core/services/configuracion-contacto.service';
 
 interface Link {
@@ -30,6 +31,7 @@ interface SocialLink {
 })
 export class FooterComponent implements OnInit {
   private contactoService = inject(ConfiguracionContactoService);
+  private destroyRef = inject(DestroyRef);
 
   public anioActual: number = new Date().getFullYear();
 
@@ -57,7 +59,10 @@ export class FooterComponent implements OnInit {
   }
 
   cargarConfiguracionContacto(): void {
-    this.contactoService.obtener().subscribe({
+    this.contactoService.obtener()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+
       next: (config) => {
         // Configurar información de contacto
         this.contactInfo = [];

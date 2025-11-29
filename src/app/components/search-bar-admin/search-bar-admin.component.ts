@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar-admin',
@@ -10,5 +10,11 @@ export class SearchBarAdminComponent {
   @Input() placeholderText: string = 'Search...';
   @Input() nuevoBotonName: string = 'Generic button'
   
-  @Output() onSearch: any;
+  @Output() search = new EventEmitter<string>();
+  @Output() create = new EventEmitter<void>();
+
+  onSearchInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.search.emit(value);
+  }
 }

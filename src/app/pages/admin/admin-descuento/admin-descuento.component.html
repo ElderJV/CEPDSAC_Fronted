@@ -1,0 +1,310 @@
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="Tags" class="me-2"></lucide-icon>
+      Gestión de Descuentos
+    </h2>
+    <button class="btn btn-primary d-flex align-items-center gap-2" (click)="nuevo()" *ngIf="!showForm()">
+      <lucide-icon [img]="Plus" size="18"></lucide-icon>
+      {{ activeTab() === 'descuentos' ? 'Nuevo Descuento' : 'Nueva Regla' }}
+    </button>
+  </div>
+
+  <ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+      <a class="nav-link d-flex align-items-center gap-2" [class.active]="activeTab() === 'descuentos'" (click)="switchTab('descuentos')" role="button">
+        <lucide-icon [img]="Percent" size="18"></lucide-icon>Descuentos
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link d-flex align-items-center gap-2" [class.active]="activeTab() === 'aplicaciones'" (click)="switchTab('aplicaciones')" role="button">
+        <lucide-icon [img]="Network" size="18"></lucide-icon>Reglas de Aplicación
+      </a>
+    </li>
+  </ul>
+
+  @if (loading()) {
+    <div class="text-center mt-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  }
+
+  @if (showForm()) {
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-bottom pt-4 ps-4 pb-3">
+        <h5 class="card-title text-primary fw-bold mb-0 d-flex align-items-center gap-2">
+          <lucide-icon [img]="Pencil"></lucide-icon>
+          {{ isEditing() ? 'Editar' : 'Crear' }} {{ activeTab() === 'descuentos' ? 'Descuento' : 'Regla' }}
+        </h5>
+      </div>
+      <div class="card-body">
+        @if (activeTab() === 'descuentos') {
+          <form [formGroup]="descuentoForm" (ngSubmit)="guardar()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Tipo Descuento</label>
+                <select class="form-select" formControlName="tipoDescuento">
+                  <option value="PORCENTAJE">Porcentaje (%)</option>
+                  <option value="MONTO_FIJO">Monto Fijo (S/.)</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Valor</label>
+                <input type="number" class="form-control" formControlName="valor" step="0.01">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Inicio</label>
+                <input type="date" class="form-control" formControlName="fechaInicio">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Fin</label>
+                <input type="date" class="form-control" formControlName="fechaFin">
+              </div>
+              <div class="col-md-12 mb-3">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="vigenteCheck" formControlName="vigente">
+                  <label class="form-check-label" for="vigenteCheck">Vigente</label>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+              <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+          </form>
+        } @else {
+          <form [formGroup]="aplicacionForm" (ngSubmit)="guardar()">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Descuento a Aplicar</label>
+                <select class="form-select" formControlName="idDescuento">
+                  @for (d of descuentos(); track d.idDescuento) {
+                    <option [value]="d.idDescuento">
+                      {{ d.tipoDescuento }} - {{ d.valor }} ({{ d.fechaInicio | date:'dd/MM' }} - {{ d.fechaFin | date:'dd/MM' }})
+                    </option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Tipo Aplicación</label>
+                <select class="form-select" formControlName="tipoAplicacion">
+                  <option value="CURSO">Por Curso</option>
+                  <option value="CATEGORIA">Por Categoría</option>
+                  <option value="MATRICULA">Por Matrícula Específica</option>
+                </select>
+              </div>
+              @if (aplicacionForm.get('tipoAplicacion')?.value === 'CURSO') {
+                <div class="col-12 mb-3">
+                  <label class="form-label">Seleccionar Curso/Diplomado</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-white border-end-0">
+                      <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar curso..." 
+                           [value]="searchText()" (input)="searchText.set($any($event.target).value)">
+                  </div>
+                  
+                  <div class="selection-grid">
+                    @for (c of filteredCursos; track c.idCursoDiplomado) {
+                      <div class="selection-card" 
+                           [class.selected]="aplicacionForm.get('idCursoDiplomado')?.value === c.idCursoDiplomado"
+                           (click)="toggleSelection('idCursoDiplomado', c.idCursoDiplomado)">
+                        <div class="card-icon">
+                          @if (c.urlCurso) {
+                            <img [src]="c.urlCurso" alt="Curso">
+                          } @else {
+                            <lucide-icon [img]="Book"></lucide-icon>
+                          }
+                        </div>
+                        <div class="card-info">
+                          <h6>{{ c.titulo }}</h6>
+                          <span class="badge bg-secondary">{{ c.tipo }}</span>
+                        </div>
+                        <div class="check-icon"><lucide-icon [img]="CheckCircle" size="20"></lucide-icon></div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (aplicacionForm.get('tipoAplicacion')?.value === 'CATEGORIA') {
+                <div class="col-12 mb-3">
+                  <label class="form-label">Seleccionar Categoría</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-white border-end-0">
+                      <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar categoría..." 
+                           [value]="searchText()" (input)="searchText.set($any($event.target).value)">
+                  </div>
+                  
+                  <div class="selection-grid">
+                    @for (cat of filteredCategorias; track cat.idCategoria) {
+                      <div class="selection-card" 
+                           [class.selected]="aplicacionForm.get('idCategoria')?.value === cat.idCategoria"
+                           (click)="toggleSelection('idCategoria', cat.idCategoria)">
+                        <div class="card-icon bg-info-subtle text-info">
+                          <lucide-icon [img]="Tags"></lucide-icon>
+                        </div>
+                        <div class="card-info">
+                          <h6>{{ cat.nombre }}</h6>
+                        </div>
+                        <div class="check-icon"><lucide-icon [img]="CheckCircle" size="20"></lucide-icon></div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              @if (aplicacionForm.get('tipoAplicacion')?.value === 'MATRICULA') {
+                <div class="col-12 mb-3">
+                  <label class="form-label">Seleccionar Matrícula</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-white border-end-0">
+                      <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por alumno, curso o DNI..." 
+                           [value]="searchText()" (input)="searchText.set($any($event.target).value)">
+                  </div>
+                  
+                  <div class="selection-grid">
+                    @for (m of filteredMatriculas; track m.idMatricula) {
+                      <div class="selection-card" 
+                           [class.selected]="aplicacionForm.get('idMatricula')?.value === m.idMatricula"
+                           (click)="toggleSelection('idMatricula', m.idMatricula)">
+                        <div class="card-icon bg-success-subtle text-success">
+                          <lucide-icon [img]="IdCard"></lucide-icon>
+                        </div>
+                        <div class="card-info">
+                          <h6>{{ m.nombreCompletoAlumno }}</h6>
+                          <small class="text-muted d-block">{{ m.tituloCurso }}</small>
+                          <small class="text-secondary d-flex align-items-center gap-1">
+                            <lucide-icon [img]="CreditCard" size="14"></lucide-icon>
+                            {{ m.dniAlumno }}
+                          </small>
+                          <br>
+                          <span class="badge bg-light text-dark border mt-1">#{{ m.idMatricula }}</span>
+                        </div>
+                        <div class="check-icon"><lucide-icon [img]="CheckCircle" size="20"></lucide-icon></div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+              <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  }
+
+  @if (!showForm() && !loading()) {
+    @if (activeTab() === 'descuentos') {
+      @if (descuentos().length === 0) {
+        <div class="alert-custom">
+          <div class="alert-icon">
+            <lucide-icon [img]="Info"></lucide-icon>
+          </div>
+          <div class="alert-content">
+            No se encontraron descuentos registrados.
+          </div>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">ID</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Vigencia</th>
+                <th>Estado</th>
+                <th class="text-end pe-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of descuentos(); track d.idDescuento) {
+                <tr>
+                  <td class="ps-4 fw-bold text-secondary">#{{ d.idDescuento }}</td>
+                  <td><span class="badge bg-primary">{{ d.tipoDescuento }}</span></td>
+                  <td class="fw-bold text-dark">{{ d.valor | number:'1.2-2' }}</td>
+                  <td>{{ d.fechaInicio | date:'dd/MM/yy' }} - {{ d.fechaFin | date:'dd/MM/yy' }}</td>
+                  <td>
+                    <span class="badge" [class.bg-success]="d.vigente" [class.bg-secondary]="!d.vigente">
+                      {{ d.vigente ? 'VIGENTE' : 'EXPIRADO' }}
+                    </span>
+                  </td>
+                  <td class="text-end pe-4">
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-outline-primary" (click)="editarDescuento(d)">
+                        <lucide-icon [img]="Pencil" size="16"></lucide-icon>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="eliminarDescuento(d.idDescuento)">
+                        <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    } @else {
+      @if (aplicaciones().length === 0) {
+        <div class="alert-custom">
+          <div class="alert-icon">
+            <lucide-icon [img]="Info"></lucide-icon>
+          </div>
+          <div class="alert-content">
+            No se encontraron reglas de aplicación.
+          </div>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4">ID</th>
+                <th>Tipo</th>
+                <th>Descuento Asoc.</th>
+                <th>Objetivo</th>
+                <th class="text-end pe-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of aplicaciones(); track a.idDescuentoAplicacion) {
+                <tr>
+                  <td class="ps-4 fw-bold text-secondary">#{{ a.idDescuentoAplicacion }}</td>
+                  <td><span class="badge bg-info text-white">{{ a.tipoAplicacion }}</span></td>
+                  <td>{{ a.infoDescuento }}</td>
+                  <td>
+                    @if (a.tipoAplicacion === 'CURSO') { {{ a.tituloCursoDiplomado }} }
+                    @else if (a.tipoAplicacion === 'CATEGORIA') { {{ a.nombreCategoria }} }
+                    @else { Matrícula #{{ a.idMatricula }} }
+                  </td>
+                  <td class="text-end pe-4">
+                    <div class="btn-group">
+                      <button class="btn btn-sm btn-outline-primary" (click)="editarAplicacion(a)">
+                        <lucide-icon [img]="Pencil" size="16"></lucide-icon>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" (click)="eliminarAplicacion(a.idDescuentoAplicacion)">
+                        <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  }
+</div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ActionButtonsAdminComponent } from '../action-buttons-admin/action-buttons-admin.component';
 import { CommonModule } from '@angular/common';
 
@@ -11,4 +11,8 @@ import { CommonModule } from '@angular/common';
 export class DataTableAdminComponent {
   @Input() columns: { key: string; label: string }[] = [];
   @Input() data: any[] = [];
+
+  @Output() edit = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
+  @Output() view = new EventEmitter<any>();
 }

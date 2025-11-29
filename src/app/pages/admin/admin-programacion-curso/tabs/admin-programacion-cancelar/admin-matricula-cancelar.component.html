@@ -1,0 +1,123 @@
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="AlertTriangle" class="me-2"></lucide-icon>
+      Cierre de Programación de Curso
+    </h2>
+  </div>
+
+  <div class="alert-custom mb-4">
+    <div class="alert-icon">
+      <lucide-icon [img]="Info"></lucide-icon>
+    </div>
+    <div class="alert-content">
+      Esta acción cancelará todas las matrículas asociadas a la programación de curso seleccionada y enviará un
+      correo de notificación a los alumnos afectados.
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = null" aria-label="Close"></button>
+  </div>
+
+  <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ success }}
+    <button type="button" class="btn-close" (click)="success = null" aria-label="Close"></button>
+  </div>
+
+  <form (ngSubmit)="cancelar()">
+    <div class="mb-4">
+      <label class="form-label">Seleccione la Programación de Curso</label>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0">
+          <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+        </span>
+        <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar por curso o docente..."
+          [(ngModel)]="searchTerm" name="searchTerm">
+      </div>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" style="max-height: 400px; overflow-y: auto;">
+        <div class="col" *ngFor="let prog of filteredProgramaciones">
+          <div class="card h-100 cursor-pointer program-card"
+            [class.border-primary]="selectedProgramacionId === prog.idProgramacionCurso"
+            (click)="seleccionarProgramacion(prog)">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h6 class="card-title fw-bold text-primary mb-0 flex-grow-1">{{ prog.nombreCursoDiplomado }}</h6>
+                <span class="badge bg-info ms-2">{{ prog.modalidad }}</span>
+              </div>
+
+              <div class="program-details">
+                <div class="detail-item">
+                  <lucide-icon [img]="User" size="16" class="text-muted"></lucide-icon>
+                  <span class="text-muted small">{{ prog.nombreDocente }}</span>
+                </div>
+
+                <div class="detail-item">
+                  <lucide-icon [img]="Calendar" size="16" class="text-primary"></lucide-icon>
+                  <span class="small"><strong>Inicio:</strong> {{ prog.fechaInicio | date:'dd/MM/yyyy' }}</span>
+                </div>
+
+                <div class="detail-item" *ngIf="prog.duracionMeses && prog.duracionMeses > 0">
+                  <lucide-icon [img]="Clock" size="16" class="text-success"></lucide-icon>
+                  <span class="small"><strong>Duración:</strong> {{ prog.duracionMeses }} {{ prog.duracionMeses ===
+                    1 ? 'mes' : 'meses' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-transparent border-top text-end"
+              *ngIf="selectedProgramacionId === prog.idProgramacionCurso">
+              <span class="badge bg-primary d-inline-flex align-items-center gap-1">
+                <lucide-icon [img]="Check" size="14"></lucide-icon>
+                Seleccionado
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="programaciones.length === 0" class="text-center text-muted py-3">
+        No hay programaciones disponibles.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="motivo" class="form-label">Motivo de Cancelación</label>
+      <textarea class="form-control" id="motivo" rows="3" [(ngModel)]="motivo" name="motivo" required
+        placeholder="Ingrese el motivo por el cual se cancelan las matrículas (se enviará en el correo)"></textarea>
+    </div>
+
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary" [disabled]="loading || !selectedProgramacionId || !motivo">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        {{ loading ? 'Procesando...' : 'Cancelar Matrículas' }}
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="matriculasCanceladas.length > 0" class="mt-4">
+    <h5>Matrículas Canceladas ({{ matriculasCanceladas.length }})</h5>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Alumno</th>
+            <th>Fecha Matrícula</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mat of matriculasCanceladas">
+            <td>{{ mat.idMatricula }}</td>
+            <td>{{ mat.alumnoNombre || 'N/A' }}</td>
+            <td>{{ mat.fechaMatricula | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td><span class="badge bg-secondary">{{ mat.estado }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

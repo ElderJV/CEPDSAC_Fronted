@@ -44,6 +44,9 @@ export class MatriculaGeneralComponent implements OnInit {
   metodoPagoSeleccionado: MetodoPago | null = null;
   loadingMetodos = signal(false);
 
+  cuotas = signal<any[]>([]);
+  mostrarCuotas = signal(false);
+
   contactPhoneDisplay = '956782481';
   get contactPhoneHref(): string {
     return `https://wa.me/51${this.contactPhoneDisplay}`;
@@ -122,25 +125,23 @@ export class MatriculaGeneralComponent implements OnInit {
       ? undefined
       : !!pagoPersonalizadoRaw;
 
-    const dtoAny: any = {
-      idProgramacionCurso: this.programacionId,
-      pagoPersonalizado,
-    };
-
     const payload = this.authService.getTokenPayload();
+    let idAlumno: number | undefined;
+
     if (payload) {
-      const possible = payload.id ?? payload.userId ?? payload.usuarioId ?? payload.alumnoId;
+      const p = payload as any; 
+      const possible = p.id ?? p.userId ?? p.usuarioId ?? p.alumnoId;
       if (possible != null) {
         const asNumber = Number(possible);
-        if (!isNaN(asNumber)) dtoAny.idAlumno = asNumber;
+        if (!isNaN(asNumber)) idAlumno = asNumber;
       }
     }
 
-    if (dtoAny.idAlumno === undefined) {
-      delete dtoAny.idAlumno;
-    }
-
-    const dto: MatriculaCreateDTO = dtoAny;
+    const dto: MatriculaCreateDTO = {
+      idProgramacionCurso: this.programacionId,
+      pagoPersonalizado,
+      ...(idAlumno !== undefined && { idAlumno })
+    };
 
     console.log('MatriculaGeneral.submit -> dto', dto, 'programacionSeleccionada=', this.programacionSeleccionada, 'programacionId=', this.programacionId);
 
@@ -151,6 +152,7 @@ export class MatriculaGeneralComponent implements OnInit {
           this.matriculaCreada.set(true);
           this.matriculaId.set(res.idMatricula);
           this.toast.success('Matrícula creada correctamente.', 5000);
+          this.cargarCuotas(res.idMatricula);
         },
         error: (err: HttpErrorResponse) => {
           this.loading.set(false);
@@ -181,5 +183,41 @@ export class MatriculaGeneralComponent implements OnInit {
           this.toast.error(msg);
         }
       });
+      
     }
+    
+    cargarCuotas(idMatricula: number): void {
+    this.matriculaService.obtenerDetalleCompleto(idMatricula).subscribe({
+      next: (detalle) => {
+        this.cuotas.set(detalle.pagos || []);
+        this.mostrarCuotas.set(true);
+      },
+      error: (err) => {
+        console.error('Error al cargar cuotas:', err);
+      }
+    });
+  }
+
+  getEstadoCuotaBadge(estado: string): string {
+    const classes: Record<string, string> = {
+      'PENDIENTE': 'bg-warning text-dark',
+      'PAGADO': 'bg-success',
+      'VENCIDA': 'bg-danger'
+    };
+    return classes[estado] || 'bg-secondary';
+  }
+
+  estaVencida(fechaVencimiento: string): boolean {
+    const hoy = new Date();
+    const vencimiento = new Date(fechaVencimiento);
+    return vencimiento < hoy;
+  }
+
+  getCuotasPagadas(): number {
+    return this.cuotas().filter(c => c.estadoCuota === 'PAGADO').length;
+  }
+
+  getCuotasPendientes(): number {
+    return this.cuotas().filter(c => c.estadoCuota === 'PENDIENTE').length;
+  }
 }
