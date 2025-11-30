@@ -1,17 +1,184 @@
-<section>
-  <h1 class="titulo_admin">Diplomados</h1>
-  <div class="contenido-admin">
-    <app-search-bar-admin
-      placeholderText="Buscar diplomados..."
-      nuevoBotonName="Nuevo Diplomado"
-    />
-    <app-data-table-admin
-      [columns]="[
-        { key: 'titulo', label: 'Título' },
-        { key: 'nombreCategoria', label: 'Categoría' },
-        { key: 'otorgaCertificado', label: 'Certificado' }
-      ]"
-      [data]="diplomado"
-    />
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="GraduationCap" class="me-2"></lucide-icon>
+      Gestión de Diplomados
+    </h2>
+    <button class="btn btn-primary d-flex align-items-center gap-2" (click)="nuevo()" *ngIf="!showForm()">
+      <lucide-icon [img]="Plus" size="18"></lucide-icon>
+      Nuevo Diplomado
+    </button>
   </div>
-</section>
+
+  @if (loading()) {
+  <div class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+  }
+
+  @if (showForm()) {
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-bottom pt-4 ps-4 pb-3">
+      <h5 class="card-title text-primary fw-bold mb-0 d-flex align-items-center gap-2">
+        <lucide-icon [img]="Pencil"></lucide-icon>
+        {{ isEditing() ? 'Editar' : 'Crear' }} Diplomado
+      </h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="diplomadoForm" (ngSubmit)="guardar()">
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Type" size="16"></lucide-icon> Título del Diplomado
+            </label>
+            <input type="text" class="form-control" formControlName="titulo"
+              placeholder="Ingrese el título del diplomado">
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Tag" size="16"></lucide-icon> Categoría
+            </label>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text bg-white border-end-0">
+                <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+              </span>
+              <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar categoría..."
+                [value]="searchCategoriaText()" (input)="searchCategoriaText.set($any($event.target).value)">
+            </div>
+
+            <div class="selection-grid">
+              @for (cat of filteredCategoriasForm; track cat.idCategoria) {
+              <div class="selection-card" [class.selected]="diplomadoForm.get('idCategoria')?.value === cat.idCategoria"
+                (click)="selectCategoria(cat.idCategoria)">
+                <div class="card-icon bg-info-subtle text-info">
+                  <lucide-icon [img]="Tag"></lucide-icon>
+                </div>
+                <div class="card-info">
+                  <h6>{{ cat.nombre }}</h6>
+                </div>
+                <div class="check-icon"><lucide-icon [img]="CheckCircle" size="20"></lucide-icon></div>
+              </div>
+              }
+            </div>
+            @if (diplomadoForm.get('idCategoria')?.invalid && diplomadoForm.get('idCategoria')?.touched) {
+            <div class="text-danger mt-1 small">Seleccione una categoría</div>
+            }
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Image" size="16"></lucide-icon> URL de Imagen
+            </label>
+            <input type="text" class="form-control" formControlName="urlCurso" placeholder="https://...">
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Target" size="16"></lucide-icon> Objetivo
+            </label>
+            <textarea class="form-control" formControlName="objetivo" rows="3"
+              placeholder="Objetivo del diplomado..."></textarea>
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <div class="form-check form-switch d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="certificadoCheck" formControlName="otorgaCertificado">
+              <label class="form-check-label d-flex align-items-center gap-2" for="certificadoCheck">
+                <lucide-icon [img]="Award" size="16"></lucide-icon> Otorga Certificado
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  @if (!showForm() && !loading()) {
+  <div class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text bg-white border-end-0">
+        <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+      </span>
+      <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar diplomados..."
+        [value]="searchText()" (input)="searchText.set($any($event.target).value)">
+    </div>
+  </div>
+
+  @if (filteredDiplomados.length === 0) {
+  <div class="alert-custom">
+    <div class="alert-icon">
+      <lucide-icon [img]="Info"></lucide-icon>
+    </div>
+    <div class="alert-content">
+      No se encontraron diplomados registrados.
+    </div>
+  </div>
+  } @else {
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th class="ps-4">ID</th>
+          <th>Imagen</th>
+          <th>Título</th>
+          <th>Categoría</th>
+          <th>Certificado</th>
+          <th class="text-end pe-4">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of filteredDiplomados; track d.idCursoDiplomado) {
+        <tr>
+          <td class="ps-4 fw-bold text-secondary">#{{ d.idCursoDiplomado }}</td>
+          <td>
+            @if (d.urlCurso) {
+            <img [src]="d.urlCurso" alt="Diplomado" class="rounded"
+              style="width: 40px; height: 40px; object-fit: cover;">
+            } @else {
+            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 40px;">
+              <lucide-icon [img]="GraduationCap" size="20" class="text-muted"></lucide-icon>
+            </div>
+            }
+          </td>
+          <td class="fw-bold text-dark">{{ d.titulo }}</td>
+          <td><span class="badge bg-info">{{ d.nombreCategoria }}</span></td>
+          <td>
+            @if (d.otorgaCertificado) {
+            <span class="text-success d-flex align-items-center gap-1">
+              <lucide-icon [img]="CheckCircle" size="16"></lucide-icon> Sí
+            </span>
+            } @else {
+            <span class="text-secondary d-flex align-items-center gap-1">
+              <lucide-icon [img]="XCircle" size="16"></lucide-icon> No
+            </span>
+            }
+          </td>
+          <td class="text-end pe-4">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" (click)="editar(d)">
+                <lucide-icon [img]="Pencil" size="16"></lucide-icon>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminar(d.idCursoDiplomado)">
+                <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+  }
+</div>

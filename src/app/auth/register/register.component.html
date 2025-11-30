@@ -12,23 +12,12 @@
               Completa los campos para registrarte y acceder a nuestros cursos.
             </p>
 
-            <form
-              [formGroup]="registerForm"
-              (ngSubmit)="submit()"
-              class="row g-3"
-            >
+            <form [formGroup]="registerForm" (ngSubmit)="submit()" class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Nombre</label>
-                <input
-                  class="form-control"
-                  [ngClass]="{
+                <input class="form-control" [ngClass]="{
                     'is-invalid': registerForm.get('nombre')?.hasError('server')
-                  }"
-                  id="nombre"
-                  type="text"
-                  placeholder="Ingresa tu nombre"
-                  formControlName="nombre"
-                />
+                  }" id="nombre" type="text" placeholder="Ingresa tu nombre" formControlName="nombre" />
                 @if (fieldErrors()['nombre']) {
                 <div class="invalid-feedback d-block">
                   {{ fieldErrors()["nombre"] }}
@@ -37,18 +26,11 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label">Apellido</label>
-                <input
-                  class="form-control"
-                  [ngClass]="{
+                <input class="form-control" [ngClass]="{
                     'is-invalid': registerForm
                       .get('apellido')
                       ?.hasError('server')
-                  }"
-                  id="apellido"
-                  type="text"
-                  placeholder="Ingresa tu apellido"
-                  formControlName="apellido"
-                />
+                  }" id="apellido" type="text" placeholder="Ingresa tu apellido" formControlName="apellido" />
                 @if (fieldErrors()['apellido']) {
                 <div class="invalid-feedback d-block">
                   {{ fieldErrors()["apellido"] }}
@@ -58,16 +40,9 @@
 
               <div class="col-12">
                 <label class="form-label">Correo</label>
-                <input
-                  class="form-control"
-                  [ngClass]="{
+                <input class="form-control" [ngClass]="{
                     'is-invalid': registerForm.get('correo')?.hasError('server')
-                  }"
-                  id="correo"
-                  type="email"
-                  placeholder="nombre@ejemplo.com"
-                  formControlName="correo"
-                />
+                  }" id="correo" type="email" placeholder="nombre@ejemplo.com" formControlName="correo" />
                 @if (fieldErrors()['correo']) {
                 <div class="invalid-feedback d-block">
                   {{ fieldErrors()["correo"] }}
@@ -77,18 +52,38 @@
 
               <div class="col-md-6">
                 <label class="form-label">Contraseña</label>
-                <input
-                  class="form-control"
-                  [ngClass]="{
-                    'is-invalid': registerForm
-                      .get('password')
-                      ?.hasError('server')
-                  }"
-                  id="password"
-                  type="password"
-                  placeholder="Mínimo 6 caracteres"
-                  formControlName="password"
-                />
+                <div class="password-input-wrapper">
+                  <input class="form-control" [ngClass]="{
+                      'is-invalid': registerForm.get('password')?.hasError('server')
+                    }" id="password" type="password" placeholder="Mínimo 8 caracteres" formControlName="password"
+                    (focus)="showPasswordStrength.set(true)" (blur)="showPasswordStrength.set(false)" />
+
+                  @if (showPasswordStrength() && passwordValue) {
+                  <div class="password-strength-indicator">
+                    <div class="strength-title">Requisitos de contraseña:</div>
+                    <div class="strength-requirement" [class.met]="hasMinLength()">
+                      <span class="check-icon">{{ hasMinLength() ? '✓' : '○' }}</span>
+                      Mínimo 8 caracteres
+                    </div>
+                    <div class="strength-requirement" [class.met]="hasLowercase()">
+                      <span class="check-icon">{{ hasLowercase() ? '✓' : '○' }}</span>
+                      Una letra minúscula
+                    </div>
+                    <div class="strength-requirement" [class.met]="hasUppercase()">
+                      <span class="check-icon">{{ hasUppercase() ? '✓' : '○' }}</span>
+                      Una letra mayúscula
+                    </div>
+                    <div class="strength-requirement" [class.met]="hasNumber()">
+                      <span class="check-icon">{{ hasNumber() ? '✓' : '○' }}</span>
+                      Un número
+                    </div>
+                    <div class="strength-requirement" [class.met]="hasSpecialChar()">
+                      <span class="check-icon">{{ hasSpecialChar() ? '✓' : '○' }}</span>
+                      Un carácter especial (&#64;$!%*?&)
+                    </div>
+                  </div>
+                  }
+                </div>
                 @if (fieldErrors()['password']) {
                 <div class="invalid-feedback d-block">
                   {{ fieldErrors()["password"] }}
@@ -99,23 +94,14 @@
               <div class="col-md-6">
                 <label class="form-label">Número celular</label>
                 <div class="input-group">
-                  <select
-                    class="form-select country-code"
-                    formControlName="id_codigo_pais"
-                    aria-label="Código país"
-                  >
+                  <select class="form-select country-code" formControlName="id_codigo_pais" aria-label="Código país">
                     <option value="" disabled>Cod</option>
                     <option *ngFor="let p of paises" [value]="p.idPais">
                       +{{ p.codigo }}
                     </option>
                   </select>
-                  <input
-                    class="form-control"
-                    id="numero_celular"
-                    type="text"
-                    placeholder="9 123 45678"
-                    formControlName="numero_celular"
-                  />
+                  <input class="form-control" id="numero_celular" type="text" placeholder="9 123 45678"
+                    formControlName="numero_celular" />
                   @if (fieldErrors()['numero_celular']) {
                   <div class="invalid-feedback d-block">
                     {{ fieldErrors()["numero_celular"] }}
@@ -126,22 +112,14 @@
 
               <div class="col-md-6">
                 <label class="form-label">Tipo de identificación</label>
-                <select
-                  class="form-select"
-                  [ngClass]="{
+                <select class="form-select" [ngClass]="{
                     'is-invalid': registerForm
                       .get('id_tipo_identificacion')
                       ?.hasError('server')
-                  }"
-                  id="id_tipo_identificacion"
-                  formControlName="id_tipo_identificacion"
-                >
+                  }" id="id_tipo_identificacion" formControlName="id_tipo_identificacion">
                   <option value="" disabled>Selecciona un tipo</option>
-                  <option
-                    *ngFor="let t of tiposIdentificacion"
-                    [value]="t.idTipoIdentificacion"
-                    [attr.title]="t.nombre"
-                  >
+                  <option *ngFor="let t of tiposIdentificacion" [value]="t.idTipoIdentificacion"
+                    [attr.title]="t.nombre">
                     {{ t.iniciales ? t.iniciales : t.nombre }}
                   </option>
                 </select>
@@ -154,18 +132,12 @@
 
               <div class="col-md-6">
                 <label class="form-label">Número de identificación</label>
-                <input
-                  class="form-control"
-                  [ngClass]="{
+                <input class="form-control" [ngClass]="{
                     'is-invalid': registerForm
                       .get('numero_identificacion')
                       ?.hasError('server')
-                  }"
-                  id="numero_identificacion"
-                  type="text"
-                  placeholder="Documento"
-                  formControlName="numero_identificacion"
-                />
+                  }" id="numero_identificacion" type="text" placeholder="Documento"
+                  formControlName="numero_identificacion" />
                 @if (fieldErrors()['numero_identificacion']) {
                 <div class="invalid-feedback d-block">
                   {{ fieldErrors()["numero_identificacion"] }}
@@ -180,18 +152,14 @@
               </div>
 
               <div class="col-12 mt-2">
-                <small class="text-muted"
-                  >Debug — Form valid: {{ registerForm.valid }} — Submitting:
-                  {{ isSubmitting() }}</small
-                >
+                <small class="text-muted">Debug — Form valid: {{ registerForm.valid }} — Submitting:
+                  {{ isSubmitting() }}</small>
               </div>
             </form>
 
             <div class="text-center mt-3">
-              <small class="text-muted"
-                >¿Ya tienes una cuenta?
-                <a routerLink="/login">Inicia sesión</a></small
-              >
+              <small class="text-muted">¿Ya tienes una cuenta?
+                <a routerLink="/login">Inicia sesión</a></small>
             </div>
           </div>
         </div>

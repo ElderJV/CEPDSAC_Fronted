@@ -16,11 +16,12 @@ import { ErrorHandlerService } from '../../core/services/error-handler.service';
 import { PaisService, Pais } from '../../core/services/pais.service';
 import { TipoIdentificacionService } from '../../core/services/tipo-identificacion.service';
 import { environment } from '../../../environment/environment';
+import { LucideAngularModule, CheckCircle, XCircle } from 'lucide-angular';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, RouterLink, LucideAngularModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -34,11 +35,14 @@ export class RegisterComponent {
   private tipoService = inject(TipoIdentificacionService);
   private platformId = inject(PLATFORM_ID);
 
+  readonly CheckCircle = CheckCircle;
+  readonly XCircle = XCircle;
+
   registerForm: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
     apellido: ['', Validators.required],
     correo: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
     numero_celular: ['', Validators.required],
     numero_identificacion: ['', Validators.required],
     id_codigo_pais: [51],
@@ -46,6 +50,7 @@ export class RegisterComponent {
   });
 
   isSubmitting = signal(false);
+  showPasswordStrength = signal(false);
 
   paises: Pais[] = [];
   tiposIdentificacion: Array<{
@@ -56,6 +61,30 @@ export class RegisterComponent {
 
   fieldErrors = signal<{ [key: string]: string }>({});
   generalError = signal<string | null>(null);
+
+  get passwordValue(): string {
+    return this.registerForm.get('password')?.value || '';
+  }
+
+  hasMinLength(): boolean {
+    return this.passwordValue.length >= 8;
+  }
+
+  hasLowercase(): boolean {
+    return /[a-z]/.test(this.passwordValue);
+  }
+
+  hasUppercase(): boolean {
+    return /[A-Z]/.test(this.passwordValue);
+  }
+
+  hasNumber(): boolean {
+    return /\d/.test(this.passwordValue);
+  }
+
+  hasSpecialChar(): boolean {
+    return /[@$!%*?&]/.test(this.passwordValue);
+  }
 
   submit() {
     console.log(

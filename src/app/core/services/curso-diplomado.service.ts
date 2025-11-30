@@ -21,12 +21,12 @@ export class CursoDiplomadoService {
     return this.http.get<CursoDiplomado[]>(`${this.apiUrl}/listar-index`);
   }
 
-  listarCursos(): Observable<CursoDiplomado[]> {
-    return this.http.get<CursoDiplomado[]>(`${this.apiUrl}/listar-cursos`);
+  listarCursos(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-cursos`);
   }
 
-  listarDiplomados(): Observable<CursoDiplomado[]> {
-    return this.http.get<CursoDiplomado[]>(`${this.apiUrl}/listar-diplomados`);
+  listarDiplomados(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-diplomados`);
   }
 
   obtenerDetalle(id: number): Observable<CursoDetalle> {

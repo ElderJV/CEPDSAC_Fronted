@@ -1,18 +1,281 @@
-<section>
-  <h1 class="titulo_admin">Estudiantes</h1>
-  <div class="contenido-admin">
-    <app-search-bar-admin
-      placeholderText="Buscar estudiantes..."
-      nuevoBotonName="Nuevo Estudiante"
-    />
-    <app-data-table-admin
-      [columns]="[
-        { key: 'nombre', label: 'Nombre' },
-        { key: 'apellido', label: 'Apellido' },
-        { key: 'correo', label: 'Correo' },
-        { key: 'activo', label: 'Estado' }
-      ]"
-      [data]="estudiantes"
-    />
+<div class="admin-container">
+  <div class="header-section d-flex justify-content-between align-items-center">
+    <h2>
+      <lucide-icon [img]="Users" class="me-2"></lucide-icon>
+      Gestión de Estudiantes
+    </h2>
+    <button class="btn btn-primary d-flex align-items-center gap-2" (click)="nuevo()" *ngIf="!showForm()">
+      <lucide-icon [img]="Plus" size="18"></lucide-icon>
+      Nuevo Estudiante
+    </button>
   </div>
-</section>
+
+  @if (loading()) {
+  <div class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+  }
+
+  @if (showForm()) {
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-bottom pt-4 ps-4 pb-3">
+      <h5 class="card-title text-primary fw-bold mb-0 d-flex align-items-center gap-2">
+        <lucide-icon [img]="Pencil"></lucide-icon>
+        {{ isEditing() ? 'Editar' : 'Crear' }} Estudiante
+      </h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="estudianteForm" (ngSubmit)="guardar()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="User" size="16"></lucide-icon> Nombre <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre del estudiante"
+              [class.is-invalid]="estudianteForm.get('nombre')?.invalid && estudianteForm.get('nombre')?.touched">
+            @if (estudianteForm.get('nombre')?.invalid && estudianteForm.get('nombre')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('nombre') }}
+            </div>
+            }
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="User" size="16"></lucide-icon> Apellido
+            </label>
+            <input type="text" class="form-control" formControlName="apellido" placeholder="Apellido del estudiante"
+              [class.is-invalid]="estudianteForm.get('apellido')?.invalid && estudianteForm.get('apellido')?.touched">
+            @if (estudianteForm.get('apellido')?.invalid && estudianteForm.get('apellido')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('apellido') }}
+            </div>
+            }
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Mail" size="16"></lucide-icon> Correo Electrónico <span class="text-danger">*</span>
+            </label>
+            <input type="email" class="form-control" formControlName="correo" placeholder="correo@ejemplo.com"
+              [class.is-invalid]="estudianteForm.get('correo')?.invalid && estudianteForm.get('correo')?.touched">
+            @if (estudianteForm.get('correo')?.invalid && estudianteForm.get('correo')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('correo') }}
+            </div>
+            }
+          </div>
+
+          @if (!isEditing()) {
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Lock" size="16"></lucide-icon> Contraseña <span class="text-danger">*</span>
+            </label>
+            <div class="password-input-wrapper">
+              <input type="password" class="form-control" formControlName="password" placeholder="Mínimo 8 caracteres"
+                [class.is-invalid]="estudianteForm.get('password')?.invalid && estudianteForm.get('password')?.touched"
+                (focus)="showPasswordStrength.set(true)" (blur)="showPasswordStrength.set(false)">
+
+              @if (showPasswordStrength() && passwordValue) {
+              <div class="password-strength-indicator">
+                <div class="strength-title">Requisitos de contraseña:</div>
+                <div class="strength-requirement" [class.met]="hasMinLength()">
+                  <span class="check-icon">{{ hasMinLength() ? '✓' : '○' }}</span>
+                  Mínimo 8 caracteres
+                </div>
+                <div class="strength-requirement" [class.met]="hasLowercase()">
+                  <span class="check-icon">{{ hasLowercase() ? '✓' : '○' }}</span>
+                  Una letra minúscula
+                </div>
+                <div class="strength-requirement" [class.met]="hasUppercase()">
+                  <span class="check-icon">{{ hasUppercase() ? '✓' : '○' }}</span>
+                  Una letra mayúscula
+                </div>
+                <div class="strength-requirement" [class.met]="hasNumber()">
+                  <span class="check-icon">{{ hasNumber() ? '✓' : '○' }}</span>
+                  Un número
+                </div>
+                <div class="strength-requirement" [class.met]="hasSpecialChar()">
+                  <span class="check-icon">{{ hasSpecialChar() ? '✓' : '○' }}</span>
+                  Un carácter especial (&#64;$!%*?&)
+                </div>
+              </div>
+              }
+            </div>
+
+            @if (estudianteForm.get('password')?.invalid && estudianteForm.get('password')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('password') }}
+            </div>
+            } @else if (!passwordValue) {
+            <small class="form-text text-muted">
+              Debe contener: 1 minúscula, 1 mayúscula, 1 número y 1 carácter especial (&#64;$!%*?&)
+            </small>
+            }
+          </div>
+          }
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="CreditCard" size="16"></lucide-icon> Tipo Doc. <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" formControlName="inicialesTipoIdentificacion">
+              @for (tipo of tiposIdentificacion(); track tipo.idTipoIdentificacion) {
+              <option [value]="tipo.iniciales">{{ tipo.iniciales }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Hash" size="16"></lucide-icon> N° Documento
+            </label>
+            <input type="text" class="form-control" formControlName="numeroIdentificacion" placeholder="12345678"
+              [class.is-invalid]="estudianteForm.get('numeroIdentificacion')?.invalid && estudianteForm.get('numeroIdentificacion')?.touched">
+            @if (estudianteForm.get('numeroIdentificacion')?.invalid &&
+            estudianteForm.get('numeroIdentificacion')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('numeroIdentificacion') }}
+            </div>
+            }
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label d-flex align-items-center gap-2">
+              <lucide-icon [img]="Phone" size="16"></lucide-icon> Número Celular
+            </label>
+            <div class="input-group">
+              <select class="form-select" style="max-width: 100px;" formControlName="id_codigo_pais">
+                @for (p of paises(); track p.idPais) {
+                <option [value]="p.idPais">+{{ p.codigo }}</option>
+                }
+              </select>
+              <input type="text" class="form-control" formControlName="numeroCelular" placeholder="9 123 45678"
+                [class.is-invalid]="estudianteForm.get('numeroCelular')?.invalid && estudianteForm.get('numeroCelular')?.touched">
+            </div>
+            @if (estudianteForm.get('numeroCelular')?.invalid && estudianteForm.get('numeroCelular')?.touched) {
+            <div class="invalid-feedback d-block">
+              {{ getErrorMessage('numeroCelular') }}
+            </div>
+            }
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <div class="form-check form-switch d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" id="activoCheck" formControlName="activo">
+              <label class="form-check-label d-flex align-items-center gap-2" for="activoCheck">
+                <lucide-icon [img]="CheckCircle" size="16"></lucide-icon> Activo
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  @if (!showForm() && !loading()) {
+  <div class="d-flex flex-column flex-md-row gap-3 mb-4 align-items-center">
+    <div class="input-group flex-grow-1">
+      <span class="input-group-text bg-white border-end-0">
+        <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+      </span>
+      <input type="text" class="form-control border-start-0 ps-0" placeholder="Buscar estudiantes..."
+        [value]="searchText()" (input)="onSearch($any($event.target).value)">
+    </div>
+
+    <div class="form-check form-switch d-flex align-items-center gap-2 bg-white p-2 rounded border">
+      <input class="form-check-input m-0 cursor-pointer" type="checkbox" role="switch" id="filtroMatricula"
+        [checked]="soloConMatricula()" (change)="onFilterChange($any($event.target).checked)">
+      <label class="form-check-label small fw-semibold cursor-pointer" for="filtroMatricula">
+        Solo con Matrícula Activa
+      </label>
+    </div>
+  </div>
+
+  @if (estudiantes().length === 0) {
+  <div class="alert-custom">
+    <div class="alert-icon">
+      <lucide-icon [img]="Info"></lucide-icon>
+    </div>
+    <div class="alert-content">
+      No se encontraron estudiantes registrados con los filtros actuales.
+    </div>
+  </div>
+  } @else {
+  <div class="table-responsive mb-3">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th class="ps-4">ID</th>
+          <th>Nombre Completo</th>
+          <th>Documento</th>
+          <th>Correo</th>
+          <th>Estado</th>
+          <th class="text-end pe-4">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (e of estudiantes(); track e.idUsuario) {
+        <tr>
+          <td class="ps-4 fw-bold text-secondary">#{{ e.idUsuario }}</td>
+          <td class="fw-bold text-dark">{{ e.nombre }} {{ e.apellido }}</td>
+          <td>
+            <span class="badge bg-secondary me-1">{{ e.inicialesTipoIdentificacion }}</span>
+            {{ e.numeroIdentificacion }}
+          </td>
+          <td>{{ e.correo }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input class="form-check-input cursor-pointer" type="checkbox" role="switch"
+                [checked]="e.estado === 'ACTIVO'" (change)="toggleEstado(e)">
+              <label class="form-check-label small" [class.text-success]="e.estado === 'ACTIVO'"
+                [class.text-muted]="e.estado !== 'ACTIVO'">
+                {{ e.estado === 'ACTIVO' ? 'Activo' : 'Inactivo' }}
+              </label>
+            </div>
+          </td>
+          <td class="text-end pe-4">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" (click)="editar(e)">
+                <lucide-icon [img]="Pencil" size="16"></lucide-icon>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminar(e.idUsuario)">
+                <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded border">
+    <span class="text-muted small">
+      Mostrando {{ estudiantes().length }} de {{ totalElements() }} estudiantes
+    </span>
+    <div class="btn-group">
+      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" [disabled]="currentPage() === 0"
+        (click)="onPageChange(currentPage() - 1)">
+        <lucide-icon [img]="ChevronLeft" size="16"></lucide-icon> Anterior
+      </button>
+      <button class="btn btn-outline-secondary btn-sm" disabled>
+        Página {{ currentPage() + 1 }} de {{ totalPages() }}
+      </button>
+      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+        [disabled]="currentPage() === totalPages() - 1" (click)="onPageChange(currentPage() + 1)">
+        Siguiente <lucide-icon [img]="ChevronRight" size="16"></lucide-icon>
+      </button>
+    </div>
+  </div>
+  }
+  }
+</div>

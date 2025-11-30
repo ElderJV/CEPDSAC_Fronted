@@ -30,7 +30,7 @@ export class ToastService {
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#ff4d00',
-      cancelButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
       confirmButtonText: 'Sí, confirmar',
       cancelButtonText: 'Cancelar'
     });

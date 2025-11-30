@@ -5,12 +5,15 @@ import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
+import { ngrokInterceptor } from './core/interceptors/ngrok.interceptor';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        ngrokInterceptor,
         authInterceptor,
         errorInterceptor
       ])
