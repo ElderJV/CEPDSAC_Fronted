@@ -59,24 +59,27 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES)
+    loadChildren: () =>
+      import('./pages/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
-  { 
-    path: 'login', 
-    loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) 
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/login/login.component').then((m) => m.LoginComponent),
   },
-  { 
-    path: 'register', 
-    loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) 
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./auth/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
   },
-  { 
-    path: 'registro', 
-    loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) 
-  },
-  { 
-    path: 'reset-password', 
-    loadComponent: () => import('./auth/recuperar-pass/recuperar-pass.component').then(m => m.RecuperarPassComponent) 
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./auth/recuperar-pass/recuperar-pass.component').then(
+        (m) => m.RecuperarPassComponent
+      ),
   },
   { path: '**', component: MainComponent },
 ];
-
