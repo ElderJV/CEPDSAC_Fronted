@@ -25,12 +25,16 @@ export class CursoDiplomadoService {
     return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-diplomados`);
   }
 
-  obtenerDetalle(id: number): Observable<CursoDetalle> {
-    return this.http.get<CursoDetalle>(`${this.apiUrl}/detalle/${id}`);
+  listarCursosAdmin(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-cursos-admin`);
   }
 
-  listar(): Observable<CursoDiplomadoViewAdmin[]> {
-    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar`);
+  listarDiplomadosAdmin(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-diplomados-admin`);
+  }
+
+  obtenerDetalle(id: number): Observable<CursoDetalle> {
+    return this.http.get<CursoDetalle>(`${this.apiUrl}/detalle/${id}`);
   }
 
   obtenerPorId(id: number): Observable<CursoDiplomado> {

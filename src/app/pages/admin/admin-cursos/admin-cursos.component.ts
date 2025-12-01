@@ -79,7 +79,7 @@ export class AdminCursosComponent implements OnInit {
 
   cargarCursos() {
     this.loading.set(true);
-    this.cursoService.listar().subscribe({
+    this.cursoService.listarCursosAdmin().subscribe({
       next: (data) => {
         this.cursos.set(data);
         this.loading.set(false);

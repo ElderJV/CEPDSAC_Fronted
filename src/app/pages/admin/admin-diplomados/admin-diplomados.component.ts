@@ -79,7 +79,7 @@ export class AdminDiplomadosComponent implements OnInit {
 
   cargarDiplomados() {
     this.loading.set(true);
-    this.cursoService.listarDiplomados().subscribe({
+    this.cursoService.listarDiplomadosAdmin().subscribe({
       next: (data) => {
         this.diplomados.set(data);
         this.loading.set(false);
