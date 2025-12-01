@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MatriculaCreateDTO, MatriculaResponseDTO, MatriculaDetalleResponse } from '../models/matricula.model';
+import { MatriculaCreateDTO, MatriculaResponseDTO, MatriculaDetalleResponse, MatriculaListResponse } from '../models/matricula.model';
 import { environment } from '../../../environment/environment';
 import { AuthService } from '../../auth/services/auth.service';
 
@@ -68,5 +68,11 @@ export class MatriculaService {
     const url = `${this.base}/cancelar-por-programacion/${idProgramacionCurso}`;
     console.log('MatriculaService.cancelarMatriculasPorProgramacion -> POST', url, params.toString());
     return this.http.post<MatriculaResponseDTO[]>(url, {}, { params });
+  }
+
+  listarPorAlumno(dni: number): Observable<MatriculaListResponse[]> {
+    const url = `${this.base}/alumno/${dni}`;
+    console.log('MatriculaService.listarPorAlumno -> GET', url);
+    return this.http.get<MatriculaListResponse[]>(url);
   }
 }

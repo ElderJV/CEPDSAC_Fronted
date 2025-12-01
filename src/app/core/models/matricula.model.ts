@@ -108,3 +108,18 @@ export const ESTADO_BADGE_CLASSES: Record<EstadoMatricula, string> = {
   [EstadoMatricula.PAGADO]: 'badge-success',
   [EstadoMatricula.CANCELADO]: 'badge-danger'
 };
+
+export interface MatriculaListResponse {
+  idMatricula: number;
+  nombreCompletoAlumno: string;
+  dniAlumno: string;
+  correoAlumno: string;
+  tituloCurso: string;
+  fechaMatricula: string;
+  estado: EstadoMatricula;
+  monto: number;
+  cuotasPagadas: number;
+  totalCuotas: number;
+  proximoVencimiento?: string;
+  tieneVencidas: boolean;
+}

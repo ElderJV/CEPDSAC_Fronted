@@ -177,7 +177,7 @@ export class AuthService {
   // 2. Helpers para roles
   isAdmin(): boolean {
     const rol = this.getRole(); // Usamos tu método que lee de localStorage
-    return rol === 'ADMIN' || rol === 'ADMINISTRADOR';
+    return rol === 'ADMINISTRADOR' || rol === 'ADMINISTRADOR';
   }
 
   isAlumno(): boolean {

@@ -27,7 +27,6 @@ export class UserCursosComponent implements OnInit {
 
   cargarCursos() {
     const usuario = this.authService.getUsuarioId();
-
     // Debug para ver qué está obteniendo
     console.log('UserCursos -> ID Usuario recuperado:', usuario);
 
@@ -47,8 +46,6 @@ export class UserCursosComponent implements OnInit {
 
             // Título y Categoría
             nombre: matricula.tituloCurso,
-            descripcion: matricula.nombreCategoria || 'Diplomado Especializado',
-
             // Lógica de Estado para el botón
             activo: matricula.estado === 'PAGADO',
             estado: matricula.estado,
