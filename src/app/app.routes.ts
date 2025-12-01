@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 // Layouts
 import { MainComponent } from './layout/main/main.component';
 import { AdminComponent } from './layout/admin/admin.component';
+import { UserComponent } from './layout/user/user.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 
 // Pages de la Home
@@ -12,6 +13,7 @@ import { DiplomadoComponent } from './pages/home/diplomado/diplomado.component';
 import { CursosGeneralComponent } from './pages/home/cursos-general/cursos-general.component';
 import { DiplomadosGeneralComponent } from './pages/home/diplomados-general/diplomados-general.component';
 import { MatriculaGeneralComponent } from './pages/home/matricula-general/matricula-general.component';
+import { RoleGuard } from './auth/guards/role.guard';
 import { NotFoundComponent } from './pages/home/not-found/not-found.component';
 
 export const routes: Routes = [
@@ -56,13 +58,25 @@ export const routes: Routes = [
       },
     ],
   },
+
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' },
     loadChildren: () =>
       import('./pages/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
+
+  {
+    path: 'user',
+    component: UserComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ALUMNO' },
+    loadChildren: () =>
+      import('./pages/user/user.routes').then((m) => m.USER_ROUTES),
+  },
+
   {
     path: 'login',
     loadComponent: () =>

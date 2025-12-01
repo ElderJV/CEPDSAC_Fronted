@@ -7,6 +7,10 @@
   font-size: 2.5rem;
 }
 
+.text-cat {
+  color: #013162;
+}
+
 /* Sidebar */
 aside {
   padding-right: 15px;

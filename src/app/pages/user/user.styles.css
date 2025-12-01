@@ -1,40 +1,71 @@
 /* ========================================
-   CONTENEDORES BASE
+   CEDPSAC - Sistema de Diseño User (Alumnos)
    ======================================== */
 
-.admin-container {
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+/* Variables CSS Globales */
+:root {
+  /* Colores Corporativos CEDPSAC */
+  --cedpsac-blue: #013162;
+  --cedpsac-blue-light: #024a8f;
+  --cedpsac-orange: #ff4d00;
+  --cedpsac-orange-dark: #e04400;
+  --cedpsac-white: #ffffff;
+  --cedpsac-gray: #6c757d;
+  --cedpsac-gray-light: #f8f9fa;
+  --cedpsac-gray-border: #e9ecef;
+
+  /* Colores de Estado */
+  --color-success: #198754;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-info: #0dcaf0;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --shadow-orange: 0 4px 6px rgba(255, 77, 0, 0.2);
+  --shadow-orange-hover: 0 6px 12px rgba(255, 77, 0, 0.3);
+  --shadow-blue: 0 4px 6px rgba(1, 49, 98, 0.2);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  /* Transiciones */
+  --transition-fast: all 0.2s ease;
+  --transition-normal: all 0.3s ease;
 }
 
 /* ========================================
    CONTENEDORES BASE
    ======================================== */
 
-.admin-container {
+.user-container {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-.titulo_admin {
+.titulo_user {
   color: #013162;
   border-bottom: 1px solid #ff4d00;
   font-weight: 600;
   padding: 22px;
 }
 
-.contenido-admin {
+.contenido-user {
   margin: 25px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-
 }
-.contenido-admin {
+
+.contenido-user {
   margin: 25px;
   display: flex;
   flex-direction: column;
@@ -71,7 +102,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.titulo_admin {
+.titulo_user {
   color: var(--cedpsac-white);
   background: linear-gradient(
     135deg,
@@ -654,7 +685,7 @@
    ======================================== */
 
 @media (max-width: 768px) {
-  .admin-container {
+  .user-container {
     padding: 1rem;
   }
 
@@ -679,205 +710,4 @@
   .header-section {
     padding: 1rem 1.5rem;
   }
-}
-
-/* ========================================
-   ALERTAS PERSONALIZADAS
-   ======================================== */
-
-.alert-custom {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius-md);
-  background-color: rgba(1, 49, 98, 0.05);
-  border-left: 4px solid var(--cedpsac-blue);
-}
-
-.alert-icon {
-  color: var(--cedpsac-blue);
-  font-size: 1.5rem;
-}
-
-.alert-content {
-  color: var(--cedpsac-blue);
-  font-weight: 500;
-}
-
-/* ========================================
-   SELECTION CARDS (GRID)
-   ======================================== */
-
-.selection-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 4px;
-}
-
-.selection-card {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--cedpsac-white);
-  border: 2px solid var(--cedpsac-gray-border);
-  border-radius: var(--radius-md);
-  padding: 0.75rem;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  position: relative;
-}
-
-.selection-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--cedpsac-orange);
-}
-
-.selection-card.selected {
-  border-color: var(--cedpsac-blue);
-  background: linear-gradient(135deg, rgba(1, 49, 98, 0.03) 0%, rgba(255, 77, 0, 0.03) 100%);
-  box-shadow: 0 0 0 1px var(--cedpsac-blue);
-}
-
-.card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: var(--cedpsac-gray-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  color: var(--cedpsac-gray);
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.card-info {
-  flex-grow: 1;
-  min-width: 0;
-}
-
-.card-info h6 {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #343a40;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.check-icon {
-  color: var(--cedpsac-blue);
-  font-size: 1.25rem;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: var(--transition-fast);
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-}
-
-.selection-card.selected .check-icon {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.selection-grid::-webkit-scrollbar {
-  width: 6px;
-}
-
-.selection-grid::-webkit-scrollbar-thumb {
-  background-color: var(--cedpsac-gray-border);
-  border-radius: 3px;
-}
-
-.selection-grid::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-/* ========================================
-   SWEETALERT2 CUSTOM STYLES
-   ======================================== */
-
-div:where(.swal2-container) div:where(.swal2-popup) {
-  border-radius: var(--radius-lg);
-  border-top: 4px solid var(--cedpsac-orange);
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  box-shadow: var(--shadow-lg);
-}
-
-div:where(.swal2-container) .swal2-title {
-  color: var(--cedpsac-blue);
-  font-weight: 600;
-}
-
-div:where(.swal2-container) .swal2-html-container {
-  color: #495057;
-}
-
-div:where(.swal2-container) button.swal2-confirm {
-  background: linear-gradient(135deg, var(--cedpsac-orange) 0%, var(--cedpsac-orange-dark) 100%) !important;
-  box-shadow: var(--shadow-orange) !important;
-  border-radius: var(--radius-md) !important;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-div:where(.swal2-container) button.swal2-confirm:hover {
-  background: linear-gradient(135deg, var(--cedpsac-orange-dark) 0%, #c43900 100%) !important;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-orange-hover) !important;
-}
-
-div:where(.swal2-container) button.swal2-cancel {
-  background: var(--cedpsac-gray) !important;
-  color: white !important;
-  border-radius: var(--radius-md) !important;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-div:where(.swal2-container) button.swal2-cancel:hover {
-  background: #5a6268 !important;
-  transform: translateY(-2px);
-}
-
-/* Toast specific overrides */
-div:where(.swal2-container).swal2-top-end > .swal2-popup, 
-div:where(.swal2-container).swal2-top-right > .swal2-popup {
-  border-left: 4px solid var(--cedpsac-blue);
-  border-top: none;
-  box-shadow: var(--shadow-lg);
-}
-
-div:where(.swal2-icon).swal2-success {
-  border-color: var(--cedpsac-blue);
-  color: var(--cedpsac-blue);
-}
-
-div:where(.swal2-icon).swal2-success [class^=swal2-success-line] {
-  background-color: var(--cedpsac-blue);
-}
-
-div:where(.swal2-icon).swal2-warning {
-  border-color: var(--cedpsac-orange);
-  color: var(--cedpsac-orange);
-}
-
-div:where(.swal2-icon).swal2-error {
-  border-color: var(--color-danger);
-  color: var(--color-danger);
-}
-
-div:where(.swal2-icon).swal2-info {
-  border-color: var(--cedpsac-blue);
-  color: var(--cedpsac-blue);
 }

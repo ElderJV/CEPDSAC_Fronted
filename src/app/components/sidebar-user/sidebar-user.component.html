@@ -1,0 +1,62 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a routerLink="/user" class="sidebar-logo">
+      <img src="/logo.png" alt="User CEPSAC" />
+      <h3 class="fw-bold">Portal Estudiantil</h3>
+    </a>
+    <button class="sidebar-toggle" aria-label="Toggle sidebar">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-profile">
+    <h4 class="profile-greeting">Bienvenido</h4>
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <span class="status-indicator"></span>
+      </div>
+      <span class="profile-name">Alumno</span>
+      <span class="profile-status">Última actividad: 30/11/25 8:00pm</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a
+          routerLink="/user/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="bi bi-house-door-fill"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user/cursos" routerLinkActive="active">
+          <i class="bi bi-journal-bookmark-fill"></i>
+          <span>Cursos</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user/diplomados" routerLinkActive="active">
+          <i class="bi bi-award-fill"></i>
+          <span>Diplomados</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user/matriculas" routerLinkActive="active">
+          <i class="bi bi-people-fill"></i>
+          <span>Matriculas</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a routerLink="/user/configuracion" routerLinkActive="active">
+      <i class="bi bi-gear-fill"></i>
+      <span>Configuración</span>
+    </a>
+  </div>
+</aside>

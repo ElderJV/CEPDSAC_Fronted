@@ -11,7 +11,9 @@
             </div>
             <div class="ms-3">
               <h6 class="text-muted mb-0">Estudiantes con matrícula</h6>
-              <span class="fw-bold fs-4">{{ loading ? '...' : (metrics?.estudiantes ?? '-') }}</span>
+              <span class="fw-bold fs-4">{{
+                loading ? "..." : metrics?.estudiantes ?? "-"
+              }}</span>
             </div>
           </div>
         </div>
@@ -25,7 +27,9 @@
             </div>
             <div class="ms-3">
               <h6 class="text-muted mb-0">Programaciones de cursos activas</h6>
-              <span class="fw-bold fs-4">{{ loading ? '...' : (metrics?.certificaciones ?? '-') }}</span>
+              <span class="fw-bold fs-4">{{
+                loading ? "..." : metrics?.certificaciones ?? "-"
+              }}</span>
             </div>
           </div>
         </div>
@@ -39,7 +43,9 @@
             </div>
             <div class="ms-3">
               <h6 class="text-muted mb-0">Cursos Activos</h6>
-              <span class="fw-bold fs-4">{{ loading ? '...' : (metrics?.cursos ?? '-') }}</span>
+              <span class="fw-bold fs-4">{{
+                loading ? "..." : metrics?.cursos ?? "-"
+              }}</span>
             </div>
           </div>
         </div>
@@ -53,7 +59,9 @@
             </div>
             <div class="ms-3">
               <h6 class="text-muted mb-0">Instructores</h6>
-              <span class="fw-bold fs-4">{{ loading ? '...' : (metrics?.instructores ?? '-') }}</span>
+              <span class="fw-bold fs-4">{{
+                loading ? "..." : metrics?.instructores ?? "-"
+              }}</span>
             </div>
           </div>
         </div>

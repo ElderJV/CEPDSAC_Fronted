@@ -43,6 +43,8 @@ export interface TokenPayload {
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
+  private readonly USER_ID_KEY = 'user_id';
+
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -64,13 +66,17 @@ export class AuthService {
   }
 
   resetPassword(token: string, nuevaPassword: string) {
-    return this.http.post(`${this.apiUrl}/reset-password`, { token, nuevaPassword });
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token,
+      nuevaPassword,
+    });
   }
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('jwt_token');
       localStorage.removeItem('user_role');
+      localStorage.removeItem(this.USER_ID_KEY);
     }
   }
 
@@ -133,5 +139,61 @@ export class AuthService {
     if (!payload.exp) return true;
     const now = Math.floor(Date.now() / 1000);
     return payload.exp > now;
+  }
+
+  // 1. MEJORA: Obtener el ID del usuario del token
+  getUsuarioId(): number | null {
+    const payload = this.getTokenPayload();
+    let id: number | string | null = null;
+
+    if (payload) {
+      const val =
+        payload['idUsuario'] ||
+        payload['id'] ||
+        payload['userId'] ||
+        payload['sub'];
+      // Validamos que sea número y no un email
+      if (val && !isNaN(Number(val))) {
+        id = Number(val);
+      }
+    }
+
+    if (!id && isPlatformBrowser(this.platformId)) {
+      const storedId = localStorage.getItem(this.USER_ID_KEY);
+      if (storedId) {
+        id = Number(storedId);
+      }
+    }
+
+    return id;
+  }
+
+  setUserId(userId: number): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.USER_ID_KEY, userId.toString());
+    }
+  }
+
+  // 2. Helpers para roles
+  isAdmin(): boolean {
+    const rol = this.getRole(); // Usamos tu método que lee de localStorage
+    return rol === 'ADMIN' || rol === 'ADMINISTRADOR';
+  }
+
+  isAlumno(): boolean {
+    const rol = this.getRole();
+    return rol === 'ALUMNO' || rol === 'ESTUDIANTE';
+  }
+
+  // 3. Método para guardar todo al hacer login (Token, Rol y User)
+  saveSession(response: LoginResponse): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.setToken(response.token);
+
+      // Guardamos el rol (Prioridad: Response > Token > Defecto)
+      const payload = this.getTokenPayload(response.token);
+      const rol = response.rol || payload?.rol || 'ALUMNO';
+      this.setRole(rol);
+    }
   }
 }

@@ -40,9 +40,11 @@ export class LoginComponent implements OnInit {
   isSubmitting = false;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['sessionExpired'] === 'true') {
-        this.toastService.error('Tiempo en sesión expiró, loguearse nuevamente');
+        this.toastService.error(
+          'Tiempo en sesión expiró, loguearse nuevamente'
+        );
       }
     });
   }
@@ -61,11 +63,23 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         this.isSubmitting = false;
         if (response?.token) {
+          // Guardar el Token
           this.authService.setToken(response.token);
-          // si el backend devuelve el rol, guardarlo
+
+          // Guardar el rol
           if ((response as any).rol) {
             this.authService.setRole((response as any).rol);
           }
+
+          // Guardar el ID del usuario
+          if (response.user && response.user.idUsuario) {
+            this.authService.setUserId(response.user.idUsuario);
+          }
+          // Nota: A veces viene como 'id' en lugar de 'idUsuario', revisa tu consola
+          else if (response.user && (response.user as any).id) {
+            this.authService.setUserId((response.user as any).id);
+          }
+
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
           try {
             if (returnUrl) {
@@ -76,6 +90,8 @@ export class LoginComponent implements OnInit {
               const rol = (response as any).rol ?? this.authService.getRole();
               if (rol && String(rol).toUpperCase().includes('ADMIN')) {
                 this.router.navigate(['/admin']);
+              } else if (rol && String(rol).toUpperCase().includes('ALUMNO')) {
+                this.router.navigate(['/user']);
               } else {
                 this.router.navigate(['/']);
               }

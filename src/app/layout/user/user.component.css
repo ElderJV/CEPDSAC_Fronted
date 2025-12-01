@@ -1,0 +1,10 @@
+.user-wrapper {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.user-content {
+  margin-left: 280px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}

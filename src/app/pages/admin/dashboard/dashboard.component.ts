@@ -1,12 +1,15 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { MetricsService, MetricsResponse } from '../../../core/services/metrics.service';
+import {
+  MetricsService,
+  MetricsResponse,
+} from '../../../core/services/metrics.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   imports: [],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['../../admin/admin-styles.css','./dashboard.component.css',]
+  styleUrls: ['../../admin/admin-styles.css', './dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private metricsService = inject(MetricsService);
@@ -31,7 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.error = 'Error al cargar métricas';
         console.error('Metrics load error', err);
-      }
+      },
     });
   }
 

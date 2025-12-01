@@ -1,14 +1,19 @@
-<div class="admin-container">
-  <div class="header-section d-flex justify-content-between align-items-center">
+<section class="admin-container">
+  <header
+    class="header-section d-flex justify-content-between align-items-center"
+  >
     <h2>
       <lucide-icon [img]="Calendar" class="me-2"></lucide-icon>
       Programación de Cursos
     </h2>
-    <button class="btn btn-primary d-flex align-items-center gap-2" (click)="onNew()">
+    <button
+      class="btn btn-primary d-flex align-items-center gap-2"
+      (click)="onNew()"
+    >
       <lucide-icon [img]="Plus" size="18"></lucide-icon>
       Nueva Programación
     </button>
-  </div>
+  </header>
 
   <div class="card">
     <div class="card-body">
@@ -17,13 +22,25 @@
           <div class="col-md-6">
             <div class="input-group">
               <span class="input-group-text bg-white border-end-0">
-                <lucide-icon [img]="Search" size="18" class="text-muted"></lucide-icon>
+                <lucide-icon
+                  [img]="Search"
+                  size="18"
+                  class="text-muted"
+                ></lucide-icon>
               </span>
-              <input type="text" class="form-control border-start-0 ps-0"
-                placeholder="Buscar por nombre del curso, diplomado o docente..." [value]="searchTerm()"
-                (input)="onSearch($event)">
+              <input
+                type="text"
+                class="form-control border-start-0 ps-0"
+                placeholder="Buscar por nombre del curso, diplomado o docente..."
+                [value]="searchTerm()"
+                (input)="onSearch($event)"
+              />
 
-              <button class="btn btn-outline-primary" type="button" (click)="cargarProgramaciones()">
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                (click)="cargarProgramaciones()"
+              >
                 Actualizar
               </button>
             </div>
@@ -37,20 +54,14 @@
           <span class="visually-hidden">Cargando...</span>
         </div>
       </div>
-      }
-
-      @if (!isLoading() && programaciones().length === 0) {
+      } @if (!isLoading() && programaciones().length === 0) {
       <div class="alert-custom">
         <div class="alert-icon">
           <lucide-icon [img]="Info"></lucide-icon>
         </div>
-        <div class="alert-content">
-          No se encontraron programaciones.
-        </div>
+        <div class="alert-content">No se encontraron programaciones.</div>
       </div>
-      }
-
-      @if (!isLoading() && programaciones().length > 0) {
+      } @if (!isLoading() && programaciones().length > 0) {
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead class="table-light">
@@ -65,12 +76,15 @@
             </tr>
           </thead>
           <tbody>
-            @for (prog of paginatedProgramaciones(); track prog.idProgramacionCurso) {
+            @for (prog of paginatedProgramaciones(); track
+            prog.idProgramacionCurso) {
             <tr>
               <td>#{{ prog.idProgramacionCurso }}</td>
               <td>
                 <div class="fw-bold">{{ prog.nombreCursoDiplomado }}</div>
-                <span class="badge bg-info text-dark">{{ prog.modalidad }}</span>
+                <span class="badge bg-info text-dark">{{
+                  prog.modalidad
+                }}</span>
               </td>
               <td>
                 @if (prog.nombreDocente) {
@@ -86,29 +100,41 @@
                 <div class="small">
                   <div class="d-flex align-items-center gap-1">
                     <lucide-icon [img]="CalendarCheck" size="14"></lucide-icon>
-                    {{ prog.fechaInicio | date:'dd/MM/yyyy' }}
+                    {{ prog.fechaInicio | date : "dd/MM/yyyy" }}
                   </div>
                   <div class="text-muted d-flex align-items-center gap-1">
                     <lucide-icon [img]="CalendarX" size="14"></lucide-icon>
-                    {{ prog.fechaFin | date:'dd/MM/yyyy' }}
+                    {{ prog.fechaFin | date : "dd/MM/yyyy" }}
                   </div>
                 </div>
               </td>
               <td>
-                <span class="badge d-inline-flex align-items-center gap-1"
-                  [ngClass]="{'bg-danger': (prog.cantidadInscritos || 0) < 5, 'bg-success': (prog.cantidadInscritos || 0) >= 5}">
+                <span
+                  class="badge d-inline-flex align-items-center gap-1"
+                  [ngClass]="{
+                    'bg-danger': (prog.cantidadInscritos || 0) < 5,
+                    'bg-success': (prog.cantidadInscritos || 0) >= 5
+                  }"
+                >
                   <lucide-icon [img]="Users" size="14"></lucide-icon>
                   {{ prog.cantidadInscritos || 0 }}
                 </span>
               </td>
-              <td class="fw-bold">S/. {{ prog.monto | number:'1.2-2' }}</td>
+              <td class="fw-bold">S/. {{ prog.monto | number : "1.2-2" }}</td>
               <td>
                 <div class="btn-group">
-                  <button class="btn btn-sm btn-outline-primary" (click)="onEdit(prog.idProgramacionCurso)"
-                    title="Editar">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    (click)="onEdit(prog.idProgramacionCurso)"
+                    title="Editar"
+                  >
                     <lucide-icon [img]="Pencil" size="16"></lucide-icon>
                   </button>
-                  <button class="btn btn-sm btn-outline-danger" (click)="onDelete(prog)" title="Eliminar">
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="onDelete(prog)"
+                    title="Eliminar"
+                  >
                     <lucide-icon [img]="Trash2" size="16"></lucide-icon>
                   </button>
                 </div>
@@ -120,13 +146,20 @@
       </div>
 
       @if (totalPages() > 1) {
-      <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-between align-items-center">
+      <nav
+        aria-label="Page navigation"
+        class="mt-4 d-flex justify-content-between align-items-center"
+      >
         <small class="text-muted">
-          Mostrando {{ paginatedProgramaciones().length }} de {{ totalElements() }} registros
+          Mostrando {{ paginatedProgramaciones().length }} de
+          {{ totalElements() }} registros
         </small>
         <ul class="pagination mb-0">
           <li class="page-item" [class.disabled]="currentPage() === 0">
-            <button class="page-link" (click)="cambiarPagina(currentPage() - 1)">
+            <button
+              class="page-link"
+              (click)="cambiarPagina(currentPage() - 1)"
+            >
               <lucide-icon [img]="ChevronLeft" size="16"></lucide-icon>
             </button>
           </li>
@@ -135,15 +168,20 @@
               {{ currentPage() + 1 }} / {{ totalPages() }}
             </span>
           </li>
-          <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
-            <button class="page-link" (click)="cambiarPagina(currentPage() + 1)">
+          <li
+            class="page-item"
+            [class.disabled]="currentPage() === totalPages() - 1"
+          >
+            <button
+              class="page-link"
+              (click)="cambiarPagina(currentPage() + 1)"
+            >
               <lucide-icon [img]="ChevronRight" size="16"></lucide-icon>
             </button>
           </li>
         </ul>
       </nav>
-      }
-      }
+      } }
     </div>
   </div>
-</div>
+</section>
