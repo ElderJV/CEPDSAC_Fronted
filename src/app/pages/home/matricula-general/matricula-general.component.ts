@@ -1,4 +1,3 @@
-
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +12,9 @@ import { CursoDetalle, ProgramacionCursoSimple } from '../../../core/models/curs
 import { AuthService } from '../../../auth/services/auth.service';
 import { MetodoPagoService } from '../../../core/services/metodo-pago.service';
 import { MetodoPago } from '../../../core/models/configuracion.model';
+import { DescuentoService } from '../../../core/services/descuento.service';
+import { Descuento, DescuentoAplicacion } from '../../../core/models/descuento.model';
+import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,6 +34,7 @@ export class MatriculaGeneralComponent implements OnInit {
   private cursoService = inject(CursoDiplomadoService);
   private authService = inject(AuthService);
   private metodoPagoService = inject(MetodoPagoService);
+  private descuentoService = inject(DescuentoService);
 
   cursoId: number | null = null;
   programacionId: number | null = null;
@@ -47,6 +50,9 @@ export class MatriculaGeneralComponent implements OnInit {
 
   cuotas = signal<PagoResponse[]>([]);
   mostrarCuotas = signal(false);
+
+  activeDiscounts: Descuento[] = [];
+  applications: DescuentoAplicacion[] = [];
 
   contactPhoneDisplay = '956782481';
   get contactPhoneHref(): string {
@@ -79,6 +85,26 @@ export class MatriculaGeneralComponent implements OnInit {
     }
 
     this.cargarMetodosPago();
+    this.cargarDescuentos();
+  }
+
+  cargarDescuentos(): void {
+    forkJoin({
+      descuentos: this.descuentoService.listar(),
+      apps: this.descuentoService.listarAplicaciones()
+    }).subscribe({
+      next: ({ descuentos, apps }) => {
+        const now = new Date();
+        this.activeDiscounts = descuentos.filter(d => {
+          const start = new Date(d.fechaInicio);
+          const end = new Date(d.fechaFin);
+          end.setHours(23, 59, 59, 999);
+          return d.vigente && start <= now && end >= now;
+        });
+        this.applications = apps;
+      },
+      error: (err) => console.error('Error loading discounts', err)
+    });
   }
 
   cargarMetodosPago(): void {
@@ -227,7 +253,7 @@ export class MatriculaGeneralComponent implements OnInit {
   getPrimeraCuota(): number {
     if (!this.programacionSeleccionada) return 0;
 
-    const monto = this.programacionSeleccionada.monto;
+    const monto = this.montoFinal;
     const numeroCuotas = this.programacionSeleccionada.numeroCuotas ?? 1;
 
     if (numeroCuotas <= 1) {
@@ -240,10 +266,97 @@ export class MatriculaGeneralComponent implements OnInit {
     if (!this.programacionSeleccionada) return 'S/. 0.00';
     const numeroCuotas = this.programacionSeleccionada.numeroCuotas ?? 1;
     if (numeroCuotas <= 1) {
-      return `S/. ${this.programacionSeleccionada.monto.toFixed(2)}`;
+      return `S/. ${this.montoFinal.toFixed(2)}`;
     }
 
     const primeraCuota = this.getPrimeraCuota();
     return `S/. ${primeraCuota.toFixed(2)} (Primera cuota de ${numeroCuotas})`;
+  }
+
+  get descuentoAplicable(): { valor: number, tipo: 'PORCENTAJE' | 'MONTO', texto: string } | null {
+    if (!this.cursoDetalle) return null;
+
+    // 1. Specific course discount
+    const courseApps = this.applications.filter(a => 
+      a.tipoAplicacion === 'CURSO' && Number(a.idCursoDiplomado) === Number(this.cursoDetalle!.idCursoDiplomado)
+    );
+
+    let bestDiscount: Descuento | null = null;
+
+    for (const app of courseApps) {
+      const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+      if (discount) {
+        if (!bestDiscount || discount.valor > bestDiscount.valor) {
+          bestDiscount = discount;
+        }
+      }
+    }
+
+    if (bestDiscount) {
+      return {
+        valor: bestDiscount.valor,
+        tipo: bestDiscount.tipoDescuento,
+        texto: bestDiscount.tipoDescuento === 'PORCENTAJE' ? `-${bestDiscount.valor}%` : `-S/.${bestDiscount.valor}`
+      };
+    }
+
+    // 2. Category discount
+    if (this.cursoDetalle.idCategoria) {
+      const catApps = this.applications.filter(a => 
+        a.tipoAplicacion === 'CATEGORIA' && Number(a.idCategoria) === Number(this.cursoDetalle!.idCategoria)
+      );
+      
+      for (const app of catApps) {
+        const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+        if (discount) {
+           if (!bestDiscount || discount.valor > bestDiscount.valor) {
+            bestDiscount = discount;
+          }
+        }
+      }
+      
+      if (bestDiscount) {
+        return {
+          valor: bestDiscount.valor,
+          tipo: bestDiscount.tipoDescuento,
+          texto: bestDiscount.tipoDescuento === 'PORCENTAJE' ? `-${bestDiscount.valor}%` : `-S/.${bestDiscount.valor}`
+        };
+      }
+    }
+
+    // 3. General discount
+    const generalApps = this.applications.filter(a => a.tipoAplicacion === 'GENERAL');
+    for (const app of generalApps) {
+      const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+      if (discount) {
+         if (!bestDiscount || discount.valor > bestDiscount.valor) {
+          bestDiscount = discount;
+        }
+      }
+    }
+
+    if (bestDiscount) {
+      return {
+        valor: bestDiscount.valor,
+        tipo: bestDiscount.tipoDescuento,
+        texto: bestDiscount.tipoDescuento === 'PORCENTAJE' ? `-${bestDiscount.valor}%` : `-S/.${bestDiscount.valor}`
+      };
+    }
+
+    return null;
+  }
+
+  get montoFinal(): number {
+    if (!this.programacionSeleccionada) return 0;
+    const precioOriginal = this.programacionSeleccionada.monto;
+    const descuento = this.descuentoAplicable;
+
+    if (!descuento) return precioOriginal;
+
+    if (descuento.tipo === 'PORCENTAJE') {
+      return precioOriginal * (1 - descuento.valor / 100);
+    } else {
+      return Math.max(0, precioOriginal - descuento.valor);
+    }
   }
 }

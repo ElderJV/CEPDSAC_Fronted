@@ -55,5 +55,7 @@ export interface CursoDetalle {
   objetivo?: string;
   materialesIncluidos?: string;
   requisitos?: string;
+  idDescuento?: number;
+  descuento?: number;
   programaciones: ProgramacionCursoSimple[];
 }
