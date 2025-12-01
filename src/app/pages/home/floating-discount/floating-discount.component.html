@@ -1,0 +1,29 @@
+@if (isVisible() && activeDiscount()) {
+<div class="floating-discount-container animate-slide-in">
+    <button class="close-btn" (click)="close()">
+        <lucide-icon [img]="XIcon" size="16"></lucide-icon>
+    </button>
+
+    <div class="discount-content">
+        <div class="icon-wrapper">
+            <lucide-icon [img]="TagIcon" size="24" class="text-white"></lucide-icon>
+        </div>
+
+        <div class="text-content">
+            <h4 class="discount-title">¡Oferta Especial!</h4>
+            <p class="discount-scope">{{ discountScope() }}</p>
+            <p class="discount-desc">
+                Obtén un
+                <span class="highlight">
+                    {{ activeDiscount()?.valor }}
+                    {{ activeDiscount()?.tipoDescuento === 'PORCENTAJE' ? '%' : 'S/.' }}
+                </span>
+                de descuento
+            </p>
+            <p class="discount-expiry">
+                Válido hasta {{ activeDiscount()?.fechaFin | date:'dd/MM/yyyy' }}
+            </p>
+        </div>
+    </div>
+</div>
+}
