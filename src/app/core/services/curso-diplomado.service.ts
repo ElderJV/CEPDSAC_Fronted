@@ -37,6 +37,10 @@ export class CursoDiplomadoService {
     return this.http.get<CursoDetalle>(`${this.apiUrl}/detalle/${id}`);
   }
 
+  listar(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar`);
+  }
+
   obtenerPorId(id: number): Observable<CursoDiplomado> {
     return this.http.get<CursoDiplomado>(`${this.apiUrl}/obtener/${id}`);
   }
