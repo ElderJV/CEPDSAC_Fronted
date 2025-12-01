@@ -1,198 +1,244 @@
 <section class="curso-page fade-in">
-  @if (isLoading()) {
-  <div class="d-flex justify-content-center align-items-center vh-50">
-    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem">
+  <div
+    *ngIf="isLoading()"
+    class="d-flex justify-content-center align-items-center vh-50"
+  >
+    <div
+      class="spinner-border text-primary"
+      role="status"
+      style="width: 3rem; height: 3rem"
+    >
       <span class="visually-hidden">Cargando...</span>
     </div>
   </div>
-  }
 
-  @if (!isLoading() && curso()) {
-  <div class="container pb-5">
-    <div class="header-section text-center mb-5">
-      <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2 rounded-pill mb-3 fw-bold text-uppercase">
-        {{ curso()?.tipo === 'DIPLOMADO' ? "DIPLOMADO" : "CURSO ESPECIALIZADO" }}
+  <div *ngIf="!isLoading() && curso()" class="container pb-5">
+    <div class=" text-center mb-5">
+      <span
+        class="badge bg-primary-subtle text-primary-emphasis px-3 py-2 rounded-pill mb-3 fw-bold text-uppercase"
+      >
+        {{ curso()?.tipo ? "DIPLOMADO" : "CURSO ESPECIALIZADO" }}
       </span>
       <h1 class="display-4 fw-bolder text-dark mb-3">{{ curso()?.titulo }}</h1>
       <div class="d-flex justify-content-center gap-4 text-muted small">
-        @if (curso()?.nombreCategoria) {
-        <span>
-          <i class="fas fa-tag me-1 text-orange"></i>
-          {{ curso()?.nombreCategoria }}
-        </span>
-        }
-        @if (curso()?.otorgaCertificado) {
-        <span>
-          <i class="fas fa-certificate me-1 text-orange"></i>
-          Certificado Incluido
-        </span>
-        }
+        <span *ngIf="curso()?.nombreCategoria"
+          ><i class="fas fa-tag me-1 text-orange"></i>
+          {{ curso()?.nombreCategoria }}</span
+        >
+        <span *ngIf="curso()?.otorgaCertificado"
+          ><i class="fas fa-certificate me-1 text-orange"></i> Certificado
+          Incluido</span
+        >
       </div>
     </div>
 
-    <div class="text-start mb-4">
-      <h2 class="fw-bold text-uppercase">{{ curso()?.tipo === 'DIPLOMADO' ? 'Diplomado en' : 'Curso de' }}</h2>
-      <h1 class="fw-bolder text-uppercase text-highlight">
-        {{ curso()?.titulo }}
-      </h1>
-    </div>
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div
+          class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4 sticky-lg-top"
+          style="top: 100px; z-index: 10"
+        >
+          <div
+            class="card-header bg-gradient-primary text-white p-4 text-center"
+          >
+            <i
+              class="{{
+                curso()?.tipo ? 'fas fa-graduation-cap' : 'fas fa-book-open'
+              }} fa-4x opacity-50"
+            ></i>
+          </div>
 
-    @if (curso()?.objetivo) {
-    <div class="card p-4 mb-4 about-box">
-      <h5 class="fw-bold text-uppercase mb-3">Acerca de este {{ curso()?.tipo === 'DIPLOMADO' ? 'diplomado' : 'curso'
-        }}:</h5>
-      <p>{{ curso()?.objetivo }}</p>
-    </div>
-    }
-
-    @if ((curso()?.programaciones || []).length > 0) {
-    <div class="programaciones-section mb-4">
-      <h3 class="section-title mb-4">
-        <i class="bi bi-calendar-check me-2"></i>
-        Selecciona tu Programación
-      </h3>
-
-      <div class="row g-4">
-        @for (prog of (curso()?.programaciones || []); track prog.idProgramacionCurso) {
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="program-card" [class.selected]="programacionSeleccionada === prog.idProgramacionCurso"
-            (click)="seleccionarProgramacion(prog.idProgramacionCurso)">
-
-            <div class="program-card-header">
-              <div class="program-badge">{{ getModalidadLabel(prog.modalidad) }}</div>
-              <div class="program-price">S/. {{ prog.monto | number: '1.2-2' }}</div>
+          <div class="card-body p-4">
+            <div
+              class="text-center mb-4"
+              *ngIf="curso()?.programaciones?.length"
+            >
+              <p class="text-muted mb-0 small text-uppercase">
+                Inversión desde
+              </p>
+              <h2 class="fw-bold text-primary mb-0">
+                S/ {{ (curso()?.programaciones)![0].monto | number : "1.2-2" }}
+              </h2>
             </div>
 
-            <div class="program-card-body">
-              <div class="program-info-item">
-                <i class="bi bi-person-circle"></i>
-                <div>
-                  <small class="text-muted">Docente</small>
-                  <div class="fw-semibold">{{ getNombreCompleto(prog) }}</div>
-                </div>
-              </div>
-
-              <div class="program-info-item">
-                <i class="bi bi-calendar-range"></i>
-                <div>
-                  <small class="text-muted">Fecha de Inicio</small>
-                  <div class="fw-semibold">{{ prog.fechaInicio | date: 'dd/MM/yyyy' }}</div>
-                </div>
-              </div>
-
-              @if (prog.horario) {
-              <div class="program-info-item">
-                <i class="bi bi-clock"></i>
-                <div>
-                  <small class="text-muted">Horario</small>
-                  <div class="fw-semibold">{{ prog.horario }}</div>
-                </div>
-              </div>
-              }
-
-              @if (prog.duracionCurso) {
-              <div class="program-info-item">
-                <i class="bi bi-hourglass-split"></i>
-                <div>
-                  <small class="text-muted">Duración</small>
-                  <div class="fw-semibold">{{ prog.duracionCurso }} horas</div>
-                </div>
-              </div>
-              }
-
-              @if (prog.duracionMeses) {
-              <div class="program-info-item">
-                <i class="bi bi-credit-card"></i>
-                <div>
-                  <small class="text-muted">Cuotas</small>
-                  <div class="fw-semibold">{{ prog.duracionMeses }} meses</div>
-                </div>
-              </div>
-              }
+            <div class="d-grid gap-2 mb-4">
+              <button
+                class="btn btn-matricula btn-lg rounded-pill fw-bold shadow-sm"
+                (click)="comprar()"
+              >
+                <i class="fas fa-user-plus me-2"></i> Matricularse Ahora
+              </button>
+              <button
+                class="btn btn-outline-secondary btn-lg rounded-pill fw-bold"
+              >
+                <i class="fas fa-cart-plus me-2"></i> Añadir al Carrito
+              </button>
             </div>
 
-            <div class="program-card-footer">
-              <div class="selection-indicator">
-                @if (programacionSeleccionada === prog.idProgramacionCurso) {
-                <i class="bi bi-check-circle-fill"></i>
-                <span>Seleccionada</span>
-                } @else {
-                <i class="bi bi-circle"></i>
-                <span>Seleccionar</span>
-                }
-              </div>
+            <hr class="text-muted opacity-25" />
+
+            <ul class="list-unstyled mb-0 feature-list">
+              <li class="mb-3 d-flex align-items-center">
+                <div class="icon-square bg-orange-subtle text-orange me-3">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                  <small class="d-block text-muted">Duración</small>
+                  <span class="fw-bold"
+                    >{{ curso()?.programaciones?.[0]?.duracionCurso || 0 }}
+                    Horas</span
+                  >
+                </div>
+              </li>
+              <li class="mb-3 d-flex align-items-center">
+                <div class="icon-square bg-blue-subtle text-primary me-3">
+                  <i class="fas fa-video"></i>
+                </div>
+                <div>
+                  <small class="d-block text-muted">Modalidad</small>
+                  <span
+                    class="fw-bold"
+                    >{{ getModalidadLabel(curso()?.programaciones?.[0]?.modalidad || '') }}</span
+                  >
+                </div>
+              </li>
+              <li class="d-flex align-items-center">
+                <div class="icon-square bg-success-subtle text-success me-3">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                  <small class="d-block text-muted">Certificación</small>
+                  <span class="fw-bold">{{
+                    curso()?.otorgaCertificado ? "Sí" : "No"
+                  }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="mb-5" *ngIf="curso()?.objetivo">
+          <h4 class="fw-bold text-dark mb-3 position-relative section-title des-text">
+            Descripción del Programa
+          </h4>
+          <p class="lead text-muted" style="line-height: 1.8">
+            {{ curso()?.objetivo }}
+          </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+          <div class="col-md-6">
+            <div class="card h-100 border-0 bg-light rounded-4 p-4">
+              <h5 class="fw-bold mb-3">
+                <i class="fas fa-box-open text-orange me-2"></i> Lo que
+                aprenderás
+              </h5>
+              <ul class="custom-list">
+                <ng-container
+                  *ngIf="getMaterialesArray().length > 0; else noMateriales"
+                >
+                  <li *ngFor="let item of getMaterialesArray()">{{ item }}</li>
+                </ng-container>
+                <ng-template #noMateriales>
+                  <li>Acceso a plataforma virtual</li>
+                  <li>Material descargable</li>
+                  <li>Clases en vivo y grabadas</li>
+                </ng-template>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card h-100 border-0 bg-light rounded-4 p-4">
+              <h5 class="fw-bold mb-3">
+                <i class="fas fa-clipboard-list text-primary me-2"></i>
+                Requisitos
+              </h5>
+              <ul class="custom-list check-blue">
+                <ng-container
+                  *ngIf="getRequisitosArray().length > 0; else noRequisitos"
+                >
+                  <li *ngFor="let req of getRequisitosArray()">{{ req }}</li>
+                </ng-container>
+                <ng-template #noRequisitos>
+                  <li>Conexión a internet estable</li>
+                  <li>PC o Laptop básica</li>
+                  <li>Ganas de aprender</li>
+                </ng-template>
+              </ul>
             </div>
           </div>
         </div>
-        }
-      </div>
-    </div>
-    }
 
-    <div class="row g-3 mb-4">
-      <div class="col-md-6">
-        <div class="card p-3 h-100 materials-box">
-          @let materiales = getMaterialesArray();
-          <h5 class="fw-bold text-uppercase mb-3">
-            <i class="bi bi-box-seam me-2"></i>
-            {{ materiales.length > 0 ? 'Materiales incluidos' : 'Información' }}
-          </h5>
-          <ul class="mb-0">
-            @if (materiales.length > 0) {
-            @for (material of materiales; track $index) {
-            <li>{{ material }}</li>
-            }
-            } @else {
-            @if (curso()?.nombreCategoria) {
-            <li>Categoría: {{ curso()?.nombreCategoria }}</li>
-            }
-            @if (curso()?.otorgaCertificado) {
-            <li>✓ Otorga certificado de finalización</li>
-            }
-            @if ((curso()?.programaciones || []).length > 0) {
-            <li>{{ (curso()?.programaciones || []).length }} programación(es) disponible(s)</li>
-            }
-            }
-          </ul>
+        <div
+          class="card border-0 shadow-sm rounded-4 overflow-hidden"
+          *ngIf="(curso()?.programaciones || []).length > 0"
+        >
+          <div class="card-header bg-white border-bottom-0 p-4 pb-0">
+            <h4 class="fw-bold mb-0">Inicios Disponibles</h4>
+            <p class="text-muted small">
+              Elige el horario que mejor se adapte a ti
+            </p>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0 custom-table">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="ps-4 py-3">Docente</th>
+                    <th class="py-3">Horario</th>
+                    <th class="py-3">Fecha Inicio</th>
+                    <th class="py-3 text-end pe-4">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prog of curso()?.programaciones">
+                    <td class="ps-4">
+                      <div class="d-flex align-items-center">
+                        <div class="avatar-circle me-2 bg-primary text-white">
+                          {{ getNombreCompleto(prog).charAt(0) }}
+                        </div>
+                        <div>
+                          <span class="d-block fw-bold text-dark">{{
+                            getNombreCompleto(prog)
+                          }}</span>
+                          <small class="text-muted">{{
+                            getModalidadLabel(prog.modalidad)
+                          }}</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="badge bg-light text-dark border"
+                        ><i class="far fa-clock me-1"></i>
+                        {{ prog.horario || "Por definir" }}</span
+                      >
+                    </td>
+                    <td class="fw-bold text-primary">
+                      {{ prog.fechaInicio | date : "dd/MM/yyyy" }}
+                    </td>
+                    <td class="text-end pe-4">
+                      <button
+                        class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                        (click)="
+                          irAMatricula(
+                            curso()?.idCursoDiplomado || 0,
+                            prog.idProgramacionCurso
+                          )
+                        "
+                      >
+                        Seleccionar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="col-md-6">
-        <div class="card p-3 h-100 requisitos-box">
-          @let requisitos = getRequisitosArray();
-          <h5 class="fw-bold text-uppercase mb-3">
-            <i class="bi bi-list-check me-2"></i>
-            {{ requisitos.length > 0 ? 'Requisitos' : 'Detalles' }}
-          </h5>
-          <ul class="mb-0">
-            @if (requisitos.length > 0) {
-            @for (requisito of requisitos; track $index) {
-            <li>{{ requisito }}</li>
-            }
-            } @else {
-            @if (curso()?.otorgaCertificado) {
-            <li>Certificado al finalizar</li>
-            }
-            @if ((curso()?.programaciones || []).length > 0) {
-            <li>Múltiples horarios disponibles</li>
-            }
-            <li>Modalidades flexibles</li>
-            }
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center action-buttons">
-      <button class="btn btn-carrito mx-2 fw-bold rounded-pill" type="button">
-        <i class="bi bi-cart-plus me-2"></i>
-        Añadir al carrito
-      </button>
-      <button class="btn btn-comprar mx-2 fw-bold rounded-pill" type="button" (click)="comprar()">
-        <i class="bi bi-check-circle me-2"></i>
-        Matricularse
-      </button>
     </div>
   </div>
-  }
 </section>
