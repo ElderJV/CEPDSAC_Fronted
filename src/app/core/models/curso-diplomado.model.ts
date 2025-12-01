@@ -6,6 +6,8 @@ export interface CursoDiplomado {
     idCategoria: number;
     nombre: string;
   };
+  materialesIncluidos?: string;
+  requisitos?: string;
 }
 
 export interface CursoDiplomadoViewAdmin {
@@ -17,13 +19,14 @@ export interface CursoDiplomadoViewAdmin {
   titulo: string;
   urlCurso: string;
   objetivo: string;
+  materialesIncluidos?: string;
+  requisitos?: string;
 }
 
 export interface ProgramacionCursoSimple {
   idProgramacionCurso: number;
   modalidad: 'PRESENCIAL' | 'VIRTUAL' | 'VIRTUAL_24_7';
   duracionCurso: number;
-  horasSemanales: number;
   fechaInicio: string;
   fechaFin: string;
   monto: number;

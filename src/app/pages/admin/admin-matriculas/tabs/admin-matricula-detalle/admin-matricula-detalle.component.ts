@@ -109,8 +109,9 @@ export class AdminMatriculaDetalleComponent implements OnInit {
           this.cargarDetalle();
           this.descuentoSeleccionado.set(null);
         },
-        error: (err) => {
-          this.toast.error('Error al aplicar descuento');
+        error: (err: HttpErrorResponse) => {
+          const msg = this.errorHandler.getErrorMessage(err);
+          this.toast.error('Error al aplicar descuento: ' + msg);
         }
       });
     }
@@ -130,8 +131,9 @@ export class AdminMatriculaDetalleComponent implements OnInit {
           this.toast.success('Matrícula cancelada correctamente');
           this.cargarDetalle();
         },
-        error: () => {
-          this.toast.error('Error al cancelar la matrícula');
+        error: (err: HttpErrorResponse) => {
+          const msg = this.errorHandler.getErrorMessage(err);
+          this.toast.error('Error al cancelar la matrícula: ' + msg);
         }
       });
     }

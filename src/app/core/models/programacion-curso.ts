@@ -7,6 +7,7 @@ export interface ProgramacionCursoResponse {
     nombreDocente: string;
     cantidadInscritos: number;
     duracionMeses: number;
+    numeroCuotas: number;
     activo?: boolean;
     modalidad?: string;
     idCursoDiplomado?: number;

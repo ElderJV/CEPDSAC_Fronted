@@ -121,6 +121,96 @@
   border-color: #ff7f22;
 }
 
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-strength-indicator {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  width: 280px;
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-in;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.password-strength-indicator::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(0, 0, 0, 0.92);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.strength-title {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+}
+
+.strength-requirement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #999;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.strength-requirement:last-child {
+  margin-bottom: 0;
+}
+
+.strength-requirement.met {
+  color: #4ade80;
+}
+
+.check-icon {
+  font-weight: bold;
+  font-size: 1rem;
+  min-width: 1.2rem;
+  text-align: center;
+}
+
+.strength-requirement.met .check-icon {
+  color: #4ade80;
+}
+
+@media (max-width: 768px) {
+  .password-strength-indicator {
+    position: static;
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .password-strength-indicator::after {
+    display: none;
+  }
+}
+
 @media (max-width: 576px) {
   .register-card .card-body { padding: 1rem; }
 }

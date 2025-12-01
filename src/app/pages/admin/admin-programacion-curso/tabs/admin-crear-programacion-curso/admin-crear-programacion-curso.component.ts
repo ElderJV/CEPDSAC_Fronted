@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-crear-programacion-curso',
+  standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, LucideAngularModule],
   templateUrl: './admin-crear-programacion-curso.component.html',
   styleUrl: './admin-crear-programacion-curso.component.css'
@@ -57,10 +58,10 @@ export class AdminCrearProgramacionCursoComponent implements OnInit {
   idCursoDiplomado: number | null = null;
   modalidad: string = 'VIRTUAL';
   duracionCurso: number | null = null;
-  horasSemanales: number | null = null;
   fechaInicio: string = '';
   fechaFin: string = '';
   monto: number | null = null;
+  numeroCuotas: number | null = null;
   duracionMeses: number | null = null;
   horario: string = '';
   idDocente: number | null = null;
@@ -99,10 +100,10 @@ export class AdminCrearProgramacionCursoComponent implements OnInit {
         
         this.modalidad = data.modalidad || 'PRESENCIAL';
         this.duracionCurso = data.duracionCurso;
-        this.horasSemanales = data.horasSemanales;
         this.fechaInicio = data.fechaInicio;
         this.fechaFin = data.fechaFin;
         this.monto = data.monto;
+        this.numeroCuotas = data.numeroCuotas;
         this.duracionMeses = data.duracionMeses;
         this.horario = data.horario || '';
         this.idDocente = data.idDocente;
@@ -155,10 +156,10 @@ export class AdminCrearProgramacionCursoComponent implements OnInit {
       idCursoDiplomado: this.idCursoDiplomado,
       modalidad: this.modalidad,
       duracionCurso: this.duracionCurso,
-      horasSemanales: this.horasSemanales,
       fechaInicio: this.fechaInicio,
       fechaFin: this.fechaFin,
       monto: this.monto,
+      numeroCuotas: this.numeroCuotas,
       duracionMeses: this.duracionMeses,
       horario: this.horario,
       idDocente: this.idDocente

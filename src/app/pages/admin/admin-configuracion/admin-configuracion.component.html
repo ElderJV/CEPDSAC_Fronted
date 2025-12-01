@@ -1,58 +1,43 @@
-<section>
-  <h1 class="titulo_admin">Configuración</h1>
-  
-  <div class="contenido-admin">
-    <div class="tabs-container">
-      <div class="tabs">
-        <button 
-          class="tab" 
-          [class.active]="activeTab === 'general'"
-          (click)="selectTab('general')">
-          General
-        </button>
-        <button 
-          class="tab" 
-          [class.active]="activeTab === 'metodos-pago'"
-          (click)="selectTab('metodos-pago')">
-          Métodos de Pago
-        </button>
-        <button 
-          class="tab" 
-          [class.active]="activeTab === 'sponsors'"
-          (click)="selectTab('sponsors')">
-          Sponsors
-        </button>
-        <button 
-          class="tab" 
-          [class.active]="activeTab === 'testimonios'"
-          (click)="selectTab('testimonios')">
-          Testimonios
-        </button>
-        <button 
-          class="tab" 
-          [class.active]="activeTab === 'contacto'"
-          (click)="selectTab('contacto')">
-          Contacto
-        </button>
-      </div>
-    </div>
+<div class="admin-container">
+  <div class="header-section mb-4">
+    <h2>Configuración</h2>
+  </div>
 
-    <div class="tab-content">
-      @if (activeTab === 'general') {
-        <app-config-general />
-      }
-      @if (activeTab === 'metodos-pago') {
-        <app-config-metodos-pago />
-      }
-      @if (activeTab === 'sponsors') {
-        <app-config-sponsors />
-      }
-      @if (activeTab === 'testimonios') {
-        <app-config-testimonios />
-      }
-      @if (activeTab === 'contacto') {
-        <app-config-contacto />
-      }
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="tab" [class.active]="activeTab === 'general'" (click)="selectTab('general')">
+        General
+      </button>
+      <button class="tab" [class.active]="activeTab === 'metodos-pago'" (click)="selectTab('metodos-pago')">
+        Métodos de Pago
+      </button>
+      <button class="tab" [class.active]="activeTab === 'sponsors'" (click)="selectTab('sponsors')">
+        Sponsors
+      </button>
+      <button class="tab" [class.active]="activeTab === 'testimonios'" (click)="selectTab('testimonios')">
+        Testimonios
+      </button>
+      <button class="tab" [class.active]="activeTab === 'contacto'" (click)="selectTab('contacto')">
+        Contacto
+      </button>
     </div>
   </div>
-</section>
+
+  <div class="tab-content">
+    @if (activeTab === 'general') {
+    <app-config-general />
+    }
+    @if (activeTab === 'metodos-pago') {
+    <app-config-metodos-pago />
+    }
+    @if (activeTab === 'sponsors') {
+    <app-config-sponsors />
+    }
+    @if (activeTab === 'testimonios') {
+    <app-config-testimonios />
+    }
+    @if (activeTab === 'contacto') {
+    <app-config-contacto />
+    }
+  </div>
+</div>

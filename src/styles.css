@@ -5,6 +5,44 @@
   list-style: none;
 }
 
+/* Variables CSS Globales */
+:root {
+  /* Colores Corporativos CEDPSAC */
+  --cedpsac-blue: #013162;
+  --cedpsac-blue-light: #024a8f;
+  --cedpsac-orange: #ff4d00;
+  --cedpsac-orange-dark: #e04400;
+  --cedpsac-white: #ffffff;
+  --cedpsac-gray: #6c757d;
+  --cedpsac-gray-light: #f8f9fa;
+  --cedpsac-gray-border: #e9ecef;
+
+  /* Colores de Estado */
+  --color-success: #198754;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+  --color-info: #0dcaf0;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --shadow-orange: 0 4px 6px rgba(255, 77, 0, 0.2);
+  --shadow-orange-hover: 0 6px 12px rgba(255, 77, 0, 0.3);
+  --shadow-blue: 0 4px 6px rgba(1, 49, 98, 0.2);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 20px;
+
+  /* Transiciones */
+  --transition-fast: all 0.2s ease;
+  --transition-normal: all 0.3s ease;
+}
+
 .main-container {
   min-height: 100vh;
   display: flex;

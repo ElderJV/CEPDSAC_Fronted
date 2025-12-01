@@ -1,51 +1,72 @@
 <div class="card">
-  <h2>Información de Contacto</h2>
-  
-  <div class="form-row">
-    <div class="form-group">
-      <label>Correo de Contacto</label>
-      <input type="email" [(ngModel)]="configContacto.correoContacto">
+  <div class="card-body">
+    <h2 class="card-title mb-4">Información de Contacto</h2>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Correo de Contacto</label>
+        <input type="email" class="form-control" [(ngModel)]="configContacto.correoContacto">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Teléfono</label>
+        <input type="tel" class="form-control" [(ngModel)]="configContacto.telefono">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">WhatsApp</label>
+        <input type="tel" class="form-control" [(ngModel)]="configContacto.whatsapp">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Dirección</label>
+        <input type="text" class="form-control" [(ngModel)]="configContacto.direccion">
+      </div>
     </div>
-    <div class="form-group">
-      <label>Teléfono</label>
-      <input type="tel" [(ngModel)]="configContacto.telefono">
+
+    <h3 class="h5 mt-4 mb-3 text-primary">Redes Sociales</h3>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Facebook</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light">
+            <lucide-icon [img]="FacebookIcon" [size]="18"></lucide-icon>
+          </span>
+          <input type="url" class="form-control" [(ngModel)]="configContacto.facebook"
+            placeholder="https://facebook.com/...">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Instagram</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light">
+            <lucide-icon [img]="InstagramIcon" [size]="18"></lucide-icon>
+          </span>
+          <input type="url" class="form-control" [(ngModel)]="configContacto.instagram"
+            placeholder="https://instagram.com/...">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">LinkedIn</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light">
+            <lucide-icon [img]="LinkedinIcon" [size]="18"></lucide-icon>
+          </span>
+          <input type="url" class="form-control" [(ngModel)]="configContacto.linkedin"
+            placeholder="https://linkedin.com/...">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Twitter</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light">
+            <lucide-icon [img]="TwitterIcon" [size]="18"></lucide-icon>
+          </span>
+          <input type="url" class="form-control" [(ngModel)]="configContacto.twitter"
+            placeholder="https://twitter.com/...">
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+      <button class="btn btn-primary" (click)="guardarConfigContacto()">Guardar Cambios</button>
     </div>
   </div>
-
-  <div class="form-row">
-    <div class="form-group">
-      <label>WhatsApp</label>
-      <input type="tel" [(ngModel)]="configContacto.whatsapp">
-    </div>
-    <div class="form-group">
-      <label>Dirección</label>
-      <input type="text" [(ngModel)]="configContacto.direccion">
-    </div>
-  </div>
-
-  <h3>Redes Sociales</h3>
-  <div class="form-row">
-    <div class="form-group">
-      <label>Facebook</label>
-      <input type="url" [(ngModel)]="configContacto.facebook" placeholder="https://facebook.com/...">
-    </div>
-    <div class="form-group">
-      <label>Instagram</label>
-      <input type="url" [(ngModel)]="configContacto.instagram" placeholder="https://instagram.com/...">
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-group">
-      <label>LinkedIn</label>
-      <input type="url" [(ngModel)]="configContacto.linkedin" placeholder="https://linkedin.com/...">
-    </div>
-    <div class="form-group">
-      <label>Twitter</label>
-      <input type="url" [(ngModel)]="configContacto.twitter" placeholder="https://twitter.com/...">
-    </div>
-  </div>
-
-  <button class="btn-primary" (click)="guardarConfigContacto()">Guardar Cambios</button>
-  <div style="clear: both;"></div>
 </div>

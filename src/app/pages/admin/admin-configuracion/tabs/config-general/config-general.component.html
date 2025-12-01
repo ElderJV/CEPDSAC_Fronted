@@ -1,25 +1,26 @@
 <div class="card">
-  <h2>Métricas del Sitio</h2>
-  <div class="form-row">
-    <div class="form-group">
-      <label>Número de Estudiantes</label>
-      <input type="number" [(ngModel)]="configGeneral.numeroEstudiantes">
+  <div class="card-body">
+    <h2 class="card-title mb-4">Métricas del Sitio</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Número de Estudiantes</label>
+        <input type="number" class="form-control" [(ngModel)]="configGeneral.numeroEstudiantes">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Certificaciones</label>
+        <input type="number" class="form-control" [(ngModel)]="configGeneral.numeroCertificaciones">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Instructores</label>
+        <input type="number" class="form-control" [(ngModel)]="configGeneral.numeroInstructores">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Cursos</label>
+        <input type="number" class="form-control" [(ngModel)]="configGeneral.numeroCursos">
+      </div>
     </div>
-    <div class="form-group">
-      <label>Certificaciones</label>
-      <input type="number" [(ngModel)]="configGeneral.numeroCertificaciones">
+    <div class="d-flex justify-content-end mt-4">
+      <button class="btn btn-primary" (click)="guardarConfigGeneral()">Guardar Cambios</button>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group">
-      <label>Instructores</label>
-      <input type="number" [(ngModel)]="configGeneral.numeroInstructores">
-    </div>
-    <div class="form-group">
-      <label>Cursos</label>
-      <input type="number" [(ngModel)]="configGeneral.numeroCursos">
-    </div>
-  </div>
-  <button class="btn-primary" (click)="guardarConfigGeneral()">Guardar Cambios</button>
-  <div style="clear: both;"></div>
 </div>

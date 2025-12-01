@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Pencil, Trash2, Plus, X } from 'lucide-angular';
+import { LucideAngularModule, Pencil, Trash2, Plus, X, AlertCircle } from 'lucide-angular';
 import { SponsorService } from '../../../../../core/services/sponsor.service';
 import { ToastService } from '../../../../../core/services/toast.service';
 import { Sponsor } from '../../../../../core/models/sponsor.model';
@@ -21,6 +21,7 @@ export class ConfigSponsorsComponent implements OnInit {
   readonly TrashIcon = Trash2;
   readonly PlusIcon = Plus;
   readonly XIcon = X;
+  readonly AlertCircle = AlertCircle;
 
   sponsors: Sponsor[] = [];
   isLoading = true;

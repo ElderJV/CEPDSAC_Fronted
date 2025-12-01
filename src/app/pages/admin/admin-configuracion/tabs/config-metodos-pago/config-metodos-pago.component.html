@@ -1,125 +1,138 @@
 <div class="card">
-  <div class="card-header">
-    <h2>Métodos de Pago</h2>
-    <button class="btn-primary" (click)="mostrarFormularioNuevoMetodo()">
-      <lucide-icon [img]="PlusIcon" [size]="18"></lucide-icon>
-      Añadir Método de Pago
-    </button>
-  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="card-title mb-0">Métodos de Pago</h2>
+      <button class="btn btn-primary d-flex align-items-center gap-2" (click)="mostrarFormularioNuevoMetodo()">
+        <lucide-icon [img]="PlusIcon" [size]="18"></lucide-icon>
+        Añadir Método de Pago
+      </button>
+    </div>
 
-  @if (mostrarFormularioMetodo) {
-    <div class="metodo-form">
-      <h3>{{ metodoEnEdicion ? 'Editar' : 'Nuevo' }} Método de Pago</h3>
-      
-      <div class="form-group">
-        <label>Tipo de Método *</label>
-        <input type="text" [(ngModel)]="nuevoMetodo.tipoMetodo" placeholder="Ej: YAPE, PLIN, TRANSFERENCIA">
-      </div>
+    @if (mostrarFormularioMetodo) {
+    <div class="metodo-form mb-4 p-4 border rounded bg-light">
+      <h3 class="mb-3">{{ metodoEnEdicion ? 'Editar' : 'Nuevo' }} Método de Pago</h3>
 
-      <div class="form-group">
-        <label>Descripción *</label>
-        <textarea [(ngModel)]="nuevoMetodo.descripcion" rows="2" 
-          placeholder="Descripción del método de pago"></textarea>
-      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Tipo de Método <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" [(ngModel)]="nuevoMetodo.tipoMetodo"
+            placeholder="Ej: YAPE, PLIN, TRANSFERENCIA">
+        </div>
 
-      <div class="form-group">
-        <label>Requisitos *</label>
-        <textarea [(ngModel)]="nuevoMetodo.requisitos" rows="2" 
-          placeholder="Requisitos para usar este método"></textarea>
-      </div>
+        <div class="col-md-12">
+          <label class="form-label">Descripción <span class="text-danger">*</span></label>
+          <textarea class="form-control" [(ngModel)]="nuevoMetodo.descripcion" rows="2"
+            placeholder="Descripción del método de pago"></textarea>
+        </div>
 
-      <div class="form-group">
-        <label>Imagen QR</label>
-        <div class="file-upload-container">
-          <input type="file" 
-            id="qr-upload" 
-            accept="image/*" 
-            (change)="onFileSelected($event)"
-            style="display: none;">
-          <button type="button" class="btn-secondary" onclick="document.getElementById('qr-upload').click()">
-            <lucide-icon [img]="UploadIcon" [size]="16"></lucide-icon>
-            Seleccionar Imagen
-          </button>
-          @if (imagenQRPreview) {
-            <div class="qr-preview">
-              <img [src]="imagenQRPreview" alt="Preview QR">
+        <div class="col-md-12">
+          <label class="form-label">Requisitos <span class="text-danger">*</span></label>
+          <textarea class="form-control" [(ngModel)]="nuevoMetodo.requisitos" rows="2"
+            placeholder="Requisitos para usar este método"></textarea>
+        </div>
+
+        <div class="col-md-12">
+          <label class="form-label">Imagen QR</label>
+          <div class="d-flex align-items-start gap-3">
+            <div>
+              <input type="file" id="qr-upload" accept="image/*" (change)="onFileSelected($event)"
+                style="display: none;">
+              <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2"
+                onclick="document.getElementById('qr-upload').click()">
+                <lucide-icon [img]="UploadIcon" [size]="16"></lucide-icon>
+                Seleccionar Imagen
+              </button>
             </div>
-          }
+            @if (imagenQRPreview) {
+            <div class="qr-preview">
+              <img [src]="imagenQRPreview" alt="Preview QR" class="img-thumbnail" style="max-height: 150px;">
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="activoCheck" [(ngModel)]="nuevoMetodo.activo">
+            <label class="form-check-label" for="activoCheck">
+              Activo
+            </label>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="checkbox-label">
-          <input type="checkbox" [(ngModel)]="nuevoMetodo.activo">
-          Activo
-        </label>
-      </div>
-
-      <div class="form-actions">
-        <button class="btn-primary" (click)="guardarMetodo()">
-          {{ metodoEnEdicion ? 'Actualizar' : 'Crear' }}
-        </button>
-        <button class="btn-secondary" (click)="cancelarEdicion()">
+      <div class="d-flex gap-2 mt-4 justify-content-end">
+        <button class="btn btn-secondary" (click)="cancelarEdicion()">
           Cancelar
+        </button>
+        <button class="btn btn-primary" (click)="guardarMetodo()">
+          {{ metodoEnEdicion ? 'Actualizar' : 'Crear' }}
         </button>
       </div>
     </div>
-  }
+    }
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th>QR</th>
-          <th>Tipo</th>
-          <th>Descripción</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (metodo of metodosPago; track metodo.idMetodoPago) {
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>QR</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (metodo of metodosPago; track metodo.idMetodoPago) {
           <tr>
             <td class="qr-cell">
               @if (metodo.imagenQR) {
-                <img [src]="metodo.imagenQR" alt="QR" class="qr-thumbnail">
+              <img [src]="metodo.imagenQR" alt="QR" class="qr-thumbnail img-thumbnail"
+                style="width: 50px; height: 50px; object-fit: cover;">
               } @else {
-                <div class="no-qr">Sin QR</div>
+              <div class="bg-light d-flex align-items-center justify-content-center rounded border"
+                style="width: 50px; height: 50px;">
+                <span class="small text-muted">Sin QR</span>
+              </div>
               }
             </td>
-            <td>{{ metodo.tipoMetodo }}</td>
-            <td>{{ metodo.descripcion || '-' }}</td>
+            <td class="fw-medium">{{ metodo.tipoMetodo }}</td>
             <td>
-              <span class="badge" [class.badge-success]="metodo.activo" [class.badge-danger]="!metodo.activo">
+              <div class="text-truncate" style="max-width: 300px;" title="{{ metodo.descripcion }}">
+                {{ metodo.descripcion || '-' }}
+              </div>
+            </td>
+            <td>
+              <span class="badge rounded-pill" [class.bg-success]="metodo.activo" [class.bg-danger]="!metodo.activo">
                 {{ metodo.activo ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
             <td>
-              <div class="actions">
-                <button class="icon-btn edit-icon" (click)="editarMetodo(metodo)" title="Editar">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-primary" (click)="editarMetodo(metodo)" title="Editar">
                   <lucide-icon [img]="PencilIcon" [size]="16"></lucide-icon>
                 </button>
-                <button class="icon-btn" 
-                  [class.toggle-on]="metodo.activo"
-                  [class.toggle-off]="!metodo.activo"
-                  (click)="cambiarEstadoMetodo(metodo)" 
+                <button class="btn btn-sm" [class.btn-outline-success]="!metodo.activo"
+                  [class.btn-outline-secondary]="metodo.activo" (click)="cambiarEstadoMetodo(metodo)"
                   [title]="metodo.activo ? 'Desactivar' : 'Activar'">
                   <lucide-icon [img]="PowerIcon" [size]="16"></lucide-icon>
                 </button>
-                <button class="icon-btn delete-icon" (click)="eliminarMetodo(metodo)" title="Eliminar">
+                <button class="btn btn-sm btn-outline-danger" (click)="eliminarMetodo(metodo)" title="Eliminar">
                   <lucide-icon [img]="TrashIcon" [size]="16"></lucide-icon>
                 </button>
               </div>
             </td>
           </tr>
-        } @empty {
+          } @empty {
           <tr>
-            <td colspan="5" class="empty-state">
+            <td colspan="5" class="text-center py-4 text-muted">
               No hay métodos de pago registrados
             </td>
           </tr>
-        }
-      </tbody>
-    </table>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

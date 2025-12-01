@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LucideAngularModule, Facebook, Instagram, Linkedin, Twitter } from 'lucide-angular';
 import { ConfiguracionContacto } from '../../../../../core/models/configuracion.model';
 import { ConfiguracionContactoService } from '../../../../../core/services/configuracion-contacto.service';
 import Swal from 'sweetalert2';
@@ -8,12 +9,17 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-config-contacto',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './config-contacto.component.html',
   styleUrl: './config-contacto.component.css'
 })
 export class ConfigContactoComponent implements OnInit {
   private configService = inject(ConfiguracionContactoService);
+
+  readonly FacebookIcon = Facebook;
+  readonly InstagramIcon = Instagram;
+  readonly LinkedinIcon = Linkedin;
+  readonly TwitterIcon = Twitter;
 
   configContacto: ConfiguracionContacto = {
     correoContacto: '',

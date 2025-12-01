@@ -1,6 +1,6 @@
 export interface Descuento {
   idDescuento: number;
-  tipoDescuento: 'PORCENTAJE' | 'MONTO_FIJO';
+  tipoDescuento: 'PORCENTAJE' | 'MONTO';
   valor: number;
   vigente: boolean;
   fechaInicio: string;
@@ -8,7 +8,7 @@ export interface Descuento {
 }
 
 export interface DescuentoCreateDTO {
-  tipoDescuento: 'PORCENTAJE' | 'MONTO_FIJO';
+  tipoDescuento: 'PORCENTAJE' | 'MONTO';
   valor: number;
   vigente: boolean;
   fechaInicio: string;

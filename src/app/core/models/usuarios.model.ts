@@ -3,8 +3,18 @@ export interface Usuario {
     nombre: string;
     apellido: string;
     correo: string;
-    rol: 'ALUMNO' | 'DOCENTE';
-    activo: boolean;
+    password?: string;
+    rol: 'ALUMNO' | 'DOCENTE' | 'ADMINISTRADOR';
+    estado: 'ACTIVO' | 'INACTIVO' | 'SUSPENDIDO';
     inicialesTipoIdentificacion: string;
+    idTipoIdentificacion?: number;
     numeroIdentificacion: string;
+    numeroCelular?: string;
+    nombrePais?: string;
+    id_codigo_pais?: number;
+}
+
+export interface UsuarioToggle {
+    idUsuario: number;
+    estado: 'ACTIVO' | 'INACTIVO';
 }
