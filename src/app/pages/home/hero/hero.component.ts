@@ -6,6 +6,7 @@ import { NosotrosComponent } from '../nosotros/nosotros.component';
 import { EstadisticasComponent } from '../estadisticas/estadisticas.component';
 import { SponsorsComponent } from '../sponsors/sponsors.component';
 import { TestimoniosComponent } from '../testimonios/testimonios.component';
+import { FloatingDiscountComponent } from '../floating-discount/floating-discount.component';
 
 @Component({
   selector: 'app-hero',
@@ -17,6 +18,7 @@ import { TestimoniosComponent } from '../testimonios/testimonios.component';
     EstadisticasComponent,
     SponsorsComponent,
     TestimoniosComponent,
+    FloatingDiscountComponent
   ],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css',

@@ -18,18 +18,13 @@
   <ul class="nav nav-pills mb-4" id="cursos-tab" role="tablist">
     @for (categoria of categorias; track categoria.id; let i = $index) {
     <li class="nav-item" role="presentation">
-      <button
-        class="nav-link"
-        [class.active]="i === 0"
-        [id]="categoria.id + '-tab'"
-        data-bs-toggle="pill"
-        [attr.data-bs-target]="'#cat-' + categoria.id"
-        type="button"
-        role="tab"
-        [attr.aria-controls]="'cat-' + categoria.id"
-        [attr.aria-selected]="i === 0"
-      >
+      <button class="nav-link" [class.active]="i === 0" [id]="categoria.id + '-tab'" data-bs-toggle="pill"
+        [attr.data-bs-target]="'#cat-' + categoria.id" type="button" role="tab"
+        [attr.aria-controls]="'cat-' + categoria.id" [attr.aria-selected]="i === 0">
         {{ categoria.nombre }}
+        @if (categoria.descuento) {
+        <span class="badge bg-danger ms-1" style="font-size: 0.7em;">{{ categoria.descuento }}</span>
+        }
       </button>
     </li>
     }
@@ -37,34 +32,24 @@
 
   <div class="tab-content" id="cursos-tabContent">
     @for (categoria of categorias; track categoria.id; let i = $index) {
-    <div
-      class="tab-pane fade"
-      [class.show]="i === 0"
-      [class.active]="i === 0"
-      [id]="'cat-' + categoria.id"
-      role="tabpanel"
-      [attr.aria-labelledby]="categoria.id + '-tab'"
-    >
+    <div class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0" [id]="'cat-' + categoria.id"
+      role="tabpanel" [attr.aria-labelledby]="categoria.id + '-tab'">
       <div class="row g-4">
         @for (curso of getCursosPorCategoria(categoria.nombre); track
         curso.idCursoDiplomado) {
         <div class="col-custom">
-          <div
-            class="card-curso"
-            [style.backgroundImage]="
+          <div class="card-curso" [style.backgroundImage]="
               'url(' +
               (curso.urlCurso ||
                 'https://placehold.co/600x400/64748B/FFFFFF?text=Curso') +
               ')'
-            "
-          >
+            ">
+            @if (getCursoDiscount(curso)) {
+            <div class="discount-badge">{{ getCursoDiscount(curso) }}</div>
+            }
             <div class="card-curso-content">
               <h5 class="card-title">{{ curso.titulo }}</h5>
-              <a
-                [routerLink]="['/curso', curso.idCursoDiplomado]"
-                class="card-link"
-                >Ver curso</a
-              >
+              <a [routerLink]="['/curso', curso.idCursoDiplomado]" class="card-link">Ver curso</a>
             </div>
           </div>
         </div>

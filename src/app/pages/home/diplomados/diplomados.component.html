@@ -5,65 +5,55 @@
   </h2>
 
   @if (isLoading) {
-    <div class="text-center mt-4">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
+  <div class="text-center mt-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
+  </div>
   }
 
   @if (!isLoading && categorias.length > 0) {
-    <ul class="nav nav-pills mb-4" id="diplomados-tab" role="tablist">
-      @for (categoria of categorias; track categoria.id; let i = $index) {
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            [class.active]="i === 0"
-            [id]="categoria.id + '-tab'"
-            data-bs-toggle="pill"
-            [attr.data-bs-target]="'#dip-' + categoria.id"
-            type="button"
-            role="tab"
-            [attr.aria-controls]="'dip-' + categoria.id"
-            [attr.aria-selected]="i === 0"
-          >
-            {{ categoria.nombre }}
-          </button>
-        </li>
-      }
-    </ul>
+  <ul class="nav nav-pills mb-4" id="diplomados-tab" role="tablist">
+    @for (categoria of categorias; track categoria.id; let i = $index) {
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" [class.active]="i === 0" [id]="categoria.id + '-tab'" data-bs-toggle="pill"
+        [attr.data-bs-target]="'#dip-' + categoria.id" type="button" role="tab"
+        [attr.aria-controls]="'dip-' + categoria.id" [attr.aria-selected]="i === 0">
+        {{ categoria.nombre }}
+        @if (categoria.descuento) {
+        <span class="badge bg-danger ms-1" style="font-size: 0.7em;">{{ categoria.descuento }}</span>
+        }
+      </button>
+    </li>
+    }
+  </ul>
 
-    <div class="tab-content" id="diplomados-tabContent">
-      @for (categoria of categorias; track categoria.id; let i = $index) {
-        <div
-          class="tab-pane fade"
-          [class.show]="i === 0"
-          [class.active]="i === 0"
-          [id]="'dip-' + categoria.id"
-          role="tabpanel"
-          [attr.aria-labelledby]="categoria.id + '-tab'"
-        >
-          <div class="row g-4">
-            @for (diplomado of getDiplomadosPorCategoria(categoria.nombre); track diplomado.idCursoDiplomado) {
-              <div class="col-custom">
-                <div
-                  class="card-curso"
-                  [style.backgroundImage]="'url(' + (diplomado.urlCurso || 'https://placehold.co/600x400/64748B/FFFFFF?text=Diplomado') + ')'"
-                >
-                  <div class="card-curso-content">
-                    <h5 class="card-title">{{ diplomado.titulo }}</h5>
-                    <a [routerLink]="['/diplomado', diplomado.idCursoDiplomado]" class="card-link">Ver diplomado</a>
-                  </div>
-                </div>
-              </div>
+  <div class="tab-content" id="diplomados-tabContent">
+    @for (categoria of categorias; track categoria.id; let i = $index) {
+    <div class="tab-pane fade" [class.show]="i === 0" [class.active]="i === 0" [id]="'dip-' + categoria.id"
+      role="tabpanel" [attr.aria-labelledby]="categoria.id + '-tab'">
+      <div class="row g-4">
+        @for (diplomado of getDiplomadosPorCategoria(categoria.nombre); track diplomado.idCursoDiplomado) {
+        <div class="col-custom">
+          <div class="card-curso"
+            [style.backgroundImage]="'url(' + (diplomado.urlCurso || 'https://placehold.co/600x400/64748B/FFFFFF?text=Diplomado') + ')'">
+            @if (getDiplomadoDiscount(diplomado)) {
+            <div class="discount-badge">{{ getDiplomadoDiscount(diplomado) }}</div>
             }
+            <div class="card-curso-content">
+              <h5 class="card-title">{{ diplomado.titulo }}</h5>
+              <a [routerLink]="['/diplomado', diplomado.idCursoDiplomado]" class="card-link">Ver diplomado</a>
+            </div>
           </div>
         </div>
-      }
+        }
+      </div>
     </div>
+    }
+  </div>
   }
 
   @if (!isLoading && categorias.length === 0) {
-    <p class="text-muted mt-4">No hay diplomados disponibles en este momento.</p>
+  <p class="text-muted mt-4">No hay diplomados disponibles en este momento.</p>
   }
 </section>

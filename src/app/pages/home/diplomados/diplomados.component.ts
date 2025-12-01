@@ -7,6 +7,10 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
 import { ToastService } from '../../../core/services/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
+import { DescuentoService } from '../../../core/services/descuento.service';
+import { Descuento, DescuentoAplicacion } from '../../../core/models/descuento.model';
+import { forkJoin } from 'rxjs';
+
 @Component({
   selector: 'app-diplomados',
   standalone: true,
@@ -18,12 +22,16 @@ export class DiplomadosComponent implements OnInit {
   private cursoDiplomadoService = inject(CursoDiplomadoService);
   private errorHandler = inject(ErrorHandlerService);
   private toast = inject(ToastService);
+  private descuentoService = inject(DescuentoService);
 
   diplomados: CursoDiplomado[] = [];
   isLoading = true;
+  
+  activeDiscounts: Descuento[] = [];
+  applications: DescuentoAplicacion[] = [];
 
   //extraer categorias
-  categorias: Array<{ id: string; nombre: string }> = [];
+  categorias: Array<{ id: string; nombre: string; descuento?: string }> = [];
 
   ngOnInit(): void {
     this.cargarDiplomados();
@@ -32,9 +40,23 @@ export class DiplomadosComponent implements OnInit {
   cargarDiplomados(): void {
     this.isLoading = true;
 
-    this.cursoDiplomadoService.listarDiplomados().subscribe({
-      next: (data) => {
-        this.diplomados = data;
+    forkJoin({
+      diplomados: this.cursoDiplomadoService.listarDiplomados(),
+      descuentos: this.descuentoService.listar(),
+      apps: this.descuentoService.listarAplicaciones()
+    }).subscribe({
+      next: ({ diplomados, descuentos, apps }) => {
+        this.diplomados = diplomados;
+        
+        const now = new Date();
+        this.activeDiscounts = descuentos.filter(d => {
+          const start = new Date(d.fechaInicio);
+          const end = new Date(d.fechaFin);
+          return d.vigente && start <= now && end >= now;
+        });
+        
+        this.applications = apps;
+        
         this.extraerCategorias();
         this.isLoading = false;
       },
@@ -59,13 +81,74 @@ export class DiplomadosComponent implements OnInit {
     });
 
     this.categorias = Array.from(categoriasUnicas.entries()).map(
-      ([id, nombre]) => ({ id: id.toString(), nombre })
+      ([id, nombre]) => {
+        const catId = Number(id);
+        const discount = this.getCategoryDiscount(catId);
+        return { id: id.toString(), nombre, descuento: discount };
+      }
+    );
+  }
+
+  getCategoryDiscount(catId: number): string | undefined {
+    const relevantApps = this.applications.filter(a => 
+      a.tipoAplicacion === 'CATEGORIA' && Number(a.idCategoria) === Number(catId)
+    );
+    
+    if (relevantApps.length === 0) return undefined;
+
+    let bestVal = -1;
+    let bestText = '';
+
+    for (const app of relevantApps) {
+      const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+      if (discount && discount.valor > bestVal) {
+        bestVal = discount.valor;
+        bestText = discount.tipoDescuento === 'PORCENTAJE' ? `-${discount.valor}%` : `-S/.${discount.valor}`;
+      }
+    }
+    
+    return bestVal > -1 ? bestText : undefined;
+  }
+
+  getDiplomadoDiscount(diplomado: CursoDiplomado): string | undefined {
+    // 1. Check specific diploma discount
+    const courseApps = this.applications.filter(a => 
+      a.tipoAplicacion === 'CURSO' && Number(a.idCursoDiplomado) === Number(diplomado.idCursoDiplomado)
     );
 
-    this.categorias.map((cat) => ({
-      categoria: cat.nombre,
-      cantidad: this.getDiplomadosPorCategoria(cat.nombre).length,
-    }));
+    let bestVal = -1;
+    let bestText = '';
+
+    for (const app of courseApps) {
+      const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+      if (discount && discount.valor > bestVal) {
+        bestVal = discount.valor;
+        bestText = discount.tipoDescuento === 'PORCENTAJE' ? `-${discount.valor}%` : `-S/.${discount.valor}`;
+      }
+    }
+
+    if (bestVal > -1) return bestText;
+
+    // 2. Fallback to category discount
+    if (diplomado.categoria) {
+      const catDiscount = this.getCategoryDiscount(diplomado.categoria.idCategoria);
+      if (catDiscount) return catDiscount;
+    }
+
+    // 3. Fallback to GENERAL discount
+    const generalApps = this.applications.filter(a => a.tipoAplicacion === 'GENERAL');
+    let bestGeneralVal = -1;
+    let bestGeneralText = '';
+
+    for (const app of generalApps) {
+      const discount = this.activeDiscounts.find(d => d.idDescuento === app.idDescuento);
+      if (discount && discount.valor > bestGeneralVal) {
+        bestGeneralVal = discount.valor;
+        bestGeneralText = discount.tipoDescuento === 'PORCENTAJE' ? `-${discount.valor}%` : `-S/.${discount.valor}`;
+      }
+    }
+
+    return bestGeneralVal > -1 ? bestGeneralText : undefined;
   }
 
   getDiplomadosPorCategoria(categoriaNombre: string): CursoDiplomado[] {

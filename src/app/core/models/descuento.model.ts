@@ -21,7 +21,7 @@ export interface DescuentoUpdateDTO extends DescuentoCreateDTO {
 
 export interface DescuentoAplicacion {
   idDescuentoAplicacion: number;
-  tipoAplicacion: 'CATEGORIA' | 'CURSO' | 'MATRICULA';
+  tipoAplicacion: 'CATEGORIA' | 'CURSO' | 'MATRICULA' | 'GENERAL';
   idDescuento: number;
   infoDescuento: string;
   idCategoria?: number;
@@ -32,7 +32,7 @@ export interface DescuentoAplicacion {
 }
 
 export interface DescuentoAplicacionCreateDTO {
-  tipoAplicacion: 'CATEGORIA' | 'CURSO' | 'MATRICULA';
+  tipoAplicacion: 'CATEGORIA' | 'CURSO' | 'MATRICULA' | 'GENERAL';
   idDescuento: number;
   idCategoria?: number;
   idCursoDiplomado?: number;
