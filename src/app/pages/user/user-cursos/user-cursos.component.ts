@@ -27,7 +27,6 @@ export class UserCursosComponent implements OnInit {
 
   cargarCursos() {
     const usuario = this.authService.getUsuarioId();
-    // Debug para ver qué está obteniendo
     console.log('UserCursos -> ID Usuario recuperado:', usuario);
 
     if (!usuario) {
@@ -39,17 +38,14 @@ export class UserCursosComponent implements OnInit {
 
     this.matriculaService.listarPorAlumno(usuario).subscribe({
       next: (data: MatriculaListResponse[]) => {
-        // Mapeo: Convertir respuesta del Backend -> Formato Visual de Card
-        this.cursos = data.map((matricula) => {
+        this.cursos = data.map((matricula: any) => {
           return {
-            id: matricula.idMatricula, // Usamos ID Matricula para ir al detalle
-
-            // Título y Categoría
+            id: matricula.idMatricula,
             nombre: matricula.tituloCurso,
-            // Lógica de Estado para el botón
-            activo: matricula.estado === 'PAGADO',
             estado: matricula.estado,
-            precio: matricula.monto,
+            horario: matricula.horario,
+            docente: matricula.nombreDocente,
+            monto: matricula.monto,
           };
         });
         this.isLoading = false;

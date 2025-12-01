@@ -1,0 +1,197 @@
+<div class="materiales-container fade-in">
+  <header class="mb-4">
+    <button
+      class="btn btn-link text-decoration-none ps-0 mb-2 d-flex align-items-center gap-2"
+      (click)="goBack()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      Volver a mis cursos
+    </button>
+
+    <div *ngIf="isLoading" class="d-flex align-items-center gap-3">
+      <div class="spinner-border text-primary" role="status"></div>
+      <span>Cargando materiales...</span>
+    </div>
+
+    <div
+      *ngIf="!isLoading && cursoInfo"
+      class="course-header card p-4 border-0 shadow-sm"
+    >
+      <div
+        class="d-flex justify-content-between align-items-start flex-wrap gap-3"
+      >
+        <div>
+          <span class="badge bg-primary mb-2">{{
+            cursoInfo.cursoDiplomado.nombreCategoria || "Curso"
+          }}</span>
+          <h1 class="h3 fw-bold text-dark">
+            {{ cursoInfo.cursoDiplomado.titulo }}
+          </h1>
+          <p class="text-muted mb-0">
+            Docente: <strong>{{ cursoInfo.cursoDiplomado.titulo }}</strong>
+          </p>
+        </div>
+        <div class="text-end">
+          <small class="text-muted d-block">Estado</small>
+          <span class="badge bg-success">MATRICULADO</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section *ngIf="!isLoading">
+    <div class="row">
+      <div class="col-lg-8">
+        <div
+          *ngFor="let modulo of modulos; let i = index"
+          class="card mb-4 border-0 shadow-sm module-card"
+        >
+          <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+            <h5 class="fw-bold text-primary mb-0">{{ modulo.titulo }}</h5>
+          </div>
+          <div class="card-body px-4 pb-4">
+            <div class="list-group list-group-flush">
+              <a
+                *ngFor="let rec of modulo.recursos"
+                href="javascript:void(0)"
+                class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-3 border-0 rounded-3 mb-1 resource-item"
+              >
+                <div class="icon-box" [ngClass]="getColor(rec.tipo)">
+                  <svg
+                    *ngIf="rec.tipo === 'PDF'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                    />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                  <svg
+                    *ngIf="rec.tipo === 'VIDEO'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polygon points="10 8 16 12 10 16 10 8" />
+                  </svg>
+                  <svg
+                    *ngIf="rec.tipo === 'ENLACE'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                    />
+                    <path
+                      d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                    />
+                  </svg>
+                  <svg
+                    *ngIf="rec.tipo === 'EXAMEN'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 20h9" />
+                    <path
+                      d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                    />
+                  </svg>
+                </div>
+
+                <div class="flex-grow-1">
+                  <h6 class="mb-0 text-dark">{{ rec.nombre }}</h6>
+                  <small class="text-muted" style="font-size: 0.75rem">{{
+                    rec.tipo
+                  }}</small>
+                </div>
+
+                <div class="text-primary opacity-0 hover-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div
+          class="card border-0 shadow-sm p-4 sticky-top"
+          style="top: 20px; z-index: 1"
+        >
+          <h6 class="fw-bold mb-3">Progreso del Curso</h6>
+          <div class="progress mb-2" style="height: 10px">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              style="width: 35%"
+              aria-valuenow="35"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <small class="text-muted d-block mb-4">35% Completado</small>
+
+          <h6 class="fw-bold mb-3">Recursos Descargables</h6>
+          <button class="btn btn-outline-secondary w-100 mb-2 btn-sm">
+            <i class="bi bi-download me-2"></i> Sílabo del curso
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,74 @@
+.materiales-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header del curso */
+.course-header {
+  background: linear-gradient(to right, #f8f9fa, #ffffff);
+  border-left: 5px solid #0d6efd !important;
+}
+
+/* Tarjetas de Módulos */
+.module-card {
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+
+/* Items de recursos */
+.resource-item {
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.resource-item:hover {
+  background-color: #e9ecef;
+  transform: translateX(5px);
+}
+
+.resource-item:hover .hover-icon {
+  opacity: 1 !important;
+}
+
+/* Caja de iconos */
+.icon-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Colores específicos para iconos */
+.text-danger svg {
+  color: #dc3545;
+}
+.text-primary svg {
+  color: #0d6efd;
+}
+.text-info svg {
+  color: #0dcaf0;
+}
+.text-warning svg {
+  color: #ffc107;
+}
+
+/* Animación de entrada */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
