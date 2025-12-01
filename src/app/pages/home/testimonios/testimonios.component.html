@@ -4,22 +4,16 @@
     <strong>Estudiantes</strong>
   </h1>
   <div class="row g-4 mt-3">
-    @for(testimonio of testimonios.testimonio; track testimonio.author) {
+    @for(testimonio of displayTestimonios(); track testimonio.author) {
     <div class="col-lg-6 mb-4">
       <div class="testimonial-card">
         <p class="testimonial-quote mb-4">{{ testimonio.quote }}</p>
         <div class="d-flex align-items-center">
-          <img
-            [src]="testimonio.avatar"
-            alt="{{ testimonio.author }}"
-            class="testimonial-avatar me-3"
-          />
+          <img [src]="testimonio.avatar" alt="{{ testimonio.author }}" class="testimonial-avatar me-3" />
           <div>
             <h6 class="mb-0 fw-bold">{{ testimonio.author }}</h6>
             <p class="mb-0 text-muted small">{{ testimonio.role }}</p>
-            <a href="#" class="testimonial-link small"
-              >Ver {{ testimonio.course }} →</a
-            >
+            <a href="#" class="testimonial-link small">Ver {{ testimonio.course }} →</a>
           </div>
         </div>
       </div>
