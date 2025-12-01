@@ -1,0 +1,68 @@
+<div class="admin-container">
+    <div class="header-section d-flex justify-content-between align-items-center">
+        <h2>
+            <lucide-icon [img]="BookOpen" class="me-2"></lucide-icon>
+            Mis Cursos
+        </h2>
+        <p class="text-white opacity-75 mb-0 d-none d-md-block">
+            Gestiona los cursos asignados a tu perfil docente.
+        </p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            @if (loading()) {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+            }
+
+            @if (!loading()) {
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center gap-2">
+                    <lucide-icon [img]="BookOpen" class="text-primary"></lucide-icon>
+                    <span class="fw-bold text-primary h5 mb-0">Mis Cursos Asignados</span>
+                    <span class="badge bg-primary rounded-pill">{{ cursos().length }}</span>
+                </div>
+            </div>
+
+            @if (cursos().length === 0) {
+            <div class="alert alert-info d-flex align-items-center gap-2">
+                <lucide-icon [img]="BookOpen" size="20"></lucide-icon>
+                No tienes cursos asignados actualmente.
+            </div>
+            } @else {
+            <div class="row g-4">
+                @for (curso of cursos(); track curso.idCursoDiplomado) {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border shadow-sm course-card overflow-hidden" style="border-top: none;">
+                        <div class="position-relative" style="height: 160px;">
+                            <img [src]="curso.urlCurso" class="w-100 h-100 object-fit-cover" [alt]="curso.titulo"
+                                style="object-fit: cover;">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    {{ curso.categoria?.nombre || curso.nombreCategoria }}
+                                </span>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-3">{{ curso.titulo }}</h5>
+                            <div class="mt-auto pt-3 border-top">
+                                <button [routerLink]="['/teacher/cursos', curso.idCursoDiplomado, 'alumnos']"
+                                    class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                                    <lucide-icon [img]="Users" size="18"></lucide-icon>
+                                    Ver Alumnos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+            }
+        </div>
+    </div>
+</div>

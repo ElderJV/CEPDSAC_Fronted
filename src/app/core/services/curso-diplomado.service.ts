@@ -8,6 +8,7 @@ import {
   CursoDiplomadoViewAdmin,
 } from '../models/curso-diplomado.model';
 import { Categoria } from '../models/categoria.model';
+import { ProgramacionCursoSimpleDTO } from '../models/programacion.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class CursoDiplomadoService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/cursos-diplomados`;
   private apiUrlCategorias = `${environment.apiUrl}/categorias`;
+  private apiUrlProgramacion = `${environment.apiUrl}/programacioncursos`;
 
   listarCursos(): Observable<CursoDiplomadoViewAdmin[]> {
     return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-cursos`);
@@ -66,4 +68,19 @@ export class CursoDiplomadoService {
   listarCategorias(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(`${this.apiUrlCategorias}/listar`);
   }
+
+
+  //TEACHER
+  listarCursosDocente(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-cursos-docente`);
+  } 
+
+  listarDiplomadosDocente(): Observable<CursoDiplomadoViewAdmin[]> {
+    return this.http.get<CursoDiplomadoViewAdmin[]>(`${this.apiUrl}/listar-diplomados-docente`);
+  } 
+
+  listarProgramacionesPorCursoDocente(idCurso: number): Observable<ProgramacionCursoSimpleDTO[]> {
+    return this.http.get<ProgramacionCursoSimpleDTO[]>(`${this.apiUrlProgramacion}/docente/curso/${idCurso}`);
+  }
+  
 }

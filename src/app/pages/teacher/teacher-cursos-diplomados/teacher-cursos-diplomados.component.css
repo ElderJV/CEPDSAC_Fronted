@@ -1,0 +1,11 @@
+@import '../../admin/admin-styles.css';
+
+/* Estilos específicos adicionales */
+.course-card {
+    transition: transform 0.2s;
+    border-top: none !important; /* Override admin styles for inner cards if needed */
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+}

@@ -33,6 +33,8 @@ export class RoleGuard implements CanActivate {
       return this.router.createUrlTree(['/admin']);
     } else if (currentRole === 'ALUMNO') {
       return this.router.createUrlTree(['/user']);
+    } else if (currentRole === 'DOCENTE') {
+      return this.router.createUrlTree(['/teacher']);
     }
 
     // Por defecto al home o login

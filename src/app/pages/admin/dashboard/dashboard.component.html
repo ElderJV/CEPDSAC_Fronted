@@ -1,95 +1,209 @@
-<section>
-  <h1 class="titulo_admin">Dashboard</h1>
+<div class="admin-container">
+  <div class="header-section mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Dashboard</h2>
+      <p class="text-muted text-white mb-0">Resumen general y métricas clave</p>
+    </div>
+    <div class="d-flex align-items-center gap-2 text-muted small">
+      <lucide-icon [img]="CalendarIcon" size="16"></lucide-icon>
+      <span>{{ today | date:'fullDate' }}</span>
+    </div>
+  </div>
 
-  <div class="contenido-admin">
-    <div class="row g-4 mb-4">
-      <div class="col-md-6 col-xl-3">
-        <div class="card p-3 shadow-sm border-0">
-          <div class="d-flex align-items-center">
-            <div class="stats-icon bg-success-subtle text-success">
-              <i class="bi bi-people-fill"></i>
+  @if (isLoading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+  } @else if (stats()) {
+  <!-- KPI Cards -->
+  <div class="row g-4 mb-4">
+    <!-- Total Alumnos -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="kpi-icon bg-light-primary text-primary">
+              <lucide-icon [img]="UsersIcon" size="24"></lucide-icon>
             </div>
-            <div class="ms-3">
-              <h6 class="text-muted mb-0">Estudiantes con matrícula</h6>
-              <span class="fw-bold fs-4">{{
-                loading ? "..." : metrics?.estudiantes ?? "-"
-              }}</span>
+            <span class="badge bg-light-success text-success">+12%</span>
+          </div>
+          <h3 class="fw-bold mb-1">{{ stats()!.totalAlumnos }}</h3>
+          <p class="text-muted small mb-0">Total Alumnos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Cursos -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="kpi-icon bg-light-info text-info">
+              <lucide-icon [img]="BookIcon" size="24"></lucide-icon>
+            </div>
+            <span class="badge bg-light-info text-info">Activos</span>
+          </div>
+          <h3 class="fw-bold mb-1">{{ stats()!.totalCursos }}</h3>
+          <p class="text-muted small mb-0">Cursos y Diplomados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ingresos Totales -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="kpi-icon bg-light-success text-success">
+              <lucide-icon [img]="DollarIcon" size="24"></lucide-icon>
+            </div>
+            <span class="badge bg-light-success text-success">Total</span>
+          </div>
+          <h3 class="fw-bold mb-1">S/. {{ stats()!.ingresosTotales | number:'1.0-0' }}</h3>
+          <p class="text-muted small mb-0">Ingresos Totales</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrículas Activas -->
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 kpi-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="kpi-icon bg-light-warning text-warning">
+              <lucide-icon [img]="ActivityIcon" size="24"></lucide-icon>
+            </div>
+            <span class="badge bg-light-warning text-warning">En curso</span>
+          </div>
+          <h3 class="fw-bold mb-1">{{ stats()!.matriculasActivas }}</h3>
+          <p class="text-muted small mb-0">Matrículas Activas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Chart Section (Ingresos) -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm h-100 chart-card">
+        <div class="card-header bg-white border-0 py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 fw-bold">Evolución de Ingresos</h5>
+            <div class="p-2 bg-light rounded-circle">
+              <lucide-icon [img]="TrendingIcon" size="20" class="text-primary"></lucide-icon>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="col-md-6 col-xl-3">
-        <div class="card p-3 shadow-sm border-0">
-          <div class="d-flex align-items-center">
-            <div class="stats-icon bg-primary-subtle text-primary">
-              <i class="bi bi-award"></i>
-            </div>
-            <div class="ms-3">
-              <h6 class="text-muted mb-0">Programaciones de cursos activas</h6>
-              <span class="fw-bold fs-4">{{
-                loading ? "..." : metrics?.certificaciones ?? "-"
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-xl-3">
-        <div class="card p-3 shadow-sm border-0">
-          <div class="d-flex align-items-center">
-            <div class="stats-icon bg-warning-subtle text-warning">
-              <i class="bi bi-journal-bookmark-fill"></i>
-            </div>
-            <div class="ms-3">
-              <h6 class="text-muted mb-0">Cursos Activos</h6>
-              <span class="fw-bold fs-4">{{
-                loading ? "..." : metrics?.cursos ?? "-"
-              }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-xl-3">
-        <div class="card p-3 shadow-sm border-0">
-          <div class="d-flex align-items-center">
-            <div class="stats-icon bg-purple-subtle text-purple">
-              <i class="bi bi-person-badge"></i>
-            </div>
-            <div class="ms-3">
-              <h6 class="text-muted mb-0">Instructores</h6>
-              <span class="fw-bold fs-4">{{
-                loading ? "..." : metrics?.instructores ?? "-"
-              }}</span>
-            </div>
+        <div class="card-body">
+          <div class="chart-container" style="height: 300px;">
+            <canvas #lineChartCanvas></canvas>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row g-4">
-      <div class="col-xl-7">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Cursos más vendidos</h5>
-            <div class="chart-placeholder text-center text-muted p-5">
-              (Gráfico de Barras)
+    <!-- Doughnut Chart (Estados) -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100 chart-card">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="card-title mb-0 fw-bold">Estado de Matrículas</h5>
+        </div>
+        <div class="card-body">
+          <div class="position-relative mx-auto" style="height: 200px; width: 200px;">
+            <canvas #doughnutChartCanvas></canvas>
+            <!-- Center Text Overlay -->
+            <div class="position-absolute top-50 start-50 translate-middle text-center" style="pointer-events: none;">
+              <div class="h3 fw-bold mb-0">{{ stats()!.matriculasActivas }}</div>
+              <div class="small text-muted">Activas</div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="col-xl-5">
-        <div class="card shadow-sm border-0 h-100">
-          <div classs="card-body">
-            <h5 class="card-title fw-bold p-3">Categorías Mas vendidas</h5>
-            <div class="chart-placeholder text-center text-muted p-5">
-              (Gráfico de Pastel)
+          <!-- Custom Legend -->
+          <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+            <div class="d-flex align-items-center small">
+              <span class="d-inline-block rounded-circle me-2"
+                style="width: 10px; height: 10px; background-color: #ffc107;"></span>
+              <span class="text-muted">Pendiente</span>
+            </div>
+            <div class="d-flex align-items-center small">
+              <span class="d-inline-block rounded-circle me-2"
+                style="width: 10px; height: 10px; background-color: #0dcaf0;"></span>
+              <span class="text-muted">En Proceso</span>
+            </div>
+            <div class="d-flex align-items-center small">
+              <span class="d-inline-block rounded-circle me-2"
+                style="width: 10px; height: 10px; background-color: #198754;"></span>
+              <span class="text-muted">Pagado</span>
+            </div>
+            <div class="d-flex align-items-center small">
+              <span class="d-inline-block rounded-circle me-2"
+                style="width: 10px; height: 10px; background-color: #dc3545;"></span>
+              <span class="text-muted">Cancelado</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+
+  <!-- Recent Activity -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-bold">Últimas Matrículas Registradas</h5>
+          <button class="btn btn-sm btn-light text-primary fw-medium" routerLink="/admin/matriculas">Ver Todo</button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+              <tr>
+                <th class="border-0 ps-4">Alumno</th>
+                <th class="border-0">Curso / Diplomado</th>
+                <th class="border-0">Fecha</th>
+                <th class="border-0">Estado</th>
+                <th class="border-0 text-end pe-4">Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (matricula of stats()!.ultimasMatriculas; track matricula.idMatricula) {
+              <tr>
+                <td class="ps-4">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-initials bg-light-primary text-primary rounded-circle me-3">
+                      {{ matricula.nombreCompletoAlumno.charAt(0) }}
+                    </div>
+                    <div>
+                      <div class="fw-bold text-dark">{{ matricula.nombreCompletoAlumno }}</div>
+                      <div class="small text-muted">{{ matricula.correoAlumno }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="d-inline-block text-truncate" style="max-width: 250px;">
+                    {{ matricula.tituloCurso }}
+                  </span>
+                </td>
+                <td class="text-muted">{{ matricula.fechaMatricula | date:'dd MMM yyyy' }}</td>
+                <td>
+                  <span class="badge rounded-pill" [ngClass]="{
+                      'bg-success-subtle text-success': matricula.estado === 'PAGADO',
+                      'bg-warning-subtle text-warning': matricula.estado === 'PENDIENTE' || matricula.estado === 'EN_PROCESO',
+                      'bg-danger-subtle text-danger': matricula.estado === 'CANCELADO'
+                    }">
+                    {{ matricula.estado }}
+                  </span>
+                </td>
+                <td class="text-end pe-4 fw-bold">S/. {{ matricula.monto | number:'1.2-2' }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

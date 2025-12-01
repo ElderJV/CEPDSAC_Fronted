@@ -25,6 +25,14 @@ export class TestimonioService {
     });
   }
 
+  crear(testimonio: any): Observable<Testimonio> {
+    return this.http.post<Testimonio>(this.apiUrl, testimonio);
+  }
+
+  actualizar(id: number, testimonio: any): Observable<Testimonio> {
+    return this.http.put<Testimonio>(`${this.apiUrl}/${id}`, testimonio);
+  }
+
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

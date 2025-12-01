@@ -1,0 +1,187 @@
+/* --- 1. Contenedor Principal (Host) --- */
+:host {
+  flex-shrink: 0;
+  width: 280px; /* Ancho fijo del sidebar */
+  background-color: #ffffff;
+  border-right: 0.5px solid #ff4d00;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  overflow-y: auto; /* Permite scroll si el sidebar es muy alto */
+}
+
+.sidebar {
+  height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  /* Separación entre los bloques principales */
+  gap: 24px;
+}
+
+/* --- 2. Encabezado (Logo y Toggle) --- */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #013162; /* Línea divisoria */
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.sidebar-logo img {
+  width: 50px; /* Tamaño de logo ajustado */
+  height: 50px;
+}
+
+.sidebar-logo h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #013162; /* Color de tu CSS */
+}
+
+.sidebar-logo h3 span {
+  font-size: 1.5rem; /* Tamaño de CEPSAC */
+  color: #ff4d00; /* Color de tu CSS */
+  display: block;
+  line-height: 1;
+}
+
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #013162;
+  cursor: pointer;
+}
+
+/* --- 3. Tarjeta de Perfil --- */
+.profile-greeting {
+  font-weight: 700;
+  color: #013162; /* Color de tu CSS */
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.profile-card {
+  background-color: #f8f9fa; /* Un fondo suave para la tarjeta */
+  border: 1px solid #e0e0e0;
+  border-radius: 20px; /* Bordes redondeados */
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%; /* Círculo perfecto */
+  border: 3px solid #ff4d00; /* Borde naranja */
+  margin: 0 auto 12px auto;
+  position: relative;
+  background-image: url("https://thumbs.dreamstime.com/b/vector-de-icono-perfil-usuario-s%C3%ADmbolo-retrato-avatar-logo-la-persona-forma-plana-silueta-negra-aislada-sobre-fondo-blanco-196482128.jpg");
+  background-color: #e0e0e0; /* Color de placeholder */
+}
+
+.status-indicator {
+  width: 20px;
+  height: 20px;
+  background-color: #28a745; /* Verde "online" */
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 5px;
+}
+
+.profile-name {
+  display: block;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.profile-status {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d; /* Texto gris */
+}
+
+/* --- 4. Navegación Principal --- */
+.sidebar-nav {
+  /* ESTA ES LA LÍNEA MÁS IMPORTANTE */
+  flex-grow: 1; /* Empuja el footer hacia abajo */
+
+  /* Para permitir scroll si hay muchos ítems */
+  overflow-y: auto;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Espacio entre botones */
+}
+
+/* ESTILO DE LOS BOTONES/ENLACES */
+.sidebar-nav a,
+.sidebar-footer a {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Espacio entre ícono y texto */
+  padding: 14px 20px;
+  border-radius: 12px; /* Bordes redondeados de botón */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #495057; /* Color de texto base */
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-nav a i,
+.sidebar-footer a i {
+  font-size: 1.4rem; /* Tamaño de ícono */
+  width: 24px; /* Ancho fijo para alinear texto */
+  text-align: center;
+}
+
+/* Hover (cuando pasas el mouse) */
+.sidebar-nav a:hover,
+.sidebar-footer a:hover {
+  background-color: #f1f3f5; /* Fondo gris claro */
+  color: #013162;
+}
+
+/* --- Active State con Gradiente --- */
+.sidebar-nav a.active,
+.sidebar-footer a.active {
+  background: linear-gradient(135deg, #ff4d00 0%, #ff7e47 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 15px -3px rgba(255, 77, 0, 0.4);
+  border: none;
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Espacio entre ícono y texto */
+  padding: 14px 20px;
+  border-radius: 12px; /* Bordes redondeados de botón */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #495057; /* Color de texto base */
+  transition: all 0.2s ease-in-out;
+}

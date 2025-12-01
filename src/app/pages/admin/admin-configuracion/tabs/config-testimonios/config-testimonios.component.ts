@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Check, X, Trash2, AlertCircle } from 'lucide-angular';
+import { Router } from '@angular/router';
+import { LucideAngularModule, Check, X, Trash2, AlertCircle, MessageSquare, Info, Plus, Edit } from 'lucide-angular';
 import { TestimonioService } from '../../../../../core/services/testimonio.service';
 import { Testimonio } from '../../../../../core/models/testimonio.model';
 import Swal from 'sweetalert2';
@@ -15,11 +16,16 @@ import Swal from 'sweetalert2';
 })
 export class ConfigTestimoniosComponent implements OnInit {
   private testimonioService = inject(TestimonioService);
+  private router = inject(Router);
 
   readonly CheckIcon = Check;
   readonly XIcon = X;
   readonly TrashIcon = Trash2;
   readonly AlertIcon = AlertCircle;
+  readonly MessageSquare = MessageSquare;
+  readonly Info = Info;
+  readonly Plus = Plus;
+  readonly Edit = Edit;
 
   testimonios: Testimonio[] = [];
   isLoading = true;
@@ -27,6 +33,14 @@ export class ConfigTestimoniosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTestimonios();
+  }
+
+  irACrear(): void {
+    this.router.navigate(['/admin/configuracion/testimonios/nuevo']);
+  }
+
+  irAEditar(id: number): void {
+    this.router.navigate(['/admin/configuracion/testimonios/editar', id]);
   }
 
   cargarTestimonios(): void {
@@ -45,50 +59,27 @@ export class ConfigTestimoniosComponent implements OnInit {
     });
   }
 
-  aprobarTestimonio(testimonio: Testimonio): void {
+  toggleAprobacion(testimonio: Testimonio): void {
+    const nuevoEstado = !testimonio.estadoAprobado;
+    const accion = nuevoEstado ? 'aprobar' : 'desaprobar';
+
     Swal.fire({
-      title: '¿Aprobar testimonio?',
-      text: `Se aprobará el testimonio de ${testimonio.idUsuario.nombre} ${testimonio.idUsuario.apellido}`,
+      title: `¿${nuevoEstado ? 'Aprobar' : 'Desaprobar'} testimonio?`,
+      text: `El testimonio será ${nuevoEstado ? 'visible' : 'oculto'} para el público.`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Sí, aprobar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#10b981'
+      confirmButtonText: `Sí, ${accion}`,
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.testimonioService.aprobar(testimonio.idTestimonio, true).subscribe({
+        this.testimonioService.aprobar(testimonio.idTestimonio, nuevoEstado).subscribe({
           next: () => {
-            Swal.fire('Aprobado', 'Testimonio aprobado correctamente', 'success');
             this.cargarTestimonios();
+            Swal.fire('Actualizado', `Testimonio ${nuevoEstado ? 'aprobado' : 'desaprobado'} correctamente`, 'success');
           },
           error: (err) => {
-            console.error('Error aprobando testimonio:', err);
-            Swal.fire('Error', 'No se pudo aprobar el testimonio', 'error');
-          }
-        });
-      }
-    });
-  }
-
-  rechazarTestimonio(testimonio: Testimonio): void {
-    Swal.fire({
-      title: '¿Rechazar testimonio?',
-      text: `Se rechazará el testimonio de ${testimonio.idUsuario.nombre} ${testimonio.idUsuario.apellido}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, rechazar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#ef4444'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.testimonioService.aprobar(testimonio.idTestimonio, false).subscribe({
-          next: () => {
-            Swal.fire('Rechazado', 'Testimonio rechazado correctamente', 'success');
-            this.cargarTestimonios();
-          },
-          error: (err) => {
-            console.error('Error rechazando testimonio:', err);
-            Swal.fire('Error', 'No se pudo rechazar el testimonio', 'error');
+            console.error(`Error al ${accion} testimonio`, err);
+            Swal.fire('Error', `No se pudo ${accion} el testimonio`, 'error');
           }
         });
       }

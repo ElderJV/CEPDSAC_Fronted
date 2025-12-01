@@ -4,11 +4,16 @@ import { Observable } from 'rxjs';
 import { MatriculaCreateDTO, MatriculaResponseDTO, MatriculaDetalleResponse, MatriculaListResponse } from '../models/matricula.model';
 import { environment } from '../../../environment/environment';
 import { AuthService } from '../../auth/services/auth.service';
+import { AlumnoMatriculadoDTO } from '../models/matricula.model';
 
 @Injectable({ providedIn: 'root' })
 export class MatriculaService {
   private base = `${environment.apiUrl}/matriculas`;
   constructor(private http: HttpClient, private authService: AuthService) {}
+
+  listarAlumnosPorProgramacion(idProgramacion: number): Observable<AlumnoMatriculadoDTO[]> {
+    return this.http.get<AlumnoMatriculadoDTO[]>(`${this.base}/listar-alumnos-programacion/${idProgramacion}`);
+  }
 
   crear(dto: MatriculaCreateDTO): Observable<MatriculaResponseDTO> {
     console.log('MatriculaService.crear -> POST', this.base, dto);

@@ -50,7 +50,7 @@ export class DiplomadosComponent implements OnInit {
   extraerCategorias(): void {
     const categoriasUnicas = new Map<number, string>();
     this.diplomados.forEach((diplomado) => {
-      if (diplomado.categoria) {
+      if (diplomado.categoria && diplomado.categoria.estado) {
         categoriasUnicas.set(
           diplomado.categoria.idCategoria,
           diplomado.categoria.nombre

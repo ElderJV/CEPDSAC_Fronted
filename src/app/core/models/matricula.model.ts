@@ -65,6 +65,10 @@ export interface PagoResponse {
   esAutomatico?: boolean;
   numeroOperacion?: string;
   observaciones?: string;
+  nombreAlumno?: string;
+  emailAlumno?: string;
+  nombreCurso?: string;
+  nombreMetodoPago?: string;
 }
 
 // dtocreate pago
@@ -122,4 +126,15 @@ export interface MatriculaListResponse {
   totalCuotas: number;
   proximoVencimiento?: string;
   tieneVencidas: boolean;
+}
+
+export interface AlumnoMatriculadoDTO {
+    idMatricula: number;
+    idAlumno: number;
+    nombre: string;
+    apellido: string;
+    correo: string;
+    numeroIdentificacion: string;
+    fechaMatricula: string;
+    estadoMatricula: string;
 }

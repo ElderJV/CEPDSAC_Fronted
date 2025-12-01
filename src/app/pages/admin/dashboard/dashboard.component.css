@@ -1,0 +1,103 @@
+@import '../admin-styles.css';
+
+.admin-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* KPI Cards */
+.kpi-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+}
+
+.kpi-card:hover::before {
+  opacity: 1;
+}
+
+.kpi-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.kpi-card:hover .kpi-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Chart Cards */
+.chart-card {
+  border-radius: 16px;
+  transition: box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06) !important;
+}
+
+/* Utility Classes */
+.bg-light-primary { background-color: rgba(13, 110, 253, 0.08); color: #0d6efd; }
+.bg-light-success { background-color: rgba(25, 135, 84, 0.08); color: #198754; }
+.bg-light-info { background-color: rgba(13, 202, 240, 0.08); color: #0dcaf0; }
+.bg-light-warning { background-color: rgba(255, 193, 7, 0.08); color: #ffc107; }
+
+.bg-success-subtle { background-color: #d1e7dd; color: #0f5132; }
+.bg-warning-subtle { background-color: #fff3cd; color: #664d03; }
+.bg-danger-subtle { background-color: #f8d7da; color: #842029; }
+
+.avatar-initials {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}
+
+.card-title {
+  font-family: 'Inter', sans-serif; /* Assuming Inter or similar is available, else fallback */
+  letter-spacing: -0.5px;
+}
+

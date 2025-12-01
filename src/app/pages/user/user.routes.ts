@@ -24,3 +24,4 @@ export const USER_ROUTES: Routes = [
     component: UserPagosComponent,
   },
 ];
+

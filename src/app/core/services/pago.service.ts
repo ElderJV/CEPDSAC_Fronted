@@ -26,4 +26,16 @@ export class PagoService {
     console.log('PagoService.actualizarPago -> PUT', url, dto);
     return this.http.put<PagoResponse>(url, dto);
   }
+
+  listarPagosPorDevolver(): Observable<PagoResponse[]> {
+    const url = `${this.base}/por-devolver`;
+    console.log('PagoService.listarPagosPorDevolver -> GET', url);
+    return this.http.get<PagoResponse[]>(url);
+  }
+
+  marcarComoDevuelto(id: number): Observable<void> {
+    const url = `${this.base}/${id}/devolver`;
+    console.log('PagoService.marcarComoDevuelto -> POST', url);
+    return this.http.post<void>(url, {});
+  }
 }

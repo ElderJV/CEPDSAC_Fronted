@@ -15,8 +15,8 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([
         ngrokInterceptor,
         authInterceptor,
-        errorInterceptor
+        errorInterceptor 
       ])
-    ),
+    )
   ],
 };

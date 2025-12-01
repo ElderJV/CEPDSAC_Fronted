@@ -52,7 +52,7 @@ export class CursosComponent implements OnInit {
     const categoriasUnicas = new Map<number, string>();
 
     this.cursos.forEach((curso) => {
-      if (curso.categoria) {
+      if (curso.categoria && curso.categoria.estado) {
         categoriasUnicas.set(
           curso.categoria.idCategoria,
           curso.categoria.nombre

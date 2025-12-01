@@ -5,6 +5,7 @@ import { MainComponent } from './layout/main/main.component';
 import { AdminComponent } from './layout/admin/admin.component';
 import { UserComponent } from './layout/user/user.component';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { TeacherComponent } from './layout/teacher/teacher.component';
 
 // Pages de la Home
 import { HeroComponent } from './pages/home/hero/hero.component';
@@ -13,8 +14,10 @@ import { DiplomadoComponent } from './pages/home/diplomado/diplomado.component';
 import { CursosGeneralComponent } from './pages/home/cursos-general/cursos-general.component';
 import { DiplomadosGeneralComponent } from './pages/home/diplomados-general/diplomados-general.component';
 import { MatriculaGeneralComponent } from './pages/home/matricula-general/matricula-general.component';
+
 import { RoleGuard } from './auth/guards/role.guard';
 import { NotFoundComponent } from './pages/home/not-found/not-found.component';
+
 
 export const routes: Routes = [
   {
@@ -51,11 +54,6 @@ export const routes: Routes = [
         component: MatriculaGeneralComponent,
         pathMatch: 'full',
       },
-      {
-        path: 'matricula/:cursoId/:programacionId',
-        component: MatriculaGeneralComponent,
-        pathMatch: 'full',
-      },
     ],
   },
 
@@ -75,6 +73,15 @@ export const routes: Routes = [
     data: { role: 'ALUMNO' },
     loadChildren: () =>
       import('./pages/user/user.routes').then((m) => m.USER_ROUTES),
+  },
+
+  {
+    path: 'teacher',
+    component: TeacherComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'DOCENTE' },
+    loadChildren: () =>
+      import('./pages/teacher/teacher.routes').then((m) => m.TEACHER_ROUTES),
   },
 
   {

@@ -93,9 +93,21 @@
         </ul>
       </li>
       <li>
+        <a routerLink="/admin/devoluciones" routerLinkActive="active">
+          <i class="bi bi-arrow-return-left"></i>
+          <span>Devoluciones</span>
+        </a>
+      </li>
+      <li>
         <a routerLink="/admin/descuentos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <i class="bi bi-percent"></i>
           <span>Descuentos</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/categorias" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <i class="bi bi-tag-fill"></i>
+          <span>Categorías</span>
         </a>
       </li>
     </ul>
@@ -107,4 +119,8 @@
       <span>Configuración</span>
     </a>
   </div>
+  <button class="sidebar-logout" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Salir</span>
+    </button>
 </aside>

@@ -1,84 +1,82 @@
-<div class="card">
-  <div class="card-body">
-    <h2 class="card-title mb-4">Testimonios</h2>
-
-    @if (isLoading) {
-    <div class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
+<div class="admin-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="card-title mb-0">Testimonios</h5>
+        <button class="btn btn-primary d-flex align-items-center gap-2" (click)="irACrear()">
+          <lucide-icon [img]="Plus" size="20"></lucide-icon>
+          Nuevo Testimonio
+        </button>
       </div>
-    </div>
-    }
 
-    @if (errorMessage) {
-    <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
-      <lucide-icon [img]="AlertIcon" [size]="20"></lucide-icon>
-      <div>
-        {{ errorMessage }}
-        <button class="btn btn-sm btn-outline-danger ms-2" (click)="cargarTestimonios()">Reintentar</button>
+      @if (isLoading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
       </div>
+      } @else if (testimonios.length === 0) {
+      <div class="alert-custom">
+        <div class="alert-icon">
+          <lucide-icon [img]="Info"></lucide-icon>
+        </div>
+        <div class="alert-content">
+          No hay testimonios registrados.
+        </div>
+      </div>
+      } @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Usuario</th>
+              <th>Comentario</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (testimonio of testimonios; track testimonio.idTestimonio) {
+            <tr>
+              <td>
+                <div class="fw-bold">{{ testimonio.idUsuario.nombre }} {{ testimonio.idUsuario.apellido }}</div>
+                <div class="text-muted small">{{ testimonio.idUsuario.correo }}</div>
+              </td>
+              <td>
+                <div class="text-wrap" style="max-width: 400px;">
+                  {{ testimonio.comentario }}
+                </div>
+              </td>
+              <td>
+                <span class="badge rounded-pill"
+                  [ngClass]="testimonio.estadoAprobado ? 'bg-success' : 'bg-warning text-dark'">
+                  {{ testimonio.estadoAprobado ? 'Aprobado' : 'Pendiente' }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-primary" (click)="irAEditar(testimonio.idTestimonio)"
+                    title="Editar">
+                    <lucide-icon [img]="Edit" size="16"></lucide-icon>
+                  </button>
+                  <button class="btn btn-sm"
+                    [ngClass]="testimonio.estadoAprobado ? 'btn-outline-warning' : 'btn-outline-success'"
+                    (click)="toggleAprobacion(testimonio)"
+                    [title]="testimonio.estadoAprobado ? 'Desaprobar' : 'Aprobar'">
+                    <lucide-icon [img]="testimonio.estadoAprobado ? XIcon : CheckIcon" size="16"></lucide-icon>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="eliminarTestimonio(testimonio)"
+                    title="Eliminar">
+                    <lucide-icon [img]="TrashIcon" size="16"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
     </div>
-    }
-
-    @if (!isLoading && !errorMessage && testimonios.length === 0) {
-    <div class="alert alert-info d-flex align-items-center gap-2">
-      <lucide-icon [img]="AlertIcon" [size]="20"></lucide-icon>
-      No hay testimonios registrados
-    </div>
-    }
-
-    @if (!isLoading && !errorMessage && testimonios.length > 0) {
-    <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
-          <tr>
-            <th>Usuario</th>
-            <th>Correo</th>
-            <th>Comentario</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (testimonio of testimonios; track testimonio.idTestimonio) {
-          <tr>
-            <td class="fw-medium">{{ testimonio.idUsuario.nombre }} {{ testimonio.idUsuario.apellido }}</td>
-            <td class="text-muted small">{{ testimonio.idUsuario.correo }}</td>
-            <td class="comment-cell">
-              <div class="comment-text text-truncate" style="max-width: 300px;" title="{{ testimonio.comentario }}">
-                {{ testimonio.comentario }}
-              </div>
-            </td>
-            <td>
-              <span class="badge rounded-pill" [class.bg-success]="testimonio.estadoAprobado === true"
-                [class.bg-danger]="testimonio.estadoAprobado === false"
-                [class.bg-warning]="testimonio.estadoAprobado === null">
-                {{ getEstadoTexto(testimonio.estadoAprobado) }}
-              </span>
-            </td>
-            <td>
-              <div class="btn-group">
-                @if (testimonio.estadoAprobado !== true) {
-                <button class="btn btn-sm btn-outline-success" (click)="aprobarTestimonio(testimonio)" title="Aprobar">
-                  <lucide-icon [img]="CheckIcon" [size]="16"></lucide-icon>
-                </button>
-                }
-                @if (testimonio.estadoAprobado !== false) {
-                <button class="btn btn-sm btn-outline-danger" (click)="rechazarTestimonio(testimonio)" title="Rechazar">
-                  <lucide-icon [img]="XIcon" [size]="16"></lucide-icon>
-                </button>
-                }
-                <button class="btn btn-sm btn-outline-secondary" (click)="eliminarTestimonio(testimonio)"
-                  title="Eliminar">
-                  <lucide-icon [img]="TrashIcon" [size]="16"></lucide-icon>
-                </button>
-              </div>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    }
   </div>
 </div>

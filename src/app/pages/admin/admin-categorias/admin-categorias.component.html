@@ -1,0 +1,72 @@
+<div class="admin-container">
+    <div class="header-section d-flex justify-content-between align-items-center">
+        <h2>
+            <lucide-icon [img]="Tag" class="me-2"></lucide-icon>
+            Gestión de Categorías
+        </h2>
+        <button class="btn btn-primary d-flex align-items-center gap-2" (click)="irACrear()">
+            <lucide-icon [img]="Plus" size="18"></lucide-icon>
+            Nueva Categoría
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            @if (categorias.length === 0) {
+            <div class="alert-custom">
+                <div class="alert-icon">
+                    <lucide-icon [img]="Info"></lucide-icon>
+                </div>
+                <div class="alert-content">
+                    No hay categorías registradas.
+                </div>
+            </div>
+            } @else {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (categoria of categorias; track categoria.idCategoria) {
+                        <tr>
+                            <td>#{{ categoria.idCategoria }}</td>
+                            <td class="fw-bold">{{ categoria.nombre }}</td>
+                            <td>{{ categoria.descripcion || '-' }}</td>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        [checked]="categoria.estado" (change)="toggleEstado(categoria)"
+                                        [id]="'switch-' + categoria.idCategoria">
+                                    <label class="form-check-label" [for]="'switch-' + categoria.idCategoria">
+                                        {{ categoria.estado ? 'Activo' : 'Inactivo' }}
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-primary"
+                                        (click)="irAEditar(categoria.idCategoria)" title="Editar">
+                                        <lucide-icon [img]="Edit" size="16"></lucide-icon>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        (click)="eliminarCategoria(categoria.idCategoria)" title="Eliminar">
+                                        <lucide-icon [img]="Trash" size="16"></lucide-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+    </div>
+</div>

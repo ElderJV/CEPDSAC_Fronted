@@ -13,6 +13,7 @@ import { CursoDetalle, ProgramacionCursoSimple } from '../../../core/models/curs
 import { AuthService } from '../../../auth/services/auth.service';
 import { MetodoPagoService } from '../../../core/services/metodo-pago.service';
 import { MetodoPago } from '../../../core/models/configuracion.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-matricula-general',
@@ -114,9 +115,18 @@ export class MatriculaGeneralComponent implements OnInit {
     } catch (e) { console.warn('Error printing auth info', e); }
 
     if (!this.authService.isLoggedIn()) {
-      const currentUrl = this.router.url || `/matricula/${this.cursoId}/${this.programacionId}`;
-      const returnUrl = encodeURIComponent(currentUrl);
-      this.router.navigateByUrl(`/login?returnUrl=${returnUrl}`);
+      Swal.fire({
+        title: 'Atención',
+        text: 'Es necesario loguearse para continuar.',
+        icon: 'warning',
+        confirmButtonText: 'Ir a Registro',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/register']);
+        }
+      });
       return;
     }
 
@@ -219,5 +229,30 @@ export class MatriculaGeneralComponent implements OnInit {
 
   getCuotasPendientes(): number {
     return this.cuotas().filter(c => c.estadoCuota === 'PENDIENTE').length;
+  }
+
+  getPrimeraCuota(): number {
+    if (!this.programacionSeleccionada) return 0;
+    
+    const monto = this.programacionSeleccionada.monto;
+    const numeroCuotas = this.programacionSeleccionada.numeroCuotas;
+    
+    if (numeroCuotas <= 1) {
+      return monto;
+    }
+    return monto / numeroCuotas;
+  }
+
+  getTextoMontoPago(): string {
+    if (!this.programacionSeleccionada) return 'S/. 0.00';
+    
+    const numeroCuotas = this.programacionSeleccionada.numeroCuotas;
+    
+    if (numeroCuotas <= 1) {
+      return `S/. ${this.programacionSeleccionada.monto.toFixed(2)}`;
+    }
+    
+    const primeraCuota = this.getPrimeraCuota();
+    return `S/. ${primeraCuota.toFixed(2)} (Primera cuota de ${numeroCuotas})`;
   }
 }

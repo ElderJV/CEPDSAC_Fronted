@@ -1,0 +1,63 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <a routerLink="/teacher" class="sidebar-logo">
+            <img src="/logo.png" alt="Teacher CEPSAC" />
+            <h3 class="fw-bold">Portal Docente</h3>
+        </a>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-profile">
+        <h4 class="profile-greeting">Bienvenido</h4>
+        <div class="profile-card">
+            <div class="profile-avatar">
+                <span class="status-indicator"></span>
+            </div>
+            <span class="profile-name">Docente</span>
+            <span class="profile-status">Última actividad: 30/11/25 8:00pm</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a routerLink="/teacher/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    <i class="bi bi-house-door-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/teacher/cursos" routerLinkActive="active">
+                    <i class="bi bi-journal-bookmark-fill"></i>
+                    <span>Cursos</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/teacher/diplomados" routerLinkActive="active">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    <span>Diplomados</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/teacher/alumnos" routerLinkActive="active">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Alumnos</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        <a routerLink="/teacher/configuracion" routerLinkActive="active">
+            <i class="bi bi-gear-fill"></i>
+            <span>Configuración</span>
+        </a>
+    </div>
+
+    <button class="sidebar-logout" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Salir</span>
+    </button>
+</aside>

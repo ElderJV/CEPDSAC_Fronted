@@ -185,6 +185,11 @@ export class AuthService {
     return rol === 'ALUMNO' || rol === 'ESTUDIANTE';
   }
 
+  isDocente(): boolean {
+    const rol = this.getRole();
+    return rol === 'DOCENTE' || rol === 'PROFESOR';
+  }
+
   // 3. Método para guardar todo al hacer login (Token, Rol y User)
   saveSession(response: LoginResponse): void {
     if (isPlatformBrowser(this.platformId)) {

@@ -92,6 +92,8 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['/admin']);
               } else if (rol && String(rol).toUpperCase().includes('ALUMNO')) {
                 this.router.navigate(['/user']);
+              } else if (rol && String(rol).toUpperCase().includes('DOCENTE')) {
+                this.router.navigate(['/teacher']);
               } else {
                 this.router.navigate(['/']);
               }
