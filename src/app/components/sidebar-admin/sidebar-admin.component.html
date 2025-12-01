@@ -9,48 +9,60 @@
     </button>
   </div>
 
+  <div class="sidebar-profile">
+    <h4 class="profile-greeting">Bienvenido</h4>
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <span class="status-indicator"></span>
+      </div>
+      <span class="profile-name">{{ userName$ | async }}</span>
+      <span>{{ rolUser$ | async }}</span>
+    </div>
+  </div>
+
   <nav class="sidebar-nav">
     <ul>
       <li>
-        <a routerLink="/admin/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/admin/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeAllSubmenus()">
           <i class="bi bi-house-door-fill"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li>
-        <a routerLink="/admin/cursos" routerLinkActive="active">
+        <a routerLink="/admin/cursos" routerLinkActive="active" (click)="closeAllSubmenus()">
           <i class="bi bi-journal-bookmark-fill"></i>
           <span>Cursos</span>
         </a>
       </li>
       <li>
-        <a routerLink="/admin/diplomados" routerLinkActive="active">
+        <a routerLink="/admin/diplomados" routerLinkActive="active" (click)="closeAllSubmenus()">
           <i class="bi bi-award-fill"></i>
           <span>Diplomados</span>
         </a>
       </li>
       <li>
-        <a routerLink="/admin/estudiantes" routerLinkActive="active">
+        <a routerLink="/admin/estudiantes" routerLinkActive="active" (click)="closeAllSubmenus()">
           <i class="bi bi-people-fill"></i>
           <span>Estudiantes</span>
         </a>
       </li>
       <li>
-        <a routerLink="/admin/profesores" routerLinkActive="active">
+        <a routerLink="/admin/profesores" routerLinkActive="active" (click)="closeAllSubmenus()">
           <i class="bi bi-person-video3"></i>
           <span>Profesores</span>
         </a>
       </li>
       <li>
-        <a (click)="toggleProgramacionSubmenu()" [class.active]="showProgramacionSubmenu"
+        <a (click)="toggleProgramacionSubmenu()" [class.active]="isProgramacionActive()"
           style="cursor: pointer; justify-content: space-between">
           <div style="display: flex; align-items: center; gap: 16px">
             <i class="bi bi-calendar3"></i>
             <span>Programación de Cursos</span>
           </div>
-          <i class="bi bi-chevron-down" [class.rotate-icon]="showProgramacionSubmenu"></i>
+          <i class="bi bi-chevron-down" [class.rotate-icon]="isProgramacionOpen()"></i>
         </a>
-        <ul class="submenu" [class.open]="showProgramacionSubmenu">
+        <ul class="submenu" [class.open]="isProgramacionOpen()">
           <li>
             <a routerLink="/admin/programacion-cursos" routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }">
@@ -65,15 +77,15 @@
         </ul>
       </li>
       <li>
-        <a (click)="toggleMatriculasSubmenu()" [class.active]="showMatriculasSubmenu"
+        <a (click)="toggleMatriculasSubmenu()" [class.active]="isMatriculasActive()"
           style="cursor: pointer; justify-content: space-between">
           <div style="display: flex; align-items: center; gap: 16px">
             <i class="bi bi-credit-card-2-front"></i>
             <span>Matrículas</span>
           </div>
-          <i class="bi bi-chevron-down" [class.rotate-icon]="showMatriculasSubmenu"></i>
+          <i class="bi bi-chevron-down" [class.rotate-icon]="isMatriculasOpen()"></i>
         </a>
-        <ul class="submenu" [class.open]="showMatriculasSubmenu">
+        <ul class="submenu" [class.open]="isMatriculasOpen()">
           <li>
             <a routerLink="/admin/matriculas" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
               <span>Listado</span>
@@ -82,13 +94,8 @@
         </ul>
       </li>
       <li>
-        <a routerLink="/admin/devoluciones" routerLinkActive="active">
-          <i class="bi bi-arrow-return-left"></i>
-          <span>Devoluciones</span>
-        </a>
-      </li>
-      <li>
-        <a routerLink="/admin/descuentos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="/admin/descuentos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeAllSubmenus()">
           <i class="bi bi-percent"></i>
           <span>Descuentos</span>
         </a>
@@ -100,7 +107,7 @@
         </a>
       </li>
       <li>
-        <a routerLink="/admin/configuracion" routerLinkActive="active">
+        <a routerLink="/admin/configuracion" routerLinkActive="active" (click)="closeAllSubmenus()">
           <i class="bi bi-gear-fill"></i>
           <span>Configuración</span>
         </a>
@@ -109,7 +116,7 @@
   </nav>
 
   <div class="sidebar-footer">
-    <a routerLink="/">
+    <a routerLink="/" (click)="closeAllSubmenus()">
       <i class="bi bi-house-door-fill"></i>
       <span>Volver al inicio</span>
     </a>
