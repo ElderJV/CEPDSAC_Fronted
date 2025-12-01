@@ -3,6 +3,8 @@ import { DashboardUserComponent } from './dashboard-user/dashboard-user.componen
 import { UserCursosComponent } from './user-cursos/user-cursos.component';
 import { UserDiplomadosComponent } from './user-diplomados/user-diplomados.component';
 import { UserPagosComponent } from './user-pagos/user-pagos.component';
+import { MatriculaGeneralComponent } from '../home/matricula-general/matricula-general.component';
+import { UserMatriculasComponent } from './user-matriculas/user-matriculas.component';
 
 // rutas de user para inyectar en el sidebar
 export const USER_ROUTES: Routes = [
@@ -23,4 +25,8 @@ export const USER_ROUTES: Routes = [
     path: 'pagos',
     component: UserPagosComponent,
   },
+  {
+    path: 'matriculas',
+    component: UserMatriculasComponent,
+  }
 ];

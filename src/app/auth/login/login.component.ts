@@ -63,22 +63,8 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         this.isSubmitting = false;
         if (response?.token) {
-          // Guardar el Token
-          this.authService.setToken(response.token);
-
-          // Guardar el rol
-          if ((response as any).rol) {
-            this.authService.setRole((response as any).rol);
-          }
-
-          // Guardar el ID del usuario
-          if (response.user && response.user.idUsuario) {
-            this.authService.setUserId(response.user.idUsuario);
-          }
-          // Nota: A veces viene como 'id' en lugar de 'idUsuario', revisa tu consola
-          else if (response.user && (response.user as any).id) {
-            this.authService.setUserId((response.user as any).id);
-          }
+          // Guardar sesión completa (Token, Rol, UserID)
+          this.authService.saveSession(response);
 
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
           try {

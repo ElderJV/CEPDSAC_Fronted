@@ -17,6 +17,8 @@ export interface LoginResponse {
   token: string;
   user?: User;
   rol?: string;
+  username?: string;
+  idUsuario?: number;
 }
 
 export interface RegisterRequest {
@@ -194,6 +196,35 @@ export class AuthService {
       const payload = this.getTokenPayload(response.token);
       const rol = response.rol || payload?.rol || 'ALUMNO';
       this.setRole(rol);
+
+      // Guardamos el ID del usuario (Prioridad: response.user > payload token)
+      let userId: number | null = null;
+
+      // 1) Intentar desde la respuesta explícita (Flat o Nested)
+      const respId =
+        response.idUsuario ??
+        (response.user ? response.user['idUsuario'] ?? response.user['id'] : null);
+
+      if (respId !== null && respId !== undefined && !isNaN(Number(respId))) {
+        userId = Number(respId);
+      }
+
+      // 2) Si no vino en response, intentar del token
+      if (userId === null && payload) {
+        const tokenUserId =
+          payload['idUsuario'] ??
+          payload['id'] ??
+          payload['userId'] ??
+          payload['sub'];
+
+        if (tokenUserId !== null && !isNaN(Number(tokenUserId))) {
+          userId = Number(tokenUserId);
+        }
+      }
+
+      if (userId !== null) {
+        this.setUserId(userId);
+      }
     }
   }
 }
