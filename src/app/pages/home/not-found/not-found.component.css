@@ -1,0 +1,15 @@
+.not-found-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1{
+    color: var(--cedpsac-blue-light);
+}
+
+h3{
+    color: var(--cedpsac-orange);
+}
