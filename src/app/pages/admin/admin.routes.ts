@@ -16,7 +16,6 @@ import { AdminEstudiantesRestaurarComponent } from './admin-estudiantes/tabs/adm
 import { AdminCategoriasComponent } from './admin-categorias/admin-categorias.component';
 import { AdminCrearCategoriaComponent } from './admin-categorias/tabs/admin-crear-categoria/admin-crear-categoria.component';
 import { ConfigTestimoniosComponent } from './admin-configuracion/tabs/config-testimonios/config-testimonios.component';
-import { AdminCrearTestimonioComponent } from './admin-configuracion/tabs/config-testimonios/admin-crear-testimonio/admin-crear-testimonio.component';
 import { AdminDevolucionesComponent } from './admin-devoluciones/admin-devoluciones.component';
 
 //rutas de admin para inyectar en el sidebar

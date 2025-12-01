@@ -15,8 +15,8 @@
       <div class="profile-avatar">
         <span class="status-indicator"></span>
       </div>
-      <span class="profile-name">Alumno</span>
-      <span class="profile-status">Última actividad: 30/11/25 8:00pm</span>
+      <span class="profile-name">{{ userName$ | async }}</span>
+      <span>{{ rolUser$ | async }}</span>
     </div>
   </div>
 

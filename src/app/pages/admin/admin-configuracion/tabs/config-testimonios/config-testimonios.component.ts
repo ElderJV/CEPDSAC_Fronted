@@ -1,21 +1,25 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LucideAngularModule, Check, X, Trash2, AlertCircle, MessageSquare, Info, Plus, Edit } from 'lucide-angular';
+import { LucideAngularModule, Check, X, Trash2, AlertCircle, MessageSquare, Info, Plus, Edit, Save, ArrowLeft } from 'lucide-angular';
 import { TestimonioService } from '../../../../../core/services/testimonio.service';
 import { Testimonio } from '../../../../../core/models/testimonio.model';
+import { UsuariosService } from '../../../../../core/services/usuarios.service';
+import { Usuario } from '../../../../../core/models/usuarios.model';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-config-testimonios',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LucideAngularModule],
   templateUrl: './config-testimonios.component.html',
   styleUrl: './config-testimonios.component.css'
 })
 export class ConfigTestimoniosComponent implements OnInit {
   private testimonioService = inject(TestimonioService);
+  private usuariosService = inject(UsuariosService);
+  private fb = inject(FormBuilder);
   private router = inject(Router);
 
   readonly CheckIcon = Check;
@@ -26,21 +30,43 @@ export class ConfigTestimoniosComponent implements OnInit {
   readonly Info = Info;
   readonly Plus = Plus;
   readonly Edit = Edit;
+  readonly Save = Save;
+  readonly ArrowLeft = ArrowLeft;
 
   testimonios: Testimonio[] = [];
+  usuarios = signal<Usuario[]>([]);
   isLoading = true;
   errorMessage: string | null = null;
 
+  // Form state
+  showForm = signal(false);
+  isEditMode = signal(false);
+  testimonioId = signal<number | null>(null);
+  testimonioForm: FormGroup;
+  isSaving = signal(false);
+
+  constructor() {
+    this.testimonioForm = this.fb.group({
+      idUsuario: [null, [Validators.required]],
+      comentario: ['', [Validators.required, Validators.maxLength(500)]],
+      estadoAprobado: [false]
+    });
+  }
+
   ngOnInit(): void {
     this.cargarTestimonios();
+    this.cargarUsuarios();
   }
 
-  irACrear(): void {
-    this.router.navigate(['/admin/configuracion/testimonios/nuevo']);
-  }
-
-  irAEditar(id: number): void {
-    this.router.navigate(['/admin/configuracion/testimonios/editar', id]);
+  cargarUsuarios(): void {
+    this.usuariosService.listar().subscribe({
+      next: (data) => {
+        this.usuarios.set(data);
+      },
+      error: (err) => {
+        console.error('Error al cargar usuarios', err);
+      }
+    });
   }
 
   cargarTestimonios(): void {
@@ -57,6 +83,76 @@ export class ConfigTestimoniosComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  iniciarCreacion(): void {
+    this.isEditMode.set(false);
+    this.testimonioId.set(null);
+    this.testimonioForm.reset({ estadoAprobado: false });
+    this.showForm.set(true);
+  }
+
+  iniciarEdicion(testimonio: Testimonio): void {
+    this.isEditMode.set(true);
+    this.testimonioId.set(testimonio.idTestimonio);
+    this.testimonioForm.patchValue({
+      idUsuario: testimonio.idUsuario.idUsuario,
+      comentario: testimonio.comentario,
+      estadoAprobado: testimonio.estadoAprobado
+    });
+    this.showForm.set(true);
+  }
+
+  cancelar(): void {
+    this.showForm.set(false);
+    this.testimonioForm.reset();
+  }
+
+  guardar(): void {
+    if (this.testimonioForm.invalid) {
+      this.testimonioForm.markAllAsTouched();
+      return;
+    }
+
+    this.isSaving.set(true);
+    const formValue = this.testimonioForm.value;
+    
+    // Construct payload as requested: comentario, estadoAprobado, idUsuario (object with id)
+    const payload = {
+      comentario: formValue.comentario,
+      estadoAprobado: formValue.estadoAprobado,
+      idUsuario: { idUsuario: formValue.idUsuario }
+    };
+
+    if (this.isEditMode() && this.testimonioId()) {
+      this.testimonioService.actualizar(this.testimonioId()!, payload).subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'Testimonio actualizado correctamente', 'success');
+          this.isSaving.set(false);
+          this.showForm.set(false);
+          this.cargarTestimonios();
+        },
+        error: (err) => {
+          console.error('Error al actualizar testimonio', err);
+          Swal.fire('Error', 'No se pudo actualizar el testimonio', 'error');
+          this.isSaving.set(false);
+        }
+      });
+    } else {
+      this.testimonioService.crear(payload).subscribe({
+        next: () => {
+          Swal.fire('Éxito', 'Testimonio creado correctamente', 'success');
+          this.isSaving.set(false);
+          this.showForm.set(false);
+          this.cargarTestimonios();
+        },
+        error: (err) => {
+          console.error('Error al crear testimonio', err);
+          Swal.fire('Error', 'No se pudo crear el testimonio', 'error');
+          this.isSaving.set(false);
+        }
+      });
+    }
   }
 
   toggleAprobacion(testimonio: Testimonio): void {
