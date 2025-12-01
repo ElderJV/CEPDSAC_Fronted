@@ -1,19 +1,22 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { UsuariosService } from '../../../core/services/usuarios.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Usuario } from '../../../core/models/usuarios.model';
 import { UsuarioCreateDTO } from '../../../core/models/usuario-create.model';
 import { UsuarioValidators, USUARIO_ERROR_MESSAGES } from '../../../core/validators/usuario.validators';
-import { LucideAngularModule, Users, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, User, Mail, Hash, CreditCard, Filter, ChevronLeft, ChevronRight, Globe, Lock, Phone } from 'lucide-angular';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, Users, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, User, Mail, Hash, CreditCard, Filter, ChevronLeft, ChevronRight, Globe, Lock, Phone, RefreshCw } from 'lucide-angular';
 import { PaisService, Pais } from '../../../core/services/pais.service';
 import { TipoIdentificacionService, TipoIdentificacionInicial } from '../../../core/services/tipo-identificacion.service';
 
 @Component({
   selector: 'app-admin-estudiantes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LucideAngularModule, RouterLink],
   templateUrl: './admin-estudiantes.component.html',
   styleUrls: ['../../admin/admin-styles.css', './admin-estudiantes.component.css']
 })
@@ -38,6 +41,8 @@ export class AdminEstudiantesComponent implements OnInit {
   totalElements = signal(0);
   totalPages = signal(0);
 
+  private searchSubject = new Subject<string>();
+
   estudianteForm: FormGroup;
 
   readonly Users = Users;
@@ -58,6 +63,7 @@ export class AdminEstudiantesComponent implements OnInit {
   readonly Globe = Globe;
   readonly Lock = Lock;
   readonly Phone = Phone;
+  readonly RefreshCw = RefreshCw;
 
   showPasswordStrength = signal(false);
 
@@ -100,6 +106,15 @@ export class AdminEstudiantesComponent implements OnInit {
   ngOnInit(): void {
     this.cargarEstudiantes();
     this.cargarCatalogos();
+
+    this.searchSubject.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.searchText.set(term);
+      this.currentPage.set(0);
+      this.cargarEstudiantes();
+    });
   }
 
   cargarCatalogos() {
@@ -130,6 +145,10 @@ export class AdminEstudiantesComponent implements OnInit {
   }
 
   onSearch(term: string) {
+    this.searchSubject.next(term);
+  }
+
+  onSearchEnter(term: string) {
     this.searchText.set(term);
     this.currentPage.set(0);
     this.cargarEstudiantes();

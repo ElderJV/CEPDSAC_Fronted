@@ -12,6 +12,7 @@ import { AdminMatriculaPersonalizadaComponent } from './admin-matriculas/tabs/ad
 import { AdminMatriculaDetalleComponent } from './admin-matriculas/tabs/admin-matricula-detalle/admin-matricula-detalle.component';
 import { AdminMatriculaCancelarComponent } from './admin-programacion-curso/tabs/admin-programacion-cancelar/admin-matricula-cancelar.component';
 import { AdminDescuentoComponent } from './admin-descuento/admin-descuento.component';
+import { AdminEstudiantesRestaurarComponent } from './admin-estudiantes/tabs/admin-estudiantes-restaurar/admin-estudiantes-restaurar.component';
 
 //rutas de admin para inyectar en el sidebar
 export const ADMIN_ROUTES: Routes = [
@@ -33,6 +34,11 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'estudiantes',
     component: AdminEstudiantesComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'estudiantes/restaurar',
+    component: AdminEstudiantesRestaurarComponent,
     pathMatch: 'full',
   },
   {

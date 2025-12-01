@@ -63,4 +63,12 @@ export class UsuariosService {
   actualizarParcial(id: number, data: Partial<UsuarioToggle>): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, data);
   }
+
+  listarAlumnosSuspendidos(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/alumnos/suspendidos`);
+  }
+
+  restaurar(id: number): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}/${id}/restaurar`, {});
+  }
 }

@@ -1,0 +1,31 @@
+@import '../../../admin-styles.css';
+
+.admin-container {
+  padding: 2rem;
+}
+
+.alert-custom {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: rgba(1, 49, 98, 0.05);
+  border-left: 4px solid var(--cedpsac-blue);
+}
+
+.alert-icon {
+  color: var(--cedpsac-blue);
+  font-size: 1.5rem;
+}
+
+.alert-content {
+  color: var(--cedpsac-blue);
+  font-weight: 500;
+}
+
+.btn-volver:hover {
+  color: var(--cedpsac-blue) !important;
+  background-color: white !important;
+  border-color: white !important;
+}
