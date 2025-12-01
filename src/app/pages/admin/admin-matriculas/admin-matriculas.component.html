@@ -141,28 +141,24 @@
       </div>
 
       @if (totalPages() > 1) {
-      <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-between align-items-center">
-        <small class="text-muted">
-          Mostrando {{ matriculas().length }} de {{ totalElements() }} registros
-        </small>
-        <ul class="pagination mb-0">
-          <li class="page-item" [class.disabled]="currentPage() === 0">
-            <button class="page-link" (click)="cambiarPagina(currentPage() - 1)">
-              <lucide-icon [img]="ChevronLeft" size="16"></lucide-icon>
-            </button>
-          </li>
-          <li class="page-item disabled">
-            <span class="page-link">
-              {{ currentPage() + 1 }} / {{ totalPages() }}
-            </span>
-          </li>
-          <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
-            <button class="page-link" (click)="cambiarPagina(currentPage() + 1)">
-              <lucide-icon [img]="ChevronRight" size="16"></lucide-icon>
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded border mt-4">
+        <span class="text-muted small">
+          Mostrando {{ matriculas().length }} de {{ totalElements() }} matrículas
+        </span>
+        <div class="btn-group">
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" [disabled]="currentPage() === 0"
+            (click)="cambiarPagina(currentPage() - 1)">
+            <lucide-icon [img]="ChevronLeft" size="16"></lucide-icon> Anterior
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" disabled>
+            Página {{ currentPage() + 1 }} de {{ totalPages() }}
+          </button>
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+            [disabled]="currentPage() === totalPages() - 1" (click)="cambiarPagina(currentPage() + 1)">
+            Siguiente <lucide-icon [img]="ChevronRight" size="16"></lucide-icon>
+          </button>
+        </div>
+      </div>
       }
       }
     </div>

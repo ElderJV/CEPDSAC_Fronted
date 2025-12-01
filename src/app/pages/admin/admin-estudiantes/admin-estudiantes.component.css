@@ -76,6 +76,12 @@
   color: #4ade80;
 }
 
+.btn-volver:hover {
+  color: var(--cedpsac-blue) !important;
+  background-color: white !important;
+  border-color: white !important;
+}
+
 @media (max-width: 768px) {
   .password-strength-indicator {
     position: static;
