@@ -7,12 +7,12 @@
     @for(testimonio of displayTestimonios(); track testimonio.author) {
     <div class="col-lg-6 mb-4">
       <div class="testimonial-card">
-        <p class="testimonial-quote mb-4">{{ testimonio.quote }}</p>
         <div class="d-flex align-items-center">
           <div class="testimonial-avatar me-3"></div>
           <div>
             <h6 class="mb-0 fw-bold">{{ testimonio.author }}</h6>
             <p class="mb-0 text-muted small">{{ testimonio.role }}</p>
+            <p class="testimonial-quote mt-3">{{ testimonio.quote }}</p>
             <a href="#" class="testimonial-link small">Ver {{ testimonio.course }} →</a>
           </div>
         </div>
