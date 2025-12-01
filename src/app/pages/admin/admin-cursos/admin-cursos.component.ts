@@ -6,7 +6,7 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CursoDiplomado, CursoDiplomadoViewAdmin } from '../../../core/models/curso-diplomado.model';
 import { Categoria } from '../../../core/models/categoria.model';
-import { LucideAngularModule, Book, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, Type, Tag, Image, Target, Award } from 'lucide-angular';
+import { LucideAngularModule, Book, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, Type, Tag, Image, Target, Award, List, Package } from 'lucide-angular';
 
 @Component({
   selector: 'app-admin-cursos',
@@ -44,6 +44,8 @@ export class AdminCursosComponent implements OnInit {
   readonly Image = Image;
   readonly Target = Target;
   readonly Award = Award;
+  readonly List = List;
+  readonly Package = Package;
 
   constructor() {
     this.cursoForm = this.fb.group({
@@ -53,7 +55,9 @@ export class AdminCursosComponent implements OnInit {
       tipo: ['CURSO', Validators.required],
       otorgaCertificado: [true],
       urlCurso: [''],
-      objetivo: ['']
+      objetivo: [''],
+      materialesIncluidos: [''],
+      requisitos: ['']
     });
   }
 
@@ -79,7 +83,7 @@ export class AdminCursosComponent implements OnInit {
 
   cargarCursos() {
     this.loading.set(true);
-    this.cursoService.listar().subscribe({
+    this.cursoService.listarCursosAdmin().subscribe({
       next: (data) => {
         //Filter only cursos
         const cursos = data.filter(c => c.tipo === 'CURSO');
@@ -127,7 +131,9 @@ export class AdminCursosComponent implements OnInit {
       tipo: curso.tipo || 'CURSO',
       otorgaCertificado: curso.otorgaCertificado,
       urlCurso: curso.urlCurso,
-      objetivo: curso.objetivo
+      objetivo: curso.objetivo,
+      materialesIncluidos: curso.materialesIncluidos,
+      requisitos: curso.requisitos
     });
   }
 
@@ -152,7 +158,9 @@ export class AdminCursosComponent implements OnInit {
       tipo: val.tipo === 'DIPLOMADO',
       otorgaCertificado: val.otorgaCertificado,
       urlCurso: val.urlCurso,
-      objetivo: val.objetivo
+      objetivo: val.objetivo,
+      materialesIncluidos: val.materialesIncluidos,
+      requisitos: val.requisitos
     };
 
     if (this.isEditing() && val.idCursoDiplomado) {

@@ -6,7 +6,7 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { CursoDiplomado, CursoDiplomadoViewAdmin } from '../../../core/models/curso-diplomado.model';
 import { Categoria } from '../../../core/models/categoria.model';
-import { LucideAngularModule, GraduationCap, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, Type, Tag, Image, Target, Award } from 'lucide-angular';
+import { LucideAngularModule, GraduationCap, Plus, Pencil, Trash2, Search, Info, CheckCircle, XCircle, Type, Tag, Image, Target, Award, List, Package } from 'lucide-angular';
 
 @Component({
   selector: 'app-admin-diplomados',
@@ -44,6 +44,8 @@ export class AdminDiplomadosComponent implements OnInit {
   readonly Image = Image;
   readonly Target = Target;
   readonly Award = Award;
+  readonly List = List;
+  readonly Package = Package;
 
   constructor() {
     this.diplomadoForm = this.fb.group({
@@ -53,7 +55,9 @@ export class AdminDiplomadosComponent implements OnInit {
       tipo: ['DIPLOMADO', Validators.required],
       otorgaCertificado: [true],
       urlCurso: [''],
-      objetivo: ['']
+      objetivo: [''],
+      materialesIncluidos: [''],
+      requisitos: ['']
     });
   }
 
@@ -79,7 +83,7 @@ export class AdminDiplomadosComponent implements OnInit {
 
   cargarDiplomados() {
     this.loading.set(true);
-    this.cursoService.listarDiplomados().subscribe({
+    this.cursoService.listarDiplomadosAdmin().subscribe({
       next: (data) => {
         //Filter only diplomados
         const diplomados = data.filter(d => d.tipo === 'DIPLOMADO');
@@ -127,7 +131,9 @@ export class AdminDiplomadosComponent implements OnInit {
       tipo: diplomado.tipo,
       otorgaCertificado: diplomado.otorgaCertificado,
       urlCurso: diplomado.urlCurso,
-      objetivo: diplomado.objetivo
+      objetivo: diplomado.objetivo,
+      materialesIncluidos: diplomado.materialesIncluidos,
+      requisitos: diplomado.requisitos
     });
   }
 
@@ -152,7 +158,9 @@ export class AdminDiplomadosComponent implements OnInit {
       tipo: val.tipo === 'DIPLOMADO',
       otorgaCertificado: val.otorgaCertificado,
       urlCurso: val.urlCurso,
-      objetivo: val.objetivo
+      objetivo: val.objetivo,
+      materialesIncluidos: val.materialesIncluidos,
+      requisitos: val.requisitos
     };
 
     if (this.isEditing() && val.idCursoDiplomado) {
